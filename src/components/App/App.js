@@ -2,16 +2,16 @@ import React, { Component } from 'react';
 import { HashRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-import Nav from '../Nav/Nav';
-import Footer from '../Footer/Footer';
+import Nav from './Nav/Nav';
+import Footer from './Footer/Footer';
 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
-import AboutPage from '../AboutPage/AboutPage';
-import UserPage from '../UserPage/UserPage';
-import InfoPage from '../InfoPage/InfoPage';
-import SearchPage from '../searchPage/searchPage';
-import DatePicker from '../gamesTable/datePicker/datePicker';
+import AboutPage from '../Pages/AboutPage/AboutPage';
+import UserPage from '../Pages/UserPage/UserPage';
+import InfoPage from '../Pages/InfoPage/InfoPage';
+import SearchPage from '../SearchPage/SearchPage';
+import DatePicker from '../Components/DatePicker/datePicker';
 
 import './App.css';
 
