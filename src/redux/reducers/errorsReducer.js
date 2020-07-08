@@ -37,5 +37,5 @@ const registrationMessage = (state = '', action) => {
 // state.errors.loginMessage and state.errors.registrationMessage
 export default combineReducers({
   loginMessage,
-  registrationMessage,
+  registrationMessage
 });

@@ -9,14 +9,13 @@ function* loginUser(action) {
 
     const config = {
       headers: { 'Content-Type': 'application/json' },
-      withCredentials: true,
+      withCredentials: true
     };
 
     // send the action.payload as the body
     // the config includes credentials which
     // allow the server session to recognize the user
     yield axios.post('/api/user/login', action.payload, config);
-    
     // after the user has logged in
     // get the user information from the server
     yield put({type: 'FETCH_USER'});
@@ -36,11 +35,11 @@ function* loginUser(action) {
 }
 
 // worker Saga: will be fired on "LOGOUT" actions
-function* logoutUser(action) {
+function* logoutUser() {
   try {
     const config = {
       headers: { 'Content-Type': 'application/json' },
-      withCredentials: true,
+      withCredentials: true
     };
 
     // the config includes credentials which

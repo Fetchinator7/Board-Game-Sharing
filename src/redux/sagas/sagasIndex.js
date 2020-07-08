@@ -1,4 +1,7 @@
 import { all } from 'redux-saga/effects';
+import searchingBBGSagas from './searchingBBGSagas';
+import updateUserAttributesSaga from './userAttributesSagas';
+import schedulingSagas from './schedulingSagas';
 import loginSaga from './loginSaga';
 import registrationSaga from './registrationSaga';
 import userSaga from './userSaga';
@@ -7,13 +10,13 @@ import userSaga from './userSaga';
 // It bundles up all of the other sagas so our project can use them.
 // This is imported in index.js as rootSaga
 
-// some sagas trigger other sagas, as an example
-// the registration triggers a login
-// and login triggers setting the user
 export default function* rootSaga() {
   yield all([
+    searchingBBGSagas(),
+    updateUserAttributesSaga(),
+    schedulingSagas(),
     loginSaga(),
     registrationSaga(),
-    userSaga(),
+    userSaga()
   ]);
 }

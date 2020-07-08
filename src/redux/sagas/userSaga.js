@@ -6,7 +6,7 @@ function* fetchUser() {
   try {
     const config = {
       headers: { 'Content-Type': 'application/json' },
-      withCredentials: true,
+      withCredentials: true
     };
 
     // the config includes credentials which
