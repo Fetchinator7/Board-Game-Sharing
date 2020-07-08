@@ -24,5 +24,5 @@ const comparePassword = (candidatePassword, storedPassword) => {
 
 module.exports = {
   encryptPassword,
-  comparePassword,
+  comparePassword
 };
