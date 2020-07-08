@@ -14,7 +14,10 @@ const sagaMiddleware = createSagaMiddleware();
 // Pass rootSaga into our sagaMiddleware
 
 const middlewareList = process.env.NODE_ENV === 'development'
-  ? [sagaMiddleware, logger]
+  // Disable the logger.
+  // ? [sagaMiddleware, logger]
+  // : [sagaMiddleware];
+  ? [sagaMiddleware]
   : [sagaMiddleware];
 
 const store = createStore(
