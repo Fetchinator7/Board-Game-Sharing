@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Button, TextField } from "@material-ui/core";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from './SearchPageUsersTable';
-import './SearchPage.css';
 
 class SearchPage extends Component {
   state = {

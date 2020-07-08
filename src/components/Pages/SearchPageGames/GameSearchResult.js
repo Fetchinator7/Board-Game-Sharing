@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import './SearchPage.css';
+import './SearchPageGames.css';
 import { connect } from 'react-redux';
 
 class SearchResult extends Component {
