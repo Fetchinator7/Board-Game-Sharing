@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 const usersReducer = (state = [], action) => {
   switch (action.type) {
     case 'SET_USER_SEARCH_RESULTS':
-      return [].concat(...state, action.payload);
+      return (action.payload[0]);
     case 'RESET_USER_SEARCH_RESULTS':
       return [];
     default:
