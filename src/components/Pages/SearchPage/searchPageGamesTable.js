@@ -9,8 +9,7 @@ import { MuiThemeProvider } from '@material-ui/core';
 
 class Table extends React.Component {
   render() {
-    const baseData = this.props.searchBGG.formattedGameSearchResults.filter(gameObj =>
-      gameObj.title !== '').map((gameObj, index) => [
+    const baseData = this.props.searchBGG.formattedGameSearchResults.map((gameObj, index) => [
       <img src={gameObj.artwork} alt={gameObj.title} key={`game-result-artwork-${index}`} />,
       gameObj.title,
       <a key={`game-table-row-${index}`} id={gameObj.BGGid} href={`https://boardgamegeek.com/boardgame/${gameObj.BGGid}`}>More Info</a>,
@@ -18,7 +17,7 @@ class Table extends React.Component {
       gameObj.playTime
       ]);
     let fullData = baseData;
-    const columns = [...SearchTablePresets.columns];
+    const columns = SearchTablePresets.columns;
     if (this.props.userStatus.userIsSignedIn) {
       columns.unshift(
         {
@@ -40,8 +39,7 @@ class Table extends React.Component {
           }
         }
       );
-      fullData = this.props.searchBGG.formattedGameSearchResults.filter(gameObj =>
-        gameObj.title !== '').map((gameObj, index) => {
+      fullData = this.props.searchBGG.formattedGameSearchResults.map((gameObj, index) => {
         return [<Checkbox color='primary' checked={gameObj.owned} key={`game-search-table-row-${index}`} />, ...baseData[index]];
       });
     }

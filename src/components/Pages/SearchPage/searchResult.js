@@ -13,6 +13,7 @@ class SearchResult extends Component {
 
   componentDidMount() {
     const { gameObj } = this.props
+    const userOwnsGame = true;
     this.setState({
       title: this.getTitle(gameObj.name),
       BGGid: gameObj._attributes.id,
@@ -24,10 +25,10 @@ class SearchResult extends Component {
         : null,
       artwork: gameObj.image && gameObj.image._text
     })
-    const userOwnsGame = true;
     this.props.status.userIsSignedIn && this.setState({ owned: userOwnsGame })
     // TODO const userOwnsGame = this.props.dispatch({ type: "CHECK_IF_OWNED", payload: gameObj._attributes.id });;
     // const userOwnsGame = this.props.gamesGlobalState.games.ownedGames.some(userGameObj => userGameObj.bgg_game_id === gameObj._attributes.id)
+    // this.state.title && this.props.dispatch({ type: 'SET_FORMATTED_SEARCH_GAMES', payload: this.state });
   }
 
   getTitle = (boardgameNameObj) => {
@@ -70,7 +71,8 @@ class SearchResult extends Component {
   }
 
   render() {
-    this.props.dispatch({ type: 'SET_FORMATTED_SEARCH_GAMES', payload: this.state });
+    // this.props.dispatch({ type: 'SET_FORMATTED_SEARCH_GAMES', payload: this.state });
+    this.state.title && this.props.dispatch({ type: 'SET_FORMATTED_SEARCH_GAMES', payload: this.state });
     return null;
   }
 }
