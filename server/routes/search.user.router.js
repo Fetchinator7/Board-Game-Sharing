@@ -5,8 +5,8 @@ const router = express.Router();
 
 router.get('/username/:search', (req, res) => {
   const search = req.params.search;
-  console.log(search);
-  pool.query('SELECT user_name FROM "user" WHERE user_name ILIKE $1', [search])
+  console.log('search for username:', search);
+  pool.query('SELECT user_name FROM users WHERE user_name ILIKE $1', [`%${search}%`])
     .then(results => {
       console.log('users', results.rows);
       res.send(results.rows);
