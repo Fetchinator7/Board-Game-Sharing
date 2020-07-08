@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { HashRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, connect } from 'react-redux';
 
 import Nav from './Nav/Nav';
 import Footer from './Footer/Footer';
@@ -10,15 +10,14 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import AboutPage from '../Pages/AboutPage/AboutPage';
 import UserPage from '../Pages/UserPage/UserPage';
 import InfoPage from '../Pages/InfoPage/InfoPage';
-import SearchPage from '../SearchPage/SearchPage';
-import DatePicker from '../Components/DatePicker/datePicker';
+import SearchPage from '../Pages/SearchPage/SearchPage';
+import DatePicker from '../Components/DatePicker/DatePicker';
 
 import './App.css';
 
 class App extends Component {
   componentDidMount() {
-    const dispatch = useDispatch()
-    dispatch({ type: 'FETCH_USER' });
+    this.props.dispatch({ type: 'FETCH_USER' });
   }
 
   render() {
@@ -59,11 +58,11 @@ class App extends Component {
             {/* If none of the other routes matched, we will show a 404. */}
             <Route render={() => <h1>404</h1>} />
           </Switch>
-          <Footer />
+          {/* <Footer /> */}
         </>
       </Router>
     );
   }
 }
 
-export default App;
+export default connect()(App);

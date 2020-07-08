@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import { updateOwnedStatus } from '../gamesTable/gamesTableOperations';
-import SearchTablePresets from '../gamesTable/gamesTable';
+import { updateOwnedStatus } from '../../Components/GamesTable/GamesTableOperations';
+import SearchTablePresets from '../../Components/GamesTable/GamesTable';
 import MUIDataTable from 'mui-datatables';
 import { MuiThemeProvider } from '@material-ui/core';
 

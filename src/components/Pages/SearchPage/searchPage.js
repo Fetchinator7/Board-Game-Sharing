@@ -5,9 +5,9 @@ import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import SearchResult from './searchResult';
-import Table from './searchPageGamesTable';
-import './searchPage.css';
+import SearchResult from './SearchResult';
+import Table from './SearchPageGamesTable';
+import './SearchPage.css';
 
 class SearchPage extends Component {
   state = {
