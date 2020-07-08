@@ -11,11 +11,11 @@ const usersReducer = (state = [], action) => {
   }
 };
 
-const searchForUser = (state = '', action) => {
+const noUserFoundError = (state = '', action) => {
   switch (action.type) {
-    case 'SET_CURRENT_USER_SEARCH':
+    case 'SET_USER_SEARCH__USER_NOT_FOUND':
       return action.payload;
-    case 'RESET_CURRENT_USER_SEARCH':
+    case 'RESET_USER_SEARCH__USER_NOT_FOUND':
       return '';
     default:
       return state;
@@ -24,5 +24,5 @@ const searchForUser = (state = '', action) => {
 
 export default combineReducers({
   usersSearchResults: usersReducer,
-  searchText: searchForUser
+  noResultsErrorText: noUserFoundError
 });
