@@ -2,7 +2,6 @@ import { put, takeLatest, putResolve } from 'redux-saga/effects';
 import Axios from 'axios';
 
 function* searchUsers(action) {
-  console.log('getUserInfo input:', action);
   try {
     yield put({ type: 'SHOW_LOADING' });
     yield put({ type: 'RESET_USER_SEARCH_RESULTS' });

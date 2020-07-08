@@ -49,13 +49,13 @@ class Table extends React.Component {
         }
       }
     )
-    const data = this.props.searchUsers.usersSearchResults.map((user, index) => [
-      // const data = this.props.searchUsers.usersSearchResults.filter(userObj =>
-      //   userObj.user_name !== '').map((user, index) => [
-      <a key={`game-table-row-${index}`} href={`/user/${user.user_name}`}>{user.user_name}</a>,
+    const data = this.props.searchUsers.usersSearchResults.map(user => [
+      <Button
+        variant="contained"
+        color="primary"
+        href={`/user/${user.user_name}`}
+      >{user.user_name}</Button>,
       this.props.userStatus.userIsSignedIn &&
-      // console.log('signed in:', this.props.userStatus.userIsSignedIn),
-      // console.log('get friend status:', this.getFriendStatus(user.user_name)),
       <Button
         variant="contained"
         color="primary"
@@ -64,7 +64,6 @@ class Table extends React.Component {
         buttonTitle={this.getFriendStatus(user.user_name) ? 'Send Friend Request' : 'Remove This Friend'}
       />
         ])
-        console.log('data', data);
         return (
       <MuiThemeProvider theme={SearchTablePresets.theme}>
           <MUIDataTable title='Search Users' data={data} columns={columns} options={SearchTablePresets.options} />
@@ -74,7 +73,7 @@ class Table extends React.Component {
 }
 
 const mapStateToProps = reduxState => ({
-          searchUsers: reduxState.searchUsers,
+  searchUsers: reduxState.searchUsers,
   userStatus: reduxState.status
 });
 
