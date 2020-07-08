@@ -6,6 +6,7 @@ import scheduling from './schedulingReducers';
 import errors from './errorsReducer';
 import loginMode from './loginModeReducer';
 import user from './userReducer';
+import searchUsers from './searchUsersReducers';
 
 export default combineReducers({
   searchBGG,
@@ -16,5 +17,6 @@ export default combineReducers({
   errors,
   // will have a value of 'login' or 'registration' to control which screen is shown
   loginMode,
-  user
+  user,
+  searchUsers
 });

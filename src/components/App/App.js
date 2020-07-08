@@ -36,7 +36,12 @@ class App extends Component {
             />
             <Route
               exact
-              path='/search'
+              path='/search/games'
+              component={SearchPage}
+            />
+            <Route
+              exact
+              path='/search/users'
               component={SearchPage}
             />
             {/* For protected routes, the view could show one of several things on the same route.
