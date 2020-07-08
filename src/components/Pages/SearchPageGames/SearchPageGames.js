@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import SearchResult from './SearchResult';
+import SearchResult from './GameSearchResult';
 import Table from './SearchPageGamesTable';
 import './SearchPage.css';
 
