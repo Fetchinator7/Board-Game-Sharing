@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import SearchTablePresets from '../../Components/GamesTable/GamesTable';
 import MUIDataTable from 'mui-datatables';
+import DeleteIcon from '@material-ui/icons/Delete';
+import SendIcon from '@material-ui/icons/Send';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { Button, MuiThemeProvider } from '@material-ui/core';
 
@@ -38,7 +40,14 @@ class Table extends React.Component {
             return (
               <FormControlLabel
                 control={
-                  <Button color={value.props.isFriend ? 'primary' : 'secondary'} variant="contained" value={value}>{value.props.buttonTitle}</Button>
+                  <Button
+                    color={value.props.isFriend ? 'primary' : 'secondary'}
+                    color={value ? 'primary' : 'secondary'}
+                    variant="contained"
+                    value={value}
+                    startIcon={value.props.isFriend ? <SendIcon /> : <DeleteIcon />}
+                    >{value.props.isFriend ? 'Send Friend Request' : 'Remove This Friend'}
+                    </Button>
                 }
                 onClick={() => {
                   this.changeFriendStatus(tableMeta.rowData[0].props.children, value.props.isFriend);
@@ -57,16 +66,17 @@ class Table extends React.Component {
       >{user.user_name}</Button>,
       this.props.userStatus.userIsSignedIn &&
       <Button
-        variant="contained"
-        color="primary"
-        // These are arbitrary keys I made up so the table can access this information.
+        // This is an are arbitrary key I made up so the table can access this information.
         isFriend={this.getFriendStatus(user.user_name)}
-        buttonTitle={this.getFriendStatus(user.user_name) ? 'Send Friend Request' : 'Remove This Friend'}
       />
         ])
+    const options = {
+      ...SearchTablePresets.options,
+      search: false
+    }
         return (
       <MuiThemeProvider theme={SearchTablePresets.theme}>
-          <MUIDataTable title='Search Users' data={data} columns={columns} options={SearchTablePresets.options} />
+          <MUIDataTable title='Search Users' data={data} columns={columns} options={options} />
         </MuiThemeProvider>
     );
   }
