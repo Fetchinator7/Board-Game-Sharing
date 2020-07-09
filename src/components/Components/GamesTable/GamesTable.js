@@ -1,4 +1,5 @@
 import { createMuiTheme } from '@material-ui/core';
+import green from '@material-ui/core/colors/green';
 
 const tablePreferences = {
   moreInfoColumnIndex: 3,
@@ -48,6 +49,7 @@ const tablePreferences = {
   },
   theme: createMuiTheme({
     palette: { type: 'dark' },
+    primary: green,
     typography: { useNextVariants: true }
   })
 };
