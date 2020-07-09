@@ -5,7 +5,9 @@ import LogOutButton from '../../App/LogOutButton/LogOutButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
-import Table from '../../Components/UserTable/UserResultsTable';
+import FriendsTable from '../../Components/UserTable/UserResultsTable';
+import GamesTable from '../../Pages/SearchPageGames/SearchPageGamesTable';
+import Games from './UserGamesTable';
 
 const useStyles = createMuiTheme(
   SearchTablePresets.theme
@@ -27,7 +29,8 @@ class UserPage extends Component {
           <LogOutButton className='log-in' />
         </div>
         <br />
-        <Table tableData={this.props.user.ownedGames} />
+        {/* <Games tableData={this.props.user.ownedGames} /> */}
+        <FriendsTable tableData={this.props.user.friends} />
         <MuiThemeProvider theme={useStyles}>
           <Snackbar
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
@@ -46,7 +49,7 @@ class UserPage extends Component {
       </>
     );
   }
-};
+}
 
 // Instead of taking everything from state, we just want the user info.
 // if you wanted you could write this code like this:
