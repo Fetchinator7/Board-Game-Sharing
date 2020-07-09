@@ -5,7 +5,7 @@ import { Button, TextField, MuiThemeProvider, createMuiTheme } from "@material-u
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Table from './SearchPageUsersTable';
+import Table from '../../Components/UserTable/UserResultsTable';
 
 const useStyles = createMuiTheme(
   SearchTablePresets.theme
@@ -18,7 +18,6 @@ function Alert(props) {
 class SearchPage extends Component {
   state = {
     search: '',
-    showErrorMessage: false,
   }
 
   searchInput = () => {
