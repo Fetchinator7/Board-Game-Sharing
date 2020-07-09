@@ -12,6 +12,7 @@ import UserPage from '../Pages/UserPage/UserPage';
 import InfoPage from '../Pages/InfoPage/InfoPage';
 import SearchPage from '../Pages/SearchPageGames/SearchPageGames';
 import UsersSearchPage from '../Pages/SearchPageUsers/SearchPageUsers';
+import UsersSettingsPage from '../Pages/UserPage/UserPageSettings';
 import DatePicker from '../Components/DatePicker/DatePicker';
 
 import './App.css';
@@ -44,6 +45,19 @@ class App extends Component {
               exact
               path='/search/users'
               component={UsersSearchPage}
+            />
+            <Route exact path='/calendar'>
+              <DatePicker mode='request' />
+            </Route>
+            <Route
+              exact
+              path='/test-user'
+              component={UserPage}
+            />
+            <Route
+              exact
+              path='/test-user-settings'
+              component={UsersSettingsPage}
             />
             {/* For protected routes, the view could show one of several things on the same route.
             Visiting localhost:3000/home will show the UserPage if the user is logged in.
