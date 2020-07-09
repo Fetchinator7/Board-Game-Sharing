@@ -29,6 +29,15 @@ const alerts = (state = [], action) => {
   }
 };
 
+const friends = (state = [], action) => {
+  switch (action.type) {
+    case 'SET_USER_FRIENDS':
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 const profileVisibility = (state = 4, action) => {
   switch (action.type) {
     case 'SET_USER_PROFILE_VISIBILITY':
@@ -43,6 +52,7 @@ const profileVisibility = (state = 4, action) => {
 export default combineReducers({
   userAttributes: userReducer,
   ownedGames,
+  friends,
   alerts,
   profileVisibility
 });
