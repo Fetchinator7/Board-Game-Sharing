@@ -57,7 +57,7 @@ class SearchPage extends Component {
         >
           Search
         </Button>
-        <Table />
+        <Table tableData={this.props.searchUsers.usersSearchResults} />
         <MuiThemeProvider theme={useStyles}>
           <Snackbar
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}

@@ -5,7 +5,7 @@ import LogOutButton from '../../App/LogOutButton/LogOutButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
-// import Table from '../../Components/UserTable/UserResultsTable';
+import Table from '../../Components/UserTable/UserResultsTable';
 
 const useStyles = createMuiTheme(
   SearchTablePresets.theme
@@ -27,7 +27,7 @@ class UserPage extends Component {
           <LogOutButton className='log-in' />
         </div>
         <br />
-        {/* <Table /> */}
+        <Table tableData={this.props.user.ownedGames} />
         <MuiThemeProvider theme={useStyles}>
           <Snackbar
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
