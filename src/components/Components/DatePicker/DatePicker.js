@@ -106,7 +106,7 @@ class DateAndTimePickers extends React.Component {
     const isRequestedLoanDay = isInCurrentMonth && this.state.requestedDays.includes(day.format('yyyy-MM-DD'));
     const isBlockedOutDay = isInCurrentMonth && this.state.blockOutDays.includes(day.format('yyyy-MM-DD'));
     const isAcceptedLoanDay = isInCurrentMonth && this.state.acceptedLoanDays.includes(day.format('yyyy-MM-DD'));
-    return <Badge badgeContent={isBlockedOutDay ? '🚫' : isAcceptedLoanDay ? '☑️' : isRequestedLoanDay ? '❔' : null}>{dayComponent}</Badge>;
+    return <Badge badgeContent={isBlockedOutDay ? '1' : isAcceptedLoanDay ? '2' : isRequestedLoanDay ? '3' : null}>{dayComponent}</Badge>;
   }
 
   shouldDisableDate = (day) => {
@@ -153,8 +153,8 @@ class DateAndTimePickers extends React.Component {
             placeholder='Message'
             value={this.state.message}
             type="text"
-            maxLength={100}
             onChange={(event) => {
+              event.target.value.length <= 50 &&
               this.setState({
                 message: event.target.value
               })
