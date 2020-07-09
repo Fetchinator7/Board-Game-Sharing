@@ -32,10 +32,22 @@ const registrationMessage = (state = '', action) => {
   }
 };
 
+const editGamesFailureMessage = (state = 'Error', action) => {
+  switch (action.type) {
+    case 'SET_EDIT_GAMES_ERROR':
+      return action.payload;
+    case 'CLEAR_EDIT_GAMES_ERROR':
+      return '';
+    default:
+      return state;
+  }
+};
+
 // make one object that has keys loginMessage, registrationMessage
 // these will be on the redux state at:
 // state.errors.loginMessage and state.errors.registrationMessage
 export default combineReducers({
   loginMessage,
-  registrationMessage
+  registrationMessage,
+  editGamesMessage: editGamesFailureMessage
 });
