@@ -17,7 +17,7 @@ class Table extends React.Component {
       gameObj.playTime
       ]);
     let fullData = baseData;
-    const columns = SearchTablePresets.columns;
+    const columns = [...SearchTablePresets.columns];
     if (this.props.userStatus.userIsSignedIn) {
       columns.unshift(
         {
