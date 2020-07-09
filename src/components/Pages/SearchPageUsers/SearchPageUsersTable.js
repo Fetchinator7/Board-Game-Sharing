@@ -137,7 +137,7 @@ class Table extends React.Component {
         </MuiThemeProvider>
         <MuiThemeProvider theme={useStyles}>
         <Dialog open={this.state.confirmationWindowIsOpen} onClose={() => this.setState({ confirmationWindowIsOpen: false })} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+          {/* <DialogTitle id="form-dialog-title">Subscribe</DialogTitle> */}
           <DialogContent>
             <DialogContentText>
               {this.state.prompt}
