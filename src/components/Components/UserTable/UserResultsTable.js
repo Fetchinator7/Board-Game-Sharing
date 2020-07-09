@@ -114,7 +114,9 @@ class Table extends React.Component {
         }
       }
     )
-    const data = this.props.searchUsers.usersSearchResults.map(user => [
+    // tableData comes from the parent so this table can be used for display all users or
+    // only one user's friends.
+    const data = this.props.tableData.map(user => [
       <Button
         variant="contained"
         color="primary"
