@@ -25,7 +25,7 @@ const serverSessionSecret = () => {
 };
 
 module.exports = cookieSession({
-  secret: serverSessionSecret(),
+  secret: serverSessionSecret() || 'secret',
   // this is the name of the req.variable. 'user' is convention, but not required
   key: 'user',
   reSave: 'false',

@@ -24,9 +24,10 @@ router.post('/register', (req, res, next) => {
   const queryText = "INSERT INTO users (user_name, email, password, visibility) VALUES ($1, $2, $3, '1') RETURNING user_id;";
   pool.query(queryText, [username, email, password])
     .then(() => res.sendStatus(201))
-    .catch((error) =>
-      console.log(error),
-    res.sendStatus(500));
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
+    });
 });
 
 // Handles login form authenticate/login POST
