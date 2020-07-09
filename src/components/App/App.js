@@ -10,7 +10,8 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import AboutPage from '../Pages/AboutPage/AboutPage';
 import UserPage from '../Pages/UserPage/UserPage';
 import InfoPage from '../Pages/InfoPage/InfoPage';
-import SearchPage from '../Pages/SearchPage/SearchPage';
+import SearchPage from '../Pages/SearchPageGames/SearchPageGames';
+import UsersSearchPage from '../Pages/SearchPageUsers/SearchPageUsers';
 import DatePicker from '../Components/DatePicker/DatePicker';
 
 import './App.css';
@@ -42,7 +43,7 @@ class App extends Component {
             <Route
               exact
               path='/search/users'
-              component={SearchPage}
+              component={UsersSearchPage}
             />
             {/* For protected routes, the view could show one of several things on the same route.
             Visiting localhost:3000/home will show the UserPage if the user is logged in.
