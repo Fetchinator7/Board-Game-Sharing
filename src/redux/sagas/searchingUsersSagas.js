@@ -19,8 +19,8 @@ function* searchUsers(action) {
   }
 }
 
-function* searchingBBGSaga() {
+function* searchingDataBaseUsersSaga() {
   yield takeLatest('FETCH_USERS', searchUsers);
 }
 
-export default searchingBBGSaga;
+export default searchingDataBaseUsersSaga;
