@@ -71,15 +71,6 @@ class SearchPage extends Component {
             Search
           </Button>
         }
-        {/* {this.props.reduxState.search === '' && this.props.reduxState.games.length === 0
-          ? <div>Search</div>
-          : this.props.searchBGG.searchText !== '' && this.props.searchBGG.formattedGameSearchResults.length === 0
-            && this.props.loading.loading === false
-            ? <div>Error, no search results found for: "{this.props.searchBGG.search}"</div>
-            : this.props.searchBGG.searchText !== '' && this.props.searchBGG.formattedGameSearchResults.length !== 0
-              && this.props.loading.loading === false
-              ? <div>Showing results for: "{this.props.searchBGG.searchText}"</div>
-              : <div>Null</div> */}
         <Paper className={'paper'}>
           <MenuList>
             {this.props.searchBGG.searchTitles.map((titleResultObj, index) =>
