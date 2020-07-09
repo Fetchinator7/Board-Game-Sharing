@@ -32,7 +32,7 @@ const registrationMessage = (state = '', action) => {
   }
 };
 
-const editGamesFailureMessage = (state = 'Error', action) => {
+const editGamesFailureMessage = (state = '', action) => {
   switch (action.type) {
     case 'SET_EDIT_GAMES_ERROR':
       return action.payload;
