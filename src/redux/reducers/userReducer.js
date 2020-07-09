@@ -29,10 +29,20 @@ const alerts = (state = [], action) => {
   }
 };
 
+const profileVisibility = (state = 4, action) => {
+  switch (action.type) {
+    case 'SET_USER_PROFILE_VISIBILITY':
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 // user will be on the redux state at:
 // state.user
 export default combineReducers({
   userAttributes: userReducer,
   ownedGames,
-  alerts
+  alerts,
+  profileVisibility
 });
