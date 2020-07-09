@@ -45,9 +45,21 @@ const searchForGame = (state = '', action) => {
   }
 };
 
+const noGameFoundError = (state = '', action) => {
+  switch (action.type) {
+    case 'SET_GAME_SEARCH__GAME_NOT_FOUND':
+      return action.payload;
+    case 'RESET_GAME_SEARCH__GAME_NOT_FOUND':
+      return '';
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   rawGameSearchResults: gamesReducer,
   formattedGameSearchResults: formattedGamesReducer,
+  searchTitles: titlesReducer,
   searchText: searchForGame,
-  searchTitles: titlesReducer
+  noResultsErrorText: noGameFoundError
 });

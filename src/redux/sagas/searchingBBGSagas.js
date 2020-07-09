@@ -13,6 +13,7 @@ function* searchGames(action) {
         yield put({ type: 'RESET_RAW_SEARCH_GAMES' });
         yield put({ type: 'RESET_FORMATTED_SEARCH_GAMES' });
         yield put({ type: 'RESET_SEARCH_TITLES' });
+        yield put({ type: 'RESET_GAME_SEARCH__GAME_NOT_FOUND' });
         yield put({ type: 'CURRENT_SEARCH', payload: action.payload });
         const response = yield Axios.get(`/api/search/keyword/${action.payload}`);
         // If there's only one result it will come in as an object, but if there's more than
@@ -21,7 +22,6 @@ function* searchGames(action) {
         if (boardGamesArr.length === undefined) {
           boardGamesArr = [boardGamesArr];
         }
-
         let idStr = '';
         for (let index = 0; index < boardGamesArr.length; index++) {
           const boardGameObj = boardGamesArr[index];
@@ -48,6 +48,7 @@ function* searchGames(action) {
           }
         }
       } catch (error) {
+        yield put({ type: 'SET_GAME_SEARCH__GAME_NOT_FOUND', payload: `Error, game: "${action.payload}" not found.` });
         console.log('error fetching games', error);
       }
     } else if (action.searchType === 'titles') {
@@ -92,6 +93,7 @@ function* getGameByID(action) {
     yield put({ type: 'SHOW_LOADING' });
     yield put({ type: 'RESET_RAW_SEARCH_GAMES' });
     yield put({ type: 'RESET_FORMATTED_SEARCH_GAMES' });
+    yield put({ type: 'RESET_GAME_SEARCH__GAME_NOT_FOUND' });
     yield put({ type: 'RESET_SEARCH_TITLES' });
     const result = yield Axios.get(`/api/search/game-id/${action.payload}`);
     yield put({ type: 'SET_RAW_SEARCH_GAMES', payload: [result.data] });

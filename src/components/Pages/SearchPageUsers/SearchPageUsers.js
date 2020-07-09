@@ -62,7 +62,7 @@ class SearchPage extends Component {
         <MuiThemeProvider theme={useStyles}>
           <Snackbar
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-            open={this.props.searchUsers.noResultsErrorText}
+            open={this.props.searchUsers.noResultsErrorText ? true : false}
             autoHideDuration={10000}
             onClose={() => this.props.dispatch({ type: "RESET_USER_SEARCH__USER_NOT_FOUND" })}
           >
@@ -71,7 +71,6 @@ class SearchPage extends Component {
               severity="error"
             >
               {this.props.searchUsers.noResultsErrorText}
-              {this.state.noResultsText}
             </Alert>
           </Snackbar>
         </MuiThemeProvider>
