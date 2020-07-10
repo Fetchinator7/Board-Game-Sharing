@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, TextField } from "@material-ui/core";
-import ErrorSnack from '../../Components/Errors/ErrorSnack';
+import Snack from '../../Components/Snack';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
@@ -81,11 +81,17 @@ class SearchPage extends Component {
             <SearchResult gameObj={gameObj} key={`search-result-row-${index}`}/>
             )}
         <Table />
-        <ErrorSnack
-          openIfText={this.props.searchBGG.noResultsErrorText}
+        <Snack
           onCloseDispatchText='RESET_GAME_SEARCH__GAME_NOT_FOUND'
           autoHideDuration={10000}
           message={this.props.searchBGG.noResultsErrorText}
+          severity={'error'}
+        />
+        <Snack
+          onCloseDispatchText='CLEAR_EDIT_GAMES_ERROR'
+          autoHideDuration={10000}
+          message={this.props.errors.editGamesMessage}
+          severity={'error'}
         />
       </>
     );
@@ -94,7 +100,8 @@ class SearchPage extends Component {
 
 const mapStateToProps = reduxState => ({
   searchBGG: reduxState.searchBGG,
-  loading: reduxState.status.loading
+  loading: reduxState.status.loading,
+  errors: reduxState.errors
 });
 
 export default connect(mapStateToProps)(SearchPage);

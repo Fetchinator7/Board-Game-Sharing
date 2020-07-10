@@ -5,7 +5,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import ErrorSnack from '../../Components/Errors/ErrorSnack';
+import Snack from '../../Components/Snack';
 
 class UserPage extends Component {
   changeVisibility(newVisibilityInt) {
@@ -25,11 +25,11 @@ class UserPage extends Component {
             <FormControlLabel value={4} control={<Radio />} label='Private' />
           </RadioGroup>
         </FormControl>
-        <ErrorSnack
-          open={this.props.errors.editGamesMessage}
+        <Snack
           onCloseDispatchText='CLEAR_EDIT_GAMES_ERROR'
           autoHideDuration={null}
           message={this.props.errors.editGamesMessage}
+          severity='error'
         />
       </>
     );

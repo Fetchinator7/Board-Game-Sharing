@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import SearchTablePresets from '../GamesTable/GamesTable';
+import SearchTablePresets from './GamesTable/GamesTable';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
@@ -15,22 +15,21 @@ function Alert(props) {
 
 class UserPage extends Component {
   render() {
-    const { openIfText, onCloseDispatchText, autoHideDuration, message } = this.props;
-    console.log(openIfText, onCloseDispatchText, autoHideDuration, message);
-    if (typeof openIfText !== 'string' || !onCloseDispatchText || typeof message !== 'string') {
+    const { onCloseDispatchText, autoHideDuration, message, severity } = this.props;
+    if (!onCloseDispatchText || typeof message !== 'string' || typeof severity !== 'string') {
       throw new Error('the ErrorSnack requires all these attributes but at least one is missing: open, onCloseDispatchText, autoHideDuration, message');
     }
     return (
       <MuiThemeProvider theme={useStyles}>
         <Snackbar
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          open={openIfText ? true : false}
+          open={message ? true : false}
           autoHideDuration={autoHideDuration === null ? null : autoHideDuration}
           onClose={() => this.props.dispatch({ type: onCloseDispatchText })}
         >
           <Alert
             onClose={() => this.props.dispatch({ type: onCloseDispatchText })}
-            severity='error'
+            severity={severity}
           >
             {message}
           </Alert>

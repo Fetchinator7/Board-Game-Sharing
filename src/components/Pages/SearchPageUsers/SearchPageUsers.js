@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, TextField } from "@material-ui/core";
-import ErrorSnack from '../../Components/Errors/ErrorSnack';
+import Snack from '../../Components/Snack';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '../../Components/UserTable/UserResultsTable';
 
@@ -48,11 +48,11 @@ class SearchPage extends Component {
           Search
         </Button>
         <Table tableData={this.props.searchUsers.usersSearchResults} />
-        <ErrorSnack
-          openIfText={this.props.searchUsers.noResultsErrorText}
+        <Snack
           onCloseDispatchText='RESET_USER_SEARCH__USER_NOT_FOUND'
           autoHideDuration={10000}
           message={this.props.searchUsers.noResultsErrorText}
+          severity={'error'}
         />
       </>
     );

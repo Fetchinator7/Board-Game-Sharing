@@ -49,6 +49,7 @@ function* updateGameOwnedStatus(action) {
     // yield put({ type: 'SET_ALL_DATABASE_GAMES', payload: allDataBaseBGGGameIDs.data.rows });
   } catch (error) {
     console.log('Error updating owned game status:', error);
+    yield put({ type: 'SET_EDIT_GAMES_ERROR', payload: 'Error updating owned game status.' });
   }
 }
 
