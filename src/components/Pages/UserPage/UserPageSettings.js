@@ -1,25 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import SearchTablePresets from '../../Components/GamesTable/GamesTable';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
-
-const useStyles = createMuiTheme(
-  SearchTablePresets.theme
-);
-
-function Alert(props) {
-  return <MuiAlert elevation={6} variant='filled' {...props} />;
-}
+import ErrorSnack from '../../Components/Errors/ErrorSnack';
 
 class UserPage extends Component {
-
   changeVisibility(newVisibilityInt) {
     console.log('change profile visibility to:', newVisibilityInt);
     // this.props.dispatch({ type: 'SET_USER_PROFILE_VISIBILITY', payload: newVisibilityInt });
@@ -37,21 +25,12 @@ class UserPage extends Component {
             <FormControlLabel value={4} control={<Radio />} label='Private' />
           </RadioGroup>
         </FormControl>
-        <MuiThemeProvider theme={useStyles}>
-          <Snackbar
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-            open={this.props.errors.editGamesMessage}
-            autoHideDuration={10000}
-            onClose={() => this.props.dispatch({ type: 'CLEAR_EDIT_GAMES_ERROR' })}
-          >
-            <Alert
-              onClose={() => this.props.dispatch({ type: 'CLEAR_EDIT_GAMES_ERROR' })}
-              severity='error'
-            >
-              {this.props.errors.editGamesMessage}
-            </Alert>
-          </Snackbar>
-        </MuiThemeProvider>
+        <ErrorSnack
+          open={this.props.errors.editGamesMessage}
+          onCloseDispatchText='CLEAR_EDIT_GAMES_ERROR'
+          autoHideDuration={null}
+          message={this.props.errors.editGamesMessage}
+        />
       </>
     );
   }

@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, TextField, MuiThemeProvider, createMuiTheme } from "@material-ui/core";
-import SearchTablePresets from '../../Components/GamesTable/GamesTable';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import { Button, TextField } from "@material-ui/core";
+import ErrorSnack from '../../Components/Errors/ErrorSnack';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
@@ -11,14 +9,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import SearchResult from './GameSearchResult';
 import Table from './SearchPageGamesTable';
 import './SearchPageGames.css';
-
-const useStyles = createMuiTheme(
-  SearchTablePresets.theme
-);
-
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 class SearchPage extends Component {
   state = {
@@ -91,21 +81,12 @@ class SearchPage extends Component {
             <SearchResult gameObj={gameObj} key={`search-result-row-${index}`}/>
             )}
         <Table />
-        <MuiThemeProvider theme={useStyles}>
-          <Snackbar
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-            open={this.props.searchBGG.noResultsErrorText ? true : false}
-            autoHideDuration={10000}
-            onClose={() => this.props.dispatch({ type: "RESET_GAME_SEARCH__GAME_NOT_FOUND" })}
-          >
-            <Alert
-              onClose={() => this.props.dispatch({ type: "RESET_GAME_SEARCH__GAME_NOT_FOUND" })}
-              severity="error"
-            >
-              {this.props.searchBGG.noResultsErrorText}
-            </Alert>
-          </Snackbar>
-        </MuiThemeProvider>
+        <ErrorSnack
+          openIfText={this.props.searchBGG.noResultsErrorText}
+          onCloseDispatchText='RESET_GAME_SEARCH__GAME_NOT_FOUND'
+          autoHideDuration={10000}
+          message={this.props.searchBGG.noResultsErrorText}
+        />
       </>
     );
   }

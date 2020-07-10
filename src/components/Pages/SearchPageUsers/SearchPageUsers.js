@@ -1,19 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import SearchTablePresets from '../../Components/GamesTable/GamesTable';
-import { Button, TextField, MuiThemeProvider, createMuiTheme } from "@material-ui/core";
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import { Button, TextField } from "@material-ui/core";
+import ErrorSnack from '../../Components/Errors/ErrorSnack';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Table from '../../Components/UserTable/UserResultsTable';
-
-const useStyles = createMuiTheme(
-  SearchTablePresets.theme
-);
-
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 class SearchPage extends Component {
   state = {
@@ -58,21 +48,12 @@ class SearchPage extends Component {
           Search
         </Button>
         <Table tableData={this.props.searchUsers.usersSearchResults} />
-        <MuiThemeProvider theme={useStyles}>
-          <Snackbar
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-            open={this.props.searchUsers.noResultsErrorText ? true : false}
-            autoHideDuration={10000}
-            onClose={() => this.props.dispatch({ type: "RESET_USER_SEARCH__USER_NOT_FOUND" })}
-          >
-            <Alert
-              onClose={() => this.props.dispatch({ type: "RESET_USER_SEARCH__USER_NOT_FOUND" })}
-              severity="error"
-            >
-              {this.props.searchUsers.noResultsErrorText}
-            </Alert>
-          </Snackbar>
-        </MuiThemeProvider>
+        <ErrorSnack
+          openIfText={this.props.searchUsers.noResultsErrorText}
+          onCloseDispatchText='RESET_USER_SEARCH__USER_NOT_FOUND'
+          autoHideDuration={10000}
+          message={this.props.searchUsers.noResultsErrorText}
+        />
       </>
     );
   }

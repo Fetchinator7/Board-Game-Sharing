@@ -1,21 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import SearchTablePresets from '../../Components/GamesTable/GamesTable';
 import LogOutButton from '../../App/LogOutButton/LogOutButton';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 import FriendsTable from '../../Components/UserTable/UserResultsTable';
 import GamesTable from '../../Pages/SearchPageGames/SearchPageGamesTable';
 import Games from './UserGamesTable';
-
-const useStyles = createMuiTheme(
-  SearchTablePresets.theme
-);
-
-function Alert(props) {
-  return <MuiAlert elevation={6} variant='filled' {...props} />;
-}
 
 class UserPage extends Component {
   render() {
@@ -31,21 +19,6 @@ class UserPage extends Component {
         <br />
         {/* <Games tableData={this.props.user.ownedGames} /> */}
         <FriendsTable tableData={this.props.user.friends} />
-        <MuiThemeProvider theme={useStyles}>
-          <Snackbar
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-            open={this.props.errors.editGamesMessage}
-            autoHideDuration={10000}
-            onClose={() => this.props.dispatch({ type: 'CLEAR_EDIT_GAMES_ERROR' })}
-          >
-            <Alert
-              onClose={() => this.props.dispatch({ type: 'CLEAR_EDIT_GAMES_ERROR' })}
-              severity='error'
-            >
-              {this.props.errors.editGamesMessage}
-            </Alert>
-          </Snackbar>
-        </MuiThemeProvider>
       </>
     );
   }
