@@ -52,7 +52,10 @@ function* logoutUser() {
     // remove the client-side user object to let
     // the client-side code know the user is logged out
     yield put({ type: 'UNSET_USER' });
-
+    yield put({ type: 'RESET_USER_OWNED_GAMES' });
+    yield put({ type: 'RESET_USER_REQUESTED_LOANS' });
+    yield put({ type: 'RESET_USER_FRIENDS' });
+    yield put({ type: 'RESET_USER_PROFILE_VISIBILITY' });
   } catch (error) {
     console.log('Error with user logout:', error);
   }

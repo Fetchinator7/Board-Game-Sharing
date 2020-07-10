@@ -23,9 +23,9 @@ class UserPage extends Component {
       <>
         <div>
           <h1 id='welcome'>
-            Welcome, {this.props.user.username} -test!
+            Welcome, {this.props.user.userAttributes.user_name}
           </h1>
-          <p>Your ID is: {this.props.user.id} -1</p>
+          <p>Your Profile Visibility is: {this.props.user.userAttributes.visibility}</p>
           <LogOutButton className='log-in' />
         </div>
         <br />

@@ -20,9 +20,9 @@ class UserGamesTable extends Component {
       <>
         <div>
           <h1 id='welcome'>
-            Welcome, {this.props.user.username} -test!
+            Welcome, {this.props.user.userAttributes.user_name} -test!
           </h1>
-          <p>Your ID is: {this.props.user.id} -1</p>
+          <p>Your ID is: {this.props.user.userAttributes.user_id} -1</p>
         </div>
         <br />
         <MuiThemeProvider theme={useStyles}>
