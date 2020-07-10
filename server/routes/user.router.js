@@ -12,6 +12,16 @@ router.get('/', rejectUnauthenticated, (req, res) => {
   res.send(req.user);
 });
 
+router.get('/games/:userID', rejectUnauthenticated, (req, res) => {
+  const userID = req.params.userID;
+  const queryText = 'SELECT "user_owned_game"."game_id", "user_owned_game".comments FROM "user_owned_game" WHERE "user_owned_game".user_id = $1';
+  pool.query(queryText, [userID])
+    .then(queryResponse => res.send(queryResponse))
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
+    });
+});
 // Handles POST request with new user data
 // The only thing different from this and every other post we've seen
 // is that the password gets encrypted before being inserted
