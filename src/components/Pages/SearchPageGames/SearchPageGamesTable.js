@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import { updateOwnedStatus } from '../../Components/GamesTable/GamesTableOperations';
 import SearchTablePresets from '../../Components/GamesTable/GamesTable';
 import MUIDataTable from 'mui-datatables';
 import { MuiThemeProvider } from '@material-ui/core';
@@ -31,7 +30,7 @@ class Table extends React.Component {
                     <Checkbox color='primary' checked={value.props.checked} value={value.props.checked} />
                   }
                   onClick={() => {
-                    updateOwnedStatus(value.props.checked, tableMeta.rowData[SearchTablePresets.moreInfoColumnIndex].props.id);
+                    this.props.dispatch({ type: 'UPDATE_USER_OWNED_GAME', payload: { ownedStatus: value.props.checked, BGGid: tableMeta.rowData[SearchTablePresets.moreInfoColumnIndex].props.id } });
                   }}
                 />
               );
