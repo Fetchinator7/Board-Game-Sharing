@@ -14,7 +14,11 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 
 router.get('/games/:userID', rejectUnauthenticated, (req, res) => {
   const userID = req.params.userID;
-  const queryText = 'SELECT "user_owned_game"."game_id", "user_owned_game".comments FROM "user_owned_game" WHERE "user_owned_game".user_id = $1';
+  const queryText = `SELECT "user_owned_game".game_id, "bgg_game_id", 
+                    "game_img", "title", "player_range", "playtime",
+                    "user_owned_game".comments FROM "game"
+                    INNER JOIN "user_owned_game" ON "game".game_id="user_owned_game".game_id
+                    WHERE "user_owned_game".user_id = $1;`;
   pool.query(queryText, [userID])
     .then(queryResponse => res.send(queryResponse))
     .catch((error) => {
@@ -22,6 +26,7 @@ router.get('/games/:userID', rejectUnauthenticated, (req, res) => {
       res.sendStatus(500);
     });
 });
+
 // Handles POST request with new user data
 // The only thing different from this and every other post we've seen
 // is that the password gets encrypted before being inserted

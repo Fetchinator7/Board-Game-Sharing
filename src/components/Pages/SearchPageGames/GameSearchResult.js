@@ -13,7 +13,8 @@ class SearchResult extends Component {
 
   componentDidMount() {
     const { gameObj } = this.props
-    const userOwnsGame = true;
+    // const userOwnsGame = true;
+    const userOwnsGame = this.props.user.ownedGames.some(userGameObj => userGameObj.bgg_game_id === gameObj._attributes.id)
     this.setState({
       title: this.getTitle(gameObj.name),
       BGGid: gameObj._attributes.id,
@@ -78,7 +79,7 @@ class SearchResult extends Component {
 }
 
 const mapStateToProps = reduxState => ({
-  gamesGlobalState: reduxState.games,
+  user: reduxState.user,
   status: reduxState.status
 });
 

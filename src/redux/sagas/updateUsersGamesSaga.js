@@ -1,38 +1,42 @@
 import axios from 'axios';
-import { connect } from 'react-redux';
-import { put, takeEvery } from 'redux-saga/effects';
+import { put, takeEvery, select } from 'redux-saga/effects';
 
 // worker Saga: will be fired on "FETCH_USER" actions
 function* updateGameOwnedStatus(action) {
   try {
+    const globalState = yield select();
     const ownedStatus = action.payload.ownedStatus;
     const BGGid = action.payload.BGGid;
+    const formattedGame = globalState.searchBGG.formattedGameSearchResults.filter(game => game.BGGid === BGGid);
 
-    // const allDataBaseGames = yield axios.get('/api/game/management/all-database-games');
-    // const gameIsInDatabase = allDataBaseGames.some(dataBaseGame => dataBaseGame.bgg_game_id === BGGid);
-    // const formattedGame = this.props.formattedGames.filter(game => game.BGGid === BGGid);
-    // const serverSecret = process.env.SERVER_SESSION_SECRET;
-    // if (!gameIsInDatabase) {
-    //   if (formattedGame) {
-    //     yield axios.post('/api/game/management/database/game', { ...formattedGame, serverSecret });
-    //   } else {
-    //     throw new Error('Error, attempted to add a game to the database but received invalid formatting.');
-    //   }
-    // }
+    const allDataBaseGames = yield axios.get('/api/game/management/all-database-games');
+    const gameIsInDatabase = allDataBaseGames.data.rows.some(dataBaseGame => dataBaseGame.bgg_game_id === BGGid);
 
-    // const bodyObj = {
-    //   userID: this.props.userID,
-    //   gameID: BGGid
-    // };
-    // console.log(ownedStatus, BGGid, action);
-    // if (!ownedStatus) {
-    //   yield axios.delete('/api/user/game', bodyObj);
-    // } else {
-    //   yield axios.post('/api/user/game', bodyObj);
-    // }
+    if (!gameIsInDatabase) {
+      if (formattedGame) {
+        yield axios.post('/api/game/management/database/game', formattedGame[0]);
+      } else {
+        throw new Error('Error, attempted to add a game to the database but received invalid formatting.');
+      }
+    }
 
-    // const userGames = yield axios.get(`/api/user/games/${this.props.userID}`);
-    // yield put({ type: 'SET_USER_OWNED_GAMES', payload: userGames.data.rows });
+    const dataBaseGameID = yield axios.get(`/api/game/management/game-table-id/${BGGid}`);
+
+    const bodyObj = {
+      userID: globalState.user.userAttributes.user_id,
+      gameID: dataBaseGameID.data.rows[0].game_id
+    };
+
+    if (ownedStatus) {
+      // Delete/remove this game from the database.
+      yield axios.put('/api/game/management/game', bodyObj);
+    } else {
+      // Add this game to the user's games.
+      yield axios.post('/api/game/management/game', bodyObj);
+    }
+
+    const userGames = yield axios.get(`/api/user/games/${globalState.user.userAttributes.user_id}`);
+    yield put({ type: 'SET_USER_OWNED_GAMES', payload: userGames.data.rows });
 
     // now that the session has given us a user object
     // with an id and username set the client-side user object to let
@@ -52,9 +56,4 @@ function* updateGameStatus() {
   yield takeEvery('UPDATE_USER_OWNED_GAME', updateGameOwnedStatus);
 }
 
-const mapStateToProps = reduxState => ({
-  userID: reduxState.user.userAttributes.user_id,
-  formattedGames: reduxState.searchBGG.formattedGameSearchResults
-});
-
-export default connect(mapStateToProps)(updateGameStatus);
+export default updateGameStatus;

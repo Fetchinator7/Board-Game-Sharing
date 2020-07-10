@@ -30,7 +30,11 @@ class Table extends React.Component {
                     <Checkbox color='primary' checked={value.props.checked} value={value.props.checked} />
                   }
                   onClick={() => {
-                    this.props.dispatch({ type: 'UPDATE_USER_OWNED_GAME', payload: { ownedStatus: value.props.checked, BGGid: tableMeta.rowData[SearchTablePresets.moreInfoColumnIndex].props.id } });
+                    const bodyObj = {
+                      ownedStatus: value.props.checked,
+                      BGGid: tableMeta.rowData[SearchTablePresets.moreInfoColumnIndex].props.id
+                    };
+                    this.props.dispatch({ type: 'UPDATE_USER_OWNED_GAME', payload: bodyObj });
                   }}
                 />
               );

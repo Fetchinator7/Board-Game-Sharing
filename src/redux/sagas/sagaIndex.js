@@ -1,6 +1,7 @@
 import { all } from 'redux-saga/effects';
 import searchingBBGSagas from './searchingBBGSagas';
 import updateUserAttributesSaga from './userAttributesSagas';
+import updateGameStatus from './updateUsersGamesSaga';
 import schedulingSagas from './schedulingSagas';
 import loginSaga from './loginSaga';
 import registrationSaga from './registrationSaga';
@@ -18,6 +19,7 @@ export default function* rootSaga() {
     schedulingSagas(),
     loginSaga(),
     registrationSaga(),
+    updateGameStatus(),
     userSaga(),
     searchUserSaga()
   ]);
