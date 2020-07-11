@@ -13,9 +13,9 @@ const showLoadingIcon = (state = false, action) => {
 
 const loggedInStatus = (state = false, action) => {
   switch (action.type) {
-    case 'SET_SIGNED_IN':
+    case 'SET_USER_IS_LOGGED_IN':
       return true;
-    case 'SET_SIGNED_OUT':
+    case 'SET_USER_IS_LOGGED_OUT':
       return false;
     default:
       return state;

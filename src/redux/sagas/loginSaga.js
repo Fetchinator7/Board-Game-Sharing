@@ -18,7 +18,7 @@ function* loginUser(action) {
     yield axios.post('/api/user/login', action.payload, config);
     // after the user has logged in
     // get the user information from the server
-    yield put({type: 'FETCH_USER'});
+    yield put({ type: 'FETCH_USER' });
   } catch (error) {
     console.log('Error with user login:', error);
     if (error.response.status === 401) {
@@ -52,9 +52,11 @@ function* logoutUser() {
     // remove the client-side user object to let
     // the client-side code know the user is logged out
     yield put({ type: 'UNSET_USER' });
+    yield put({ type: 'SET_USER_IS_LOGGED_OUT' });
     yield put({ type: 'RESET_USER_OWNED_GAMES' });
     yield put({ type: 'RESET_USER_REQUESTED_LOANS' });
     yield put({ type: 'RESET_USER_FRIENDS' });
+    yield put({ type: 'CLEAR_EDIT_GAMES_ERROR' });
     yield put({ type: 'RESET_USER_PROFILE_VISIBILITY' });
   } catch (error) {
     console.log('Error with user logout:', error);

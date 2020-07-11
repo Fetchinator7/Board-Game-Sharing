@@ -18,10 +18,10 @@ function* fetchUser() {
     // now that the session has given us a user object
     // with an id and username set the client-side user object to let
     // the client-side code know the user is logged in
+    yield put({ type: 'SET_USER_IS_LOGGED_IN' });
     yield put({ type: 'SET_USER', payload: response.data });
     const userGames = yield axios.get(`/api/user/games/${response.data.user_id}`);
     yield put({ type: 'SET_USER_OWNED_GAMES', payload: userGames.data.rows });
-    yield put({ type: 'SET_SIGNED_IN' });
     const allDataBaseBGGGameIDs = yield axios.get('/api/game/management/all-database-games');
     yield put({ type: 'SET_ALL_DATABASE_GAMES', payload: allDataBaseBGGGameIDs.data.rows });
   } catch (error) {
