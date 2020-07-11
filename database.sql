@@ -46,13 +46,13 @@ CREATE TABLE "friend" (
 
 CREATE TABLE "loaned_game" (
 	"loan_id" serial NOT NULL,
-	"game_id" serial,
-	"game_owner_notes" TEXT,
+	"game_id" serial NOT NULL,
 	"owner_id" serial NOT NULL,
-	"friend_id" serial NOT NULL,
+	"friend_id" integer DEFAULT NULL,
 	"loan_start" DATE NOT NULL,
-	"loan_end" DATE,
+	"loan_end" DATE NOT NULL,
 	"agreed" BOOLEAN NOT NULL DEFAULT 'false',
+    "viewed" BOOLEAN NOT NULL DEFAULT 'false',
 	CONSTRAINT "loaned_game_pk" PRIMARY KEY ("loan_id")
 ) WITH (
   OIDS=FALSE
@@ -64,8 +64,8 @@ CREATE TABLE "alert" (
 	"created_at" TIMESTAMP NOT NULL,
 	"viewed_at" TIMESTAMP,
 	"alert_text" varchar(2000) NOT NULL,
-	"loaned_game_id" serial,
-	"friend_request_id" serial,
+	"loaned_game_id" integer DEFAULT NULL,
+	"friend_request_id" integer DEFAULT NULL,
 	CONSTRAINT "alert_pk" PRIMARY KEY ("alert_id")
 ) WITH (
   OIDS=FALSE
@@ -89,10 +89,9 @@ ALTER TABLE "user_owned_game" ADD CONSTRAINT "user_owned_game_fk1" FOREIGN KEY (
 ALTER TABLE "friend" ADD CONSTRAINT "friend_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("user_id");
 ALTER TABLE "friend" ADD CONSTRAINT "friend_fk1" FOREIGN KEY ("friend_id") REFERENCES "users"("user_id");
 
+ALTER TABLE "loaned_game" ADD CONSTRAINT "No duplicate loans" UNIQUE("game_id", "owner_id", "friend_id", "loan_start", "loan_end");
+ALTER TABLE "loaned_game" ADD CONSTRAINT "No duplicate block out days" UNIQUE("game_id", "owner_id", "loan_start", "loan_end");
 ALTER TABLE "loaned_game" ADD CONSTRAINT "loaned_game_fk0" FOREIGN KEY ("game_id") REFERENCES "game"("game_id");
-
--- ALTER TABLE "loaned_game" ADD CONSTRAINT "loaned_game_fk1" FOREIGN KEY ("game_owner_notes") REFERENCES "user_owned_game"("comments");
-
 ALTER TABLE "loaned_game" ADD CONSTRAINT "loaned_game_fk2" FOREIGN KEY ("owner_id") REFERENCES "users"("user_id");
 ALTER TABLE "loaned_game" ADD CONSTRAINT "loaned_game_fk3" FOREIGN KEY ("friend_id") REFERENCES "users"("user_id");
 
@@ -103,7 +102,9 @@ ALTER TABLE "alert" ADD CONSTRAINT "alert_fk2" FOREIGN KEY ("friend_request_id")
 ALTER TABLE "friend_request" ADD CONSTRAINT "friend_request_fk0" FOREIGN KEY ("from_user_id") REFERENCES "users"("user_id");
 ALTER TABLE "friend_request" ADD CONSTRAINT "friend_request_fk1" FOREIGN KEY ("to_user_id") REFERENCES "users"("user_id");
 
-ALTER TABLE "user_owned_game" ADD CONSTRAINT "owned_game_id" UNIQUE("game_id", "user_id")
+ALTER TABLE "user_owned_game" ADD CONSTRAINT "owned_game_id" UNIQUE("game_id", "user_id");
+ALTER TABLE "friend_request" ADD CONSTRAINT "No duplicate friend requests" UNIQUE("from_user_id", "to_user_id");
+ALTER TABLE "friend" ADD CONSTRAINT "No duplicate friends" UNIQUE("user_id", "friend_id");
 
 
 
