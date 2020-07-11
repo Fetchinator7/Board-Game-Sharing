@@ -24,6 +24,8 @@ function* fetchUser() {
     yield put({ type: 'SET_USER_OWNED_GAMES', payload: userGames.data.rows });
     const allDataBaseBGGGameIDs = yield axios.get('/api/game/management/all-database-games');
     yield put({ type: 'SET_ALL_DATABASE_GAMES', payload: allDataBaseBGGGameIDs.data.rows });
+    const usersFriends = yield axios.get(`/api/search/users/friends/${response.data.user_id}`);
+    yield put({ type: 'SET_USER_FRIENDS', payload: usersFriends.data.rows });
   } catch (error) {
     console.log('User get request failed', error);
   }

@@ -70,11 +70,8 @@ class Table extends React.Component {
     
   }
 
-  getFriendStatus = (userName) => {
-    console.log('Get friend status username', userName);
-    return true;
-    // this.props.dispatch()
-    // TODO get actual relationship.
+  getFriendStatus = (userSearchResultID) => {
+    return !this.props.userFriends.some(userObj => userObj.friend_id === userSearchResultID)
   }
 
   render() {
@@ -83,7 +80,7 @@ class Table extends React.Component {
         name: 'Users',
         options: {
           filter: false,
-          sort: false
+          sort: true
         }
       }
     ];
@@ -92,7 +89,8 @@ class Table extends React.Component {
         name: 'Friend Request',
         label: 'Send Friend Request',
         options: {
-          filter: true,
+          filter: false,
+          sort: false,
           customBodyRender: (value = false, tableMeta) => {
             return (
               <FormControlLabel
@@ -125,7 +123,7 @@ class Table extends React.Component {
       this.props.userStatus.userIsSignedIn &&
       <Button
         // This is an are arbitrary key I made up so the table can access this information.
-        isFriend={this.getFriendStatus(user.user_name)}
+        isFriend={this.getFriendStatus(user.user_id)}
       />
     ])
     const options = {
@@ -183,7 +181,8 @@ class Table extends React.Component {
 
 const mapStateToProps = reduxState => ({
   searchUsers: reduxState.searchUsers,
-  userStatus: reduxState.status
+  userStatus: reduxState.status,
+  userFriends: reduxState.user.friends
 });
 
 export default connect(mapStateToProps)(Table);
