@@ -1,5 +1,5 @@
-import { put, takeEvery } from 'redux-saga/effects';
-import Axios from 'axios';
+import { takeEvery } from 'redux-saga/effects';
+// import Axios from 'axios';
 
 function* requestLoan(action) {
   console.log('requestLoan input:', action);
