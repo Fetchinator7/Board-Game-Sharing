@@ -4,7 +4,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import SearchTablePresets from '../../Components/GamesTable/GamesTable';
 import MUIDataTable from 'mui-datatables';
-import { MuiThemeProvider } from '@material-ui/core';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+
+const useStyles = createMuiTheme(
+  SearchTablePresets.theme
+);
 
 class Table extends React.Component {
   render() {
@@ -48,7 +52,7 @@ class Table extends React.Component {
     }
 
     return (
-      <MuiThemeProvider theme={SearchTablePresets.theme}>
+      <MuiThemeProvider theme={useStyles}>
         <MUIDataTable title='Search Page' data={fullData} columns={columns} options={SearchTablePresets.options} />
       </MuiThemeProvider>
     );
