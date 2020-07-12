@@ -32,4 +32,39 @@ router.get('/friends/:userID', rejectUnauthenticated, (req, res) => {
     });
 });
 
+router.get('/user/profile/:userName', (req, res) => {
+  const userName = req.params.userName;
+  const queryText = 'SELECT "visibility", "user_id" FROM "users" WHERE user_name = $1;';
+  pool.query(queryText, [userName])
+    .then(queryResponse => {
+      if (queryResponse.rows[0]) {
+        const visibility = queryResponse.rows[0].visibility <= 2;
+        console.log(visibility);
+        // If there profile is 1: Public or 2: Those with the link then show all the game results.
+        if (visibility) {
+          return res.send(getSignedOutUsersGames(queryResponse.rows[0].user_id));
+        } else {
+          return res.sendStatus(403);
+        }
+        // return res.sendStatus(407);
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
+    });
+});
+
+function getSignedOutUsersGames(userName) {
+  const queryText = '';
+  pool.query(queryText, [userName])
+    .then(queryResponse => {
+      console.log('queryResponse', queryResponse);
+    })
+    .catch((error) => {
+      console.log(error);
+      return error;
+    });
+}
+
 module.exports = router;

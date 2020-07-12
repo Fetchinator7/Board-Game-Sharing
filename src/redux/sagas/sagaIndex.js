@@ -6,6 +6,7 @@ import schedulingSagas from './schedulingSagas';
 import loginSaga from './loginSaga';
 import registrationSaga from './registrationSaga';
 import userSaga from './userSaga';
+import loggedOutSaga from './loggedOutUserSagas';
 import searchUserSaga from './searchingUsersSagas';
 
 // rootSaga is the primary saga.
@@ -21,6 +22,7 @@ export default function* rootSaga() {
     registrationSaga(),
     updateGameStatus(),
     userSaga(),
-    searchUserSaga()
+    searchUserSaga(),
+    loggedOutSaga()
   ]);
 }

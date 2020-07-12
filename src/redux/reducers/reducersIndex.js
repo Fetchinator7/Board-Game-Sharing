@@ -6,6 +6,7 @@ import success from './successReducer';
 import loginMode from './loginModeReducer';
 import allDataBaseBGGGames from './allDataBaseGamesReducer';
 import user from './userReducer';
+import loggedOut from './loggedOutUserReducer';
 import searchUsers from './searchUsersReducers';
 
 export default combineReducers({
@@ -16,5 +17,6 @@ export default combineReducers({
   success,
   allDataBaseBGGGames,
   searchBGG,
-  searchUsers
+  searchUsers,
+  loggedOut
 });
