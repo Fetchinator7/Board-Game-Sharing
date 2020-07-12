@@ -20,6 +20,7 @@ class UserPage extends Component {
 
   componentWillUnmount() {
     this.props.dispatch({ type: 'CLEAR_A_DIFFERENT_USERS_OWNED_GAMES' });
+    this.props.dispatch({ type: 'CLEAR_A_DIFFERENT_USERS_ID' });
   }
 
   render() {
@@ -51,10 +52,16 @@ class UserPage extends Component {
         expandableRowsOnClick: true,
         renderExpandableRow: (rowData, rowMeta) => {
           const colSpan = rowData.length + 1;
+          console.log(rowData, rowMeta);
           return (
             <TableRow>
               <TableCell colSpan={colSpan}>
-                <DatePicker mode='request' loanDaysArray={this.props.otherUsersGames[rowMeta.rowIndex].loans} />
+                <DatePicker
+                  mode='request'
+                  loanDaysArray={this.props.otherUsersGames[rowMeta.rowIndex].loans}
+                  gameID={this.props.otherUsersGames[rowMeta.rowIndex].game_id}
+                  ownerID={this.props.otherUsersID}
+                />
               </TableCell>
             </TableRow>
           );
@@ -74,6 +81,12 @@ class UserPage extends Component {
           message={this.props.otherUserGetErrorMessage}
           severity='error'
         />
+        <Snack
+          onCloseDispatchText='CLEAR_GAME_LOAN_CREATION_SUCCESS_FOR_A_DIFFERENT_USER'
+          autoHideDuration={10000}
+          message={this.props.otherUsersGamesSuccessMessage}
+          severity='success'
+        />
       </>
     );
   }
@@ -82,6 +95,8 @@ class UserPage extends Component {
 const mapStateToProps = reduxState => ({
   otherUsersGames: reduxState.loggedOut.otherUsersGames,
   otherUserGetErrorMessage: reduxState.loggedOut.otherUsersGamesServerErrorMessage,
+  otherUsersGamesSuccessMessage: reduxState.loggedOut.otherUsersGamesSuccessMessage,
+  otherUsersID: reduxState.loggedOut.otherUsersID,
   userStatus: reduxState.status
 });
 

@@ -1,5 +1,6 @@
 // import TextField from '@material-ui/core/TextField';
 import React, { Fragment } from 'react';
+import { connect } from 'react-redux';
 import moment from 'moment';
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MomentUtils from '@date-io/moment';
@@ -81,7 +82,6 @@ class DateAndTimePickers extends React.Component {
     // moment(start.diff(gameLoan.loan_end, 'days');
     for (const gameLoan of loanDaysArray) {
       const daysBetweenLoanStartAndEnd = getDaysBetween(moment(gameLoan.loan_start), moment(gameLoan.loan_end));
-      console.log(gameLoan);
       // Skip this loop because the owner declined this loan.
       // BLock out day.
       if (gameLoan.friend_id === null) {
@@ -115,9 +115,16 @@ class DateAndTimePickers extends React.Component {
   }
 
   dispatchLoanRequest = () => {
+    const { gameID, ownerID } = this.props;
     console.log('dispatch', this.state.start, this.state.end, this.state.message);
-    // const dispatch = useDispatch()
-    // dispatch({ type: this.state.dispatchTypeStr, payload: '' })
+    this.props.dispatch({
+      type: this.state.dispatchTypeStr,
+      payload: {
+        gameID: gameID,
+        ownerID: ownerID,
+        startDate: this.state.start,
+        endDate: this.state.end
+    }})
   }
 
   checkIfValidBorrowingRange = (date) => {
@@ -140,6 +147,9 @@ class DateAndTimePickers extends React.Component {
     const isBlockedOutDay = isInCurrentMonth && this.state.blockOutDays.includes(day.format('yyyy-MM-DD'));
     const isAcceptedLoanDay = isInCurrentMonth && this.state.acceptedLoanDays.includes(day.format('yyyy-MM-DD'));
     return <Badge badgeContent={isBlockedOutDay ? '🚫' : isAcceptedLoanDay ? '✅' : isRequestedLoanDay ? '❓' : null}>{dayComponent}</Badge>;
+    // https://emojipedia.org/prohibited/
+    // https://emojipedia.org/check-mark-button/
+    // https://emojipedia.org/question-mark/
   }
 
   shouldDisableDate = (day) => {
@@ -224,4 +234,4 @@ class DateAndTimePickers extends React.Component {
   }
 }
 
-export default DateAndTimePickers;
+export default connect()(DateAndTimePickers);

@@ -32,6 +32,17 @@ router.get('/friends/:userID', rejectUnauthenticated, (req, res) => {
     });
 });
 
+router.get('/user/ID/:userName', (req, res) => {
+  const userName = req.params.userName;
+  const queryText = 'SELECT "user_id" FROM "users" WHERE "user_name" = $1;';
+  pool.query(queryText, [userName])
+    .then(queryResponse => res.send(queryResponse))
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
+    });
+});
+
 router.get('/user/profile/:userName', (req, res) => {
   const userName = req.params.userName;
   const queryText = 'SELECT "user_id" FROM "users" WHERE "visibility" <= 2 AND user_name = $1;';
@@ -81,6 +92,22 @@ router.post('/friend-request', rejectUnauthenticated, (req, res) => {
   const message = req.body.message;
   const queryText = 'INSERT INTO "friend_request" ("from_user_id", "to_user_id", "message") VALUES ($1, $2, $3);';
   pool.query(queryText, [userID, friendRequestUserID, message])
+    .then(queryResponse => res.send(queryResponse))
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
+    });
+});
+
+router.post('/borrow-game-request', rejectUnauthenticated, (req, res) => {
+  const gameID = req.body.gameID;
+  const userID = req.body.userID;
+  const ownerID = req.body.ownerID;
+  const startDate = req.body.startDate;
+  const endDate = req.body.endDate;
+  console.log('gameID', gameID, 'userID', userID, 'ownerID', ownerID, 'startDate', startDate, 'endDate', endDate);
+  const queryText = 'INSERT INTO "loaned_game" ("game_id", "owner_id", "friend_id", "loan_start", "loan_end") VALUES ($1, $2, $3, $4, $5);';
+  pool.query(queryText, [gameID, ownerID, userID, startDate, endDate])
     .then(queryResponse => res.send(queryResponse))
     .catch((error) => {
       console.log(error);

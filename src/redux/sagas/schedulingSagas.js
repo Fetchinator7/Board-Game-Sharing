@@ -1,12 +1,19 @@
-import { takeEvery } from 'redux-saga/effects';
-// import Axios from 'axios';
+import { takeEvery, select, put } from 'redux-saga/effects';
+import Axios from 'axios';
 
 function* requestLoan(action) {
-  console.log('requestLoan input:', action);
   try {
-    // const result = yield Axios.get(`/api/search/game-id/${action.payload}`);
-    // yield put({ type: 'SET_REQUEST_LOAN_GAMES', payload: [result.data] });
+    const globalState = yield select();
+    yield Axios.post('/api/search/users/borrow-game-request', {
+      gameID: action.payload.gameID,
+      userID: globalState.user.userAttributes.user_id,
+      ownerID: action.payload.ownerID,
+      startDate: action.payload.startDate,
+      endDate: action.payload.endDate
+    });
+    yield put({ type: 'SET_GAME_LOAN_CREATION_SUCCESS_FOR_A_DIFFERENT_USER', payload: 'Successfully submitted loan request!' });
   } catch (error) {
+    yield put({ type: 'SET_ERROR_FROM_A_DIFFERENT_USER', payload: 'Error making server loan request' });
     console.log('Error', error);
   }
 }
