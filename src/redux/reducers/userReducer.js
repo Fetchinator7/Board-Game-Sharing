@@ -24,9 +24,9 @@ const ownedGames = (state = [], action) => {
 
 const alerts = (state = [], action) => {
   switch (action.type) {
-    case 'SET_USER_REQUESTED_LOANS':
-      return action.payload;
-    case 'RESET_USER_REQUESTED_LOANS':
+    case 'SET_USER_NOTIFICATION':
+      return [].concat(...state, action.payload);
+    case 'CLEAR_USER_NOTIFICATION':
       return [];
     default:
       return state;

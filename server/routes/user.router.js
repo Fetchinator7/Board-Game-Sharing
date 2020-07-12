@@ -27,6 +27,17 @@ router.get('/games/:userID', rejectUnauthenticated, (req, res) => {
     });
 });
 
+router.get('/friend-requests', rejectUnauthenticated, (req, res) => {
+  const userID = req.params.userID;
+  const queryText = 'SELECT "from_user_id", "answered", "accepted" FROM "friend_request" WHERE to_user_id = $1';
+  pool.query(queryText, [userID])
+    .then(queryResponse => res.send(queryResponse))
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
+    });
+});
+
 router.put('/settings-privacy', rejectUnauthenticated, (req, res) => {
   const userID = req.body.userID;
   const newVisibility = req.body.newVisibility;

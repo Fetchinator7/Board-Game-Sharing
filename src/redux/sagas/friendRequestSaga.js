@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { takeEvery } from 'redux-saga/effects';
 
-// worker Saga: will be fired on "FETCH_USER" actions
 function* friendRequest(action) {
   try {
     yield axios.post('/api/search/users/friend-request', {
