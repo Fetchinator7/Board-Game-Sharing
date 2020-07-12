@@ -42,7 +42,11 @@ router.get('/user/profile/:userName', (req, res) => {
         // If there profile is 1: Public or 2: Those with the link then show all the game results.
         if (visibility) {
           const userID = queryResponse.rows[0].user_id;
-          const queryText = 'SELECT "game_id" FROM "user_owned_game" WHERE user_id = $1;';
+          const queryText = `SELECT "user_owned_game".game_id, "bgg_game_id", 
+                            "game_img", "title", "player_range", "playtime",
+                            "user_owned_game".comments FROM "game"
+                            INNER JOIN "user_owned_game" ON "game".game_id="user_owned_game".game_id
+                            WHERE "user_owned_game".user_id = $1;`;
           pool.query(queryText, [userID])
             .then(allUsersGames => {
               const loanedGamesQuery = `SELECT "loaned_game".game_id, "comments", "owner_id",
@@ -56,7 +60,7 @@ router.get('/user/profile/:userName', (req, res) => {
                 .then(allUsersGameLoans => {
                   res.send(allUsersGames.rows.map(ownedGame => {
                     const infoObj = {
-                      game_id: ownedGame.game_id,
+                      ...ownedGame,
                       loans: allUsersGameLoans.rows.filter(game => game.game_id === ownedGame.game_id)
                     };
                     return infoObj;

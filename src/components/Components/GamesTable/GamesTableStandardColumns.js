@@ -1,15 +1,13 @@
 import React from 'react';
 
 const Table = baseDataArray => {
-  console.log('baseDataArray', baseDataArray);
   const baseData = baseDataArray.map((gameObj, index) => [
-    <img src={gameObj.artwork} alt={gameObj.title} key={`game-result-artwork-${index}`} />,
+    <img src={gameObj.game_img} alt={gameObj.title} key={`game-result-artwork-${index}`} />,
     gameObj.title,
-    <a key={`game-table-row-${index}`} id={gameObj.BGGid} href={`https://boardgamegeek.com/boardgame/${gameObj.BGGid}`}>More Info</a>,
-    gameObj.playerRange,
-    gameObj.playTime
+    <a key={`game-table-row-${index}`} id={gameObj.bgg_game_id} href={`https://boardgamegeek.com/boardgame/${gameObj.bgg_game_id}`}>More Info</a>,
+    gameObj.player_range,
+    gameObj.playtime
   ]);
-  console.log('baseData:', baseData);
   return (
     baseData
   );

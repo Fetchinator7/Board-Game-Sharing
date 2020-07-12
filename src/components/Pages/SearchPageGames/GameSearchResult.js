@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 class SearchResult extends Component {
   state = {
     title: '',
-    BGGid: '',
-    playerRange: '',
-    playTime: '',
-    artwork: ''
+    bgg_game_id: '',
+    player_range: '',
+    playtime: '',
+    game_img: ''
   }
 
   componentDidMount() {
@@ -17,14 +17,14 @@ class SearchResult extends Component {
     const userOwnsGame = this.props.user.ownedGames.some(userGameObj => userGameObj.bgg_game_id === gameObj._attributes.id)
     this.setState({
       title: this.getTitle(gameObj.name),
-      BGGid: gameObj._attributes.id,
-      playerRange: gameObj.minplayers
+      bgg_game_id: gameObj._attributes.id,
+      player_range: gameObj.minplayers
         ? this.formatRanges(gameObj.minplayers._attributes.value, gameObj.maxplayers._attributes.value, false)
         : null,
-      playTime: gameObj.minplaytime
+      playtime: gameObj.minplaytime
         ? this.formatRanges(gameObj.minplaytime._attributes.value, gameObj.maxplaytime._attributes.value, true)
         : null,
-      artwork: gameObj.image && gameObj.image._text
+      game_img: gameObj.image && gameObj.image._text
     })
     this.props.status.userIsSignedIn && this.setState({ owned: userOwnsGame })
     // TODO const userOwnsGame = this.props.dispatch({ type: "CHECK_IF_OWNED", payload: gameObj._attributes.id });;
