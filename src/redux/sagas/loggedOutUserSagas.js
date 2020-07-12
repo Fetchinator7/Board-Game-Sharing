@@ -7,8 +7,8 @@ function* fetchLoggedOutUser(action) {
     console.log('user:', user);
     yield put({ type: 'SET_A_DIFFERENT_USERS_OWNED_GAMES', payload: user.data });
     // yield put({ type: 'SET_A_DIFFERENT_USERS_PROFILE_VISIBILITY', payload: user.data });
-    return 'something';
   } catch (error) {
+    yield put({ type: 'SET_ERROR_GETTING_A_DIFFERENT_USERS_GAMES', payload: 'User get request failed.' });
     console.log('User get request failed', error);
   }
 }

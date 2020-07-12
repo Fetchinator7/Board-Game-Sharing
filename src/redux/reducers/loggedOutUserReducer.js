@@ -22,7 +22,19 @@ const otherUsersProfileIsPublic = (state = true, action) => {
   }
 };
 
+const otherUsersGamesServerErrorMessage = (state = '', action) => {
+  switch (action.type) {
+    case 'SET_ERROR_GETTING_A_DIFFERENT_USERS_GAMES':
+      return action.payload;
+    case 'CLEAR_ERROR_GETTING_A_DIFFERENT_USERS_GAMES':
+      return '';
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   otherUsersGames,
-  otherUsersProfileIsPublic
+  otherUsersProfileIsPublic,
+  otherUsersGamesServerErrorMessage
 });
