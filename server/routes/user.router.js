@@ -27,6 +27,18 @@ router.get('/games/:userID', rejectUnauthenticated, (req, res) => {
     });
 });
 
+router.put('/settings-privacy', rejectUnauthenticated, (req, res) => {
+  const userID = req.body.userID;
+  const newVisibility = req.body.newVisibility;
+  const queryText = 'UPDATE users SET visibility = $1 WHERE user_id = $2;';
+  pool.query(queryText, [newVisibility, userID])
+    .then(queryResponse => res.send(queryResponse))
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
+    });
+});
+
 // Handles POST request with new user data
 // The only thing different from this and every other post we've seen
 // is that the password gets encrypted before being inserted

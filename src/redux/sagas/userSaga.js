@@ -31,8 +31,21 @@ function* fetchUser() {
   }
 }
 
+function* updateUsersPrivacySetting(action) {
+  try {
+    yield axios.put('/api/user/settings-privacy', {
+      userID: action.payload.userID,
+      newVisibility: action.payload.newVisibility
+    });
+    yield put({ type: 'FETCH_USER' });
+  } catch (error) {
+    console.log("Updating the user's privacy level failed:", error);
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
+  yield takeLatest('CHANGE_USERS_PROFILE_VISIBILITY', updateUsersPrivacySetting);
 }
 
 export default userSaga;

@@ -54,10 +54,9 @@ function* logoutUser() {
     yield put({ type: 'UNSET_USER' });
     yield put({ type: 'SET_USER_IS_LOGGED_OUT' });
     yield put({ type: 'RESET_USER_OWNED_GAMES' });
-    yield put({ type: 'RESET_USER_REQUESTED_LOANS' });
+    yield put({ type: 'CLEAR_USER_NOTIFICATION' });
     yield put({ type: 'RESET_USER_FRIENDS' });
     yield put({ type: 'CLEAR_EDIT_GAMES_ERROR' });
-    yield put({ type: 'RESET_USER_PROFILE_VISIBILITY' });
   } catch (error) {
     console.log('Error with user logout:', error);
   }

@@ -10,7 +10,13 @@ import Snack from '../../Components/Snack';
 class UserPage extends Component {
   changeVisibility(newVisibilityInt) {
     console.log('change profile visibility to:', newVisibilityInt);
-    // this.props.dispatch({ type: 'SET_USER_PROFILE_VISIBILITY', payload: newVisibilityInt });
+    this.props.dispatch({
+      type: 'CHANGE_USERS_PROFILE_VISIBILITY',
+      payload: {
+        userID: this.props.user.userAttributes.user_id,
+        newVisibility: newVisibilityInt
+      }
+    });
   }
 
   render() {

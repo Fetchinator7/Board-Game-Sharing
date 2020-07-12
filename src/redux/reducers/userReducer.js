@@ -44,23 +44,11 @@ const friends = (state = [], action) => {
   }
 };
 
-const profileVisibility = (state = 1, action) => {
-  switch (action.type) {
-    case 'SET_USER_PROFILE_VISIBILITY':
-      return action.payload;
-    case 'RESET_USER_PROFILE_VISIBILITY':
-      return [];
-    default:
-      return state;
-  }
-};
-
 // user will be on the redux state at:
 // state.user
 export default combineReducers({
   userAttributes: userReducer,
   ownedGames,
   friends,
-  alerts,
-  profileVisibility
+  alerts
 });
