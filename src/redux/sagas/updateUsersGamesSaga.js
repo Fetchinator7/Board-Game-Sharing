@@ -37,7 +37,7 @@ function* updateGameOwnedStatus(action) {
 
     const userGames = yield axios.get(`/api/user/games/${globalState.user.userAttributes.user_id}`);
     yield put({ type: 'SET_USER_OWNED_GAMES', payload: userGames.data.rows });
-    
+    // yield put({ type: 'FETCH_USER' });
   } catch (error) {
     console.log('Error updating owned game status:', error);
     yield put({ type: 'SET_EDIT_GAMES_ERROR', payload: 'Error updating owned game status.' });

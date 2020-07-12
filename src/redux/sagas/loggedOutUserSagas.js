@@ -8,8 +8,11 @@ function* fetchLoggedOutUser(action) {
     yield put({ type: 'SET_A_DIFFERENT_USERS_OWNED_GAMES', payload: user.data });
     // yield put({ type: 'SET_A_DIFFERENT_USERS_PROFILE_VISIBILITY', payload: user.data });
   } catch (error) {
-    yield put({ type: 'SET_ERROR_GETTING_A_DIFFERENT_USERS_GAMES', payload: 'User get request failed.' });
-    console.log('User get request failed', error);
+    if (String(error).includes('403')) {
+      yield put({ type: 'SET_ERROR_GETTING_A_DIFFERENT_USERS_GAMES', payload: "Error, you don't have permission to view this user's games." });
+    } else {
+      yield put({ type: 'SET_ERROR_GETTING_A_DIFFERENT_USERS_GAMES', payload: 'User get request failed.' });
+    }
   }
 }
 

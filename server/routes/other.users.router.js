@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/username/:search', (req, res) => {
   const search = req.params.search;
   console.log('search for username:', search);
-  pool.query('SELECT user_name, user_id FROM users WHERE user_name ILIKE $1', [`%${search}%`])
+  pool.query('SELECT user_name, user_id FROM users WHERE "visibility" <= 1 AND user_name ILIKE $1', [`%${search}%`])
     .then(results => {
       console.log('users', results.rows);
       res.send(results.rows);
@@ -34,41 +34,39 @@ router.get('/friends/:userID', rejectUnauthenticated, (req, res) => {
 
 router.get('/user/profile/:userName', (req, res) => {
   const userName = req.params.userName;
-  const queryText = 'SELECT "visibility", "user_id" FROM "users" WHERE user_name = $1;';
+  const queryText = 'SELECT "user_id" FROM "users" WHERE "visibility" <= 2 AND user_name = $1;';
   pool.query(queryText, [userName])
     .then(queryResponse => {
+      console.log(queryResponse);
       if (queryResponse.rows[0]) {
-        const visibility = queryResponse.rows[0].visibility <= 2;
         // If there profile is 1: Public or 2: Those with the link then show all the game results.
-        if (visibility) {
-          const userID = queryResponse.rows[0].user_id;
-          const queryText = `SELECT "user_owned_game".game_id, "bgg_game_id", 
+        const userID = queryResponse.rows[0].user_id;
+        const queryText = `SELECT "user_owned_game".game_id, "bgg_game_id", 
                             "game_img", "title", "player_range", "playtime",
                             "user_owned_game".comments FROM "game"
                             INNER JOIN "user_owned_game" ON "game".game_id="user_owned_game".game_id
                             WHERE "user_owned_game".user_id = $1;`;
-          pool.query(queryText, [userID])
-            .then(allUsersGames => {
-              const loanedGamesQuery = `SELECT "loaned_game".game_id, "friend_id", "loan_start",
+        pool.query(queryText, [userID])
+          .then(allUsersGames => {
+            const loanedGamesQuery = `SELECT "loaned_game".game_id, "friend_id", "loan_start",
                                         "loan_end", "agreed", "viewed"
                                         FROM user_owned_game
                                         JOIN loaned_game
                                         ON user_owned_game.game_id = loaned_game.game_id
                                         WHERE owner_id = $1`;
-              pool.query(loanedGamesQuery, [userID])
-                .then(allUsersGameLoans => {
-                  res.send(allUsersGames.rows.map(ownedGame => {
-                    const infoObj = {
-                      ...ownedGame,
-                      loans: allUsersGameLoans.rows.filter(game => game.game_id === ownedGame.game_id)
-                    };
-                    return infoObj;
-                  }));
-                });
-            });
-        } else {
-          res.sendStatus(403);
-        }
+            pool.query(loanedGamesQuery, [userID])
+              .then(allUsersGameLoans => {
+                res.send(allUsersGames.rows.map(ownedGame => {
+                  const infoObj = {
+                    ...ownedGame,
+                    loans: allUsersGameLoans.rows.filter(game => game.game_id === ownedGame.game_id)
+                  };
+                  return infoObj;
+                }));
+              });
+          });
+      } else {
+        res.sendStatus(403);
       }
     })
     .catch((error) => {
