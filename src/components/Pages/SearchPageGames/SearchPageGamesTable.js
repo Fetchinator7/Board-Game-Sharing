@@ -4,6 +4,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import SearchTablePresets from '../../Components/GamesTable/GamesTable';
 import MUIDataTable from 'mui-datatables';
+import baseGamesDataArray from '../../Components/GamesTable/GamesTableStandardColumns';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 
 const useStyles = createMuiTheme(
@@ -12,13 +13,7 @@ const useStyles = createMuiTheme(
 
 class Table extends React.Component {
   render() {
-    const baseData = this.props.searchBGG.formattedGameSearchResults.map((gameObj, index) => [
-      <img src={gameObj.artwork} alt={gameObj.title} key={`game-result-artwork-${index}`} />,
-      gameObj.title,
-      <a key={`game-table-row-${index}`} id={gameObj.BGGid} href={`https://boardgamegeek.com/boardgame/${gameObj.BGGid}`}>More Info</a>,
-      gameObj.playerRange,
-      gameObj.playTime
-      ]);
+    const baseData = baseGamesDataArray(this.props.searchBGG.formattedGameSearchResults);
     let fullData = baseData;
     const columns = [...SearchTablePresets.columns];
     if (this.props.userStatus.userIsSignedIn) {
