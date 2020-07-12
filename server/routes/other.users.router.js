@@ -39,14 +39,33 @@ router.get('/user/profile/:userName', (req, res) => {
     .then(queryResponse => {
       if (queryResponse.rows[0]) {
         const visibility = queryResponse.rows[0].visibility <= 2;
-        console.log(visibility);
         // If there profile is 1: Public or 2: Those with the link then show all the game results.
         if (visibility) {
-          return res.send(getSignedOutUsersGames(queryResponse.rows[0].user_id));
+          const userID = queryResponse.rows[0].user_id;
+          const queryText = 'SELECT "game_id" FROM "user_owned_game" WHERE user_id = $1;';
+          pool.query(queryText, [userID])
+            .then(allUsersGames => {
+              const loanedGamesQuery = `SELECT "loaned_game".game_id, "comments", "owner_id",
+                                        "loan_start", "loan_end", "agreed", "viewed"
+                                        FROM user_owned_game
+                                        JOIN loaned_game
+                                        ON user_owned_game.game_id = loaned_game.game_id
+                                        WHERE owner_id = $1`;
+
+              pool.query(loanedGamesQuery, [userID])
+                .then(allUsersGameLoans => {
+                  res.send(allUsersGames.rows.map(ownedGame => {
+                    const infoObj = {
+                      game_id: ownedGame.game_id,
+                      loans: allUsersGameLoans.rows.filter(game => game.game_id === ownedGame.game_id)
+                    };
+                    return infoObj;
+                  }));
+                });
+            });
         } else {
-          return res.sendStatus(403);
+          res.sendStatus(403);
         }
-        // return res.sendStatus(407);
       }
     })
     .catch((error) => {
@@ -54,17 +73,5 @@ router.get('/user/profile/:userName', (req, res) => {
       res.sendStatus(500);
     });
 });
-
-function getSignedOutUsersGames(userName) {
-  const queryText = '';
-  pool.query(queryText, [userName])
-    .then(queryResponse => {
-      console.log('queryResponse', queryResponse);
-    })
-    .catch((error) => {
-      console.log(error);
-      return error;
-    });
-}
 
 module.exports = router;

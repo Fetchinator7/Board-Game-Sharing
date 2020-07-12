@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 class UserPage extends Component {
 
-  // componentWillMount() {
-  //   this.props.history.goBack();
-  // }
+  componentDidMount() {
+    this.props.dispatch({ type: 'FETCH_A_DIFFERENT_USER', payload: this.props.match.params.userName });
+  }
+
+  componentWillUnmount() {
+    this.props.dispatch({ type: 'CLEAR_A_DIFFERENT_USERS_OWNED_GAMES' });
+  }
 
   render() {
     return (
@@ -14,4 +19,4 @@ class UserPage extends Component {
     );
   }
 }
-export default UserPage;
+export default connect()(UserPage);
