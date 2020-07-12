@@ -23,30 +23,37 @@ class Table extends React.Component {
     prompt: '',
     message: '',
     showTextField: true,
+    otherUsersID: '',
     selectedSearchResultUserName: '',
     selectedSearchResultUsersAreFriends: ''
   }
 
   changeFriendStatus = () => {
     console.log('Send request', this.state);
-    if (this.state.selectedSearchResultUsersAreFriends) {
+    if (!this.state.selectedSearchResultUsersAreFriends) {
       // this.props.dispatch() remove and block.
     } else {
-      // this.props.dispatch() request
+      console.log('add');
+      this.props.dispatch({
+        type: 'CREATE_FRIEND_REQUEST',
+        payload: {
+          userID: this.props.userID,
+          friendRequestUserID: this.state.otherUsersID,
+          message: this.state.message
+        }
+      })
     }
-    // this.props.dispatch()
-    // this.state.message
-    // TODO send the actual request.
     this.setState({
       confirmationWindowIsOpen: false,
       prompt: '',
       message: '',
+      otherUsersID: '',
       selectedSearchResultUserName: '',
       selectedSearchResultUsersAreFriends: ''
     })
   }
 
-  showConfirmationDialogue = (userName, usersAreFriends) => {
+  showConfirmationDialogue = (userName, usersAreFriends, otherUsersID) => {
     console.log('Change friend status pop-up', userName, usersAreFriends);
     if (usersAreFriends) {
       this.setState({
@@ -54,6 +61,7 @@ class Table extends React.Component {
         trueButtonAction: 'SEND',
         showTextField: true,
         prompt: `"${userName}" is more likely to accept your friend request if you send a message!`,
+        otherUsersID: otherUsersID,
         selectedSearchResultUserName: userName,
         selectedSearchResultUsersAreFriends: usersAreFriends
       })
@@ -63,6 +71,7 @@ class Table extends React.Component {
         trueButtonAction: 'YES',
         showTextField: false,
         prompt: `Are you sure you want to remove your friend "${userName}"?`,
+        otherUsersID: otherUsersID,
         selectedSearchResultUserName: userName,
         selectedSearchResultUsersAreFriends: usersAreFriends
       })
@@ -104,7 +113,7 @@ class Table extends React.Component {
                   </Button>
                 }
                 onClick={() => {
-                  this.showConfirmationDialogue(tableMeta.rowData[0].props.children, value.props.isFriend);
+                  this.showConfirmationDialogue(tableMeta.rowData[0].props.children, value.props.isFriend, value.props.otherUsersID );
                 }}
               />
             );
@@ -118,12 +127,13 @@ class Table extends React.Component {
       <Button
         variant="contained"
         color="primary"
-        href={`/user/${user.user_name}`}
+        href={`/#/user/${user.user_name}`}
       >{user.user_name}</Button>,
       this.props.userStatus.userIsSignedIn &&
       <Button
         // This is an are arbitrary key I made up so the table can access this information.
         isFriend={this.getFriendStatus(user.user_id)}
+        otherUsersID={user.user_id}
       />
     ])
     const options = {
@@ -152,8 +162,8 @@ class Table extends React.Component {
               maxLength='10'
               value={this.state.message}
               onChange={
-                // Set maximum number of message characters to 50.
-                event => event.target.value.length <= 50 && this.setState({ message: event.target.value })
+                // Set maximum number of message characters to 1000.
+                event => event.target.value.length <= 1000 && this.setState({ message: event.target.value })
               }
             />
           }
@@ -182,7 +192,8 @@ class Table extends React.Component {
 const mapStateToProps = reduxState => ({
   searchUsers: reduxState.searchUsers,
   userStatus: reduxState.status,
-  userFriends: reduxState.user.friends
+  userFriends: reduxState.user.friends,
+  userID: reduxState.user.userAttributes.user_id
 });
 
 export default connect(mapStateToProps)(Table);

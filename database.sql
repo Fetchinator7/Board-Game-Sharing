@@ -77,6 +77,7 @@ CREATE TABLE "friend_request" (
 	"to_user_id" serial NOT NULL,
 	"answered" BOOLEAN NOT NULL DEFAULT 'false',
 	"accepted" BOOLEAN NOT NULL DEFAULT 'false',
+	"message" varchar(1000) DEFAULT NULL,
 	CONSTRAINT "friend_request_pk" PRIMARY KEY ("request_id")
 ) WITH (
   OIDS=FALSE
