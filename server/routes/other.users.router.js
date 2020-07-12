@@ -49,13 +49,12 @@ router.get('/user/profile/:userName', (req, res) => {
                             WHERE "user_owned_game".user_id = $1;`;
           pool.query(queryText, [userID])
             .then(allUsersGames => {
-              const loanedGamesQuery = `SELECT "loaned_game".game_id, "comments", "owner_id",
-                                        "loan_start", "loan_end", "agreed", "viewed"
+              const loanedGamesQuery = `SELECT "loaned_game".game_id, "friend_id", "loan_start",
+                                        "loan_end", "agreed", "viewed"
                                         FROM user_owned_game
                                         JOIN loaned_game
                                         ON user_owned_game.game_id = loaned_game.game_id
                                         WHERE owner_id = $1`;
-
               pool.query(loanedGamesQuery, [userID])
                 .then(allUsersGameLoans => {
                   res.send(allUsersGames.rows.map(ownedGame => {

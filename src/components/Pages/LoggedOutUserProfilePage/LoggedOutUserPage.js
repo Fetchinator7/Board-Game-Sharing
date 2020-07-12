@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import baseGamesDataArray from '../../Components/GamesTable/GamesTableStandardColumns';
 import SearchTablePresets from '../../Components/GamesTable/GamesTable';
+import Snack from '../../Components/Snack';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
+import DatePicker from '../../Components/DatePicker/DatePicker';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 import MUIDataTable from 'mui-datatables';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const useStyles = createMuiTheme(
   SearchTablePresets.theme
@@ -27,6 +29,7 @@ class UserPage extends Component {
       return [...baseData[index], gameObj.comments];
     });
     const columns = [...SearchTablePresets.columns];
+    let options = SearchTablePresets.options;
     columns.push(
       {
         name: 'Comments',
@@ -37,41 +40,40 @@ class UserPage extends Component {
       }
     );
     if (this.props.userStatus.userIsSignedIn) {
-      columns.unshift(
-        {
-          name: 'Request',
-          options: {
-            filter: false,
-            sort: false,
-            customBodyRender: (value = false, tableMeta) => {
-              return (
-                <FormControlLabel
-                  control={
-                    <Checkbox color='primary' checked={value.props.checked} value={value.props.checked} />
-                  }
-                  onClick={() => {
-                    const bodyObj = {
-                      ownedStatus: value.props.checked,
-                      BGGid: tableMeta.rowData[SearchTablePresets.moreInfoColumnIndex].props.id
-                    };
-                    this.props.dispatch({ type: 'UPDATE_USER_OWNED_GAME', payload: bodyObj });
-                  }}
-                />
-              );
-            }
-          }
+      options = {
+        ...options,
+        isRowExpandable: () => true,
+        filter: true,
+        filterType: 'dropdown',
+        responsive: 'standard',
+        expandableRows: true,
+        expandableRowsHeader: false,
+        expandableRowsOnClick: true,
+        renderExpandableRow: (rowData, rowMeta) => {
+          const colSpan = rowData.length + 1;
+          return (
+            <TableRow>
+              <TableCell colSpan={colSpan}>
+                <DatePicker mode='request' loanDaysArray={this.props.otherUsersGames[rowMeta.rowIndex].loans} />
+              </TableCell>
+            </TableRow>
+          );
         }
-      );
-      fullData = this.props.otherUsersGames.map((gameObj, index) => {
-        return [<Checkbox color='primary' checked={gameObj.owned} key={`game-search-table-row-${index}`} />, ...fullData[index]];
-      });
+        // onRowExpansionChange: (curExpanded, allExpanded, rowsExpanded) => console.log(curExpanded, allExpanded, rowsExpanded)
+      };
     }
     return (
       <>
         {`This is ${this.props.match.params.userName}'s logged out page`}
         <MuiThemeProvider theme={useStyles}>
-          <MUIDataTable title='Search Page' data={fullData} columns={columns} options={SearchTablePresets.options} />
+          <MUIDataTable title='Search Page' data={fullData} columns={columns} options={options} />
         </MuiThemeProvider>
+        <Snack
+          onCloseDispatchText='CLEAR_ERROR_GETTING_A_DIFFERENT_USERS_GAMES'
+          autoHideDuration={null}
+          message={this.props.otherUserGetErrorMessage}
+          severity='error'
+        />
       </>
     );
   }
@@ -79,6 +81,7 @@ class UserPage extends Component {
 
 const mapStateToProps = reduxState => ({
   otherUsersGames: reduxState.loggedOut.otherUsersGames,
+  otherUserGetErrorMessage: reduxState.loggedOut.otherUsersGamesServerErrorMessage,
   userStatus: reduxState.status
 });
 

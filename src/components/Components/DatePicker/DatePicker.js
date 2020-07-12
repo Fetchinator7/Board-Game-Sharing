@@ -56,13 +56,44 @@ class DateAndTimePickers extends React.Component {
     end: moment().format('yyyy-MM-DD'),
     showErrorMessage: false,
     message: '',
-    requestedDays: ['2020-07-27', '2020-07-29', '2020-07-30'],
-    blockOutDays: ['2020-07-07', '2020-07-20', '2020-07-22', '2020-07-23'],
-    acceptedLoanDays: ['2020-07-09', '2020-07-10', '2020-07-11']
+    requestedDays: [],
+    blockOutDays: [],
+    acceptedLoanDays: []
   }
 
   componentDidMount() {
     const dateSetMode = this.props.mode;
+    const { loanDaysArray } = this.props;
+    const requestedDays = [];
+    const blockOutDays = [];
+    const acceptedLoanDays = [];
+    function getDaysBetween(start, end) {
+      const daysArr = [start.format('yyyy-MM-DD')];
+      const dif = moment(end).diff(moment(start), 'days')
+      if (dif !== 0) {
+        for (let index = 0; index < dif; index++) {
+          // const element = array[index];
+          daysArr.push(moment(start, 'yyyy-MM-DD').add(index + 1, 'days').format('yyyy-MM-DD'));
+        }
+      }
+      return daysArr;
+    }
+    // moment(start.diff(gameLoan.loan_end, 'days');
+    for (const gameLoan of loanDaysArray) {
+      const daysBetweenLoanStartAndEnd = getDaysBetween(moment(gameLoan.loan_start), moment(gameLoan.loan_end));
+      console.log(gameLoan);
+      // Skip this loop because the owner declined this loan.
+      // BLock out day.
+      if (gameLoan.friend_id === null) {
+        blockOutDays.push(daysBetweenLoanStartAndEnd);
+      } else if (gameLoan.agreed === false && gameLoan.viewed === true) {
+        // 
+      } else if (gameLoan.agreed === true) {
+        acceptedLoanDays.push(daysBetweenLoanStartAndEnd);
+      } else {
+        requestedDays.push(daysBetweenLoanStartAndEnd);
+      }
+    }
     let dispatchTypeStr;
     if (dateSetMode === 'request') {
       dispatchTypeStr = 'SET_LOAN_REQUEST_TIME_FRAME';
@@ -73,6 +104,9 @@ class DateAndTimePickers extends React.Component {
     }
     this.setState({
       dispatchTypeStr: dispatchTypeStr,
+      requestedDays: requestedDays.flat(),
+      blockOutDays: blockOutDays.flat(),
+      acceptedLoanDays: acceptedLoanDays.flat(),
     })
     // If today is an invalid day change the starting values to null.
     if (this.state.blockOutDays.includes(moment().format('yyyy-MM-DD')) || this.state.acceptedLoanDays.includes(moment().format('yyyy-MM-DD'))) {
@@ -105,11 +139,11 @@ class DateAndTimePickers extends React.Component {
     const isRequestedLoanDay = isInCurrentMonth && this.state.requestedDays.includes(day.format('yyyy-MM-DD'));
     const isBlockedOutDay = isInCurrentMonth && this.state.blockOutDays.includes(day.format('yyyy-MM-DD'));
     const isAcceptedLoanDay = isInCurrentMonth && this.state.acceptedLoanDays.includes(day.format('yyyy-MM-DD'));
-    return <Badge badgeContent={isBlockedOutDay ? '1' : isAcceptedLoanDay ? '2' : isRequestedLoanDay ? '3' : null}>{dayComponent}</Badge>;
+    return <Badge badgeContent={isBlockedOutDay ? '🚫' : isAcceptedLoanDay ? '✅' : isRequestedLoanDay ? '❓' : null}>{dayComponent}</Badge>;
   }
 
   shouldDisableDate = (day) => {
-    return this.state.blockOutDays.includes(day.format('yyyy-MM-DD')) || this.state.acceptedLoanDays.includes(day.format('yyyy-MM-DD'))
+    return this.state.blockOutDays.includes(day.format('yyyy-MM-DD')) || this.state.acceptedLoanDays.includes(day.format('yyyy-MM-DD')) || this.state.requestedDays.includes(day.format('yyyy-MM-DD'))
   }
 
   render() {
@@ -154,9 +188,9 @@ class DateAndTimePickers extends React.Component {
             type="text"
             onChange={(event) => {
               event.target.value.length <= 50 &&
-              this.setState({
-                message: event.target.value
-              })
+                this.setState({
+                  message: event.target.value
+                })
             }}
           />
         }
