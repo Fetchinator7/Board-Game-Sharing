@@ -27,9 +27,11 @@ router.get('/games/:userID', rejectUnauthenticated, (req, res) => {
     });
 });
 
-router.get('/friend-requests', rejectUnauthenticated, (req, res) => {
+router.get('/notifications/:userID', rejectUnauthenticated, (req, res) => {
   const userID = req.params.userID;
-  const queryText = 'SELECT "from_user_id", "answered", "accepted" FROM "friend_request" WHERE to_user_id = $1';
+  // TODO change this to also get viewed notifications? Archived section?
+  const queryText = `SELECT "created_at", "alert_text", "loaned_game_id", "friend_request_id"
+                    FROM "alert" WHERE "viewed_at" IS NULL AND user_id = $1;`;
   pool.query(queryText, [userID])
     .then(queryResponse => res.send(queryResponse))
     .catch((error) => {
@@ -43,6 +45,21 @@ router.put('/settings-privacy', rejectUnauthenticated, (req, res) => {
   const newVisibility = req.body.newVisibility;
   const queryText = 'UPDATE users SET visibility = $1 WHERE user_id = $2;';
   pool.query(queryText, [newVisibility, userID])
+    .then(queryResponse => res.send(queryResponse))
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
+    });
+});
+
+router.post('/notification', rejectUnauthenticated, (req, res) => {
+  const userID = req.body.userID;
+  const createdAt = req.body.createdAt;
+  const alertText = req.body.alertText;
+  const friendRequestID = req.body.friendRequestID;
+  console.log('userID', userID, 'createdAt', createdAt, 'friendRequestUserID', friendRequestID, 'alertText', alertText);
+  const queryText = 'INSERT INTO "alert" ("user_id", "created_at", "alert_text", "friend_request_id") VALUES ($1, $2, $3, $4);';
+  pool.query(queryText, [userID, createdAt, alertText, friendRequestID])
     .then(queryResponse => res.send(queryResponse))
     .catch((error) => {
       console.log(error);

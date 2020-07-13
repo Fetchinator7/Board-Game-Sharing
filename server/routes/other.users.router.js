@@ -90,7 +90,7 @@ router.post('/friend-request', rejectUnauthenticated, (req, res) => {
   const userID = req.body.userID;
   const friendRequestUserID = req.body.friendRequestUserID;
   const message = req.body.message;
-  const queryText = 'INSERT INTO "friend_request" ("from_user_id", "to_user_id", "message") VALUES ($1, $2, $3);';
+  const queryText = 'INSERT INTO "friend_request" ("from_user_id", "to_user_id", "message") VALUES ($1, $2, $3) returning "request_id";';
   pool.query(queryText, [userID, friendRequestUserID, message])
     .then(queryResponse => res.send(queryResponse))
     .catch((error) => {
