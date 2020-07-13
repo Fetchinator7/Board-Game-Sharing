@@ -112,6 +112,7 @@ router.post('/borrow-game-request', rejectUnauthenticated, (req, res) => {
     });
 });
 
+// TODO combine these two into the same action based on whether loanedGameID or friendRequestID is null.
 router.post('/update-borrow-game-request', rejectUnauthenticated, (req, res) => {
   const viewedAt = req.body.viewedAt;
   const alertID = req.body.alertID;
@@ -127,6 +128,32 @@ router.post('/update-borrow-game-request', rejectUnauthenticated, (req, res) => 
         .then(updateResponse => {
           res.send(updateResponse);
         }))
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
+    });
+});
+
+router.post('/update-friend-request', rejectUnauthenticated, (req, res) => {
+  const viewedAt = req.body.viewedAt;
+  const alertID = req.body.alertID;
+  const agreed = req.body.agreed;
+  const userID = req.body.userID;
+  const friendRequestID = req.body.friendRequestID;
+  console.log(viewedAt, alertID, agreed, userID);
+  console.log(userID, friendRequestID);
+  const updateAlertText = 'UPDATE "alert" SET "viewed_at" = $1 WHERE alert_id = $2 AND user_id = $3;';
+  const updateFriendRequestText = 'UPDATE "friend_request" SET "answered" = TRUE, "accepted" = $1 WHERE "request_id" = $2 AND to_user_id = $3 returning from_user_id;';
+  const addFriendRelationText = 'INSERT INTO "friend" ("user_id", "friend_id") VALUES ($1, $2);';
+  pool.query(updateAlertText, [viewedAt, alertID, userID])
+    .then(() =>
+      pool.query(updateFriendRequestText, [agreed, friendRequestID, userID])
+        .then(friendID =>
+          pool.query(addFriendRelationText, [friendID.rows[0].from_user_id, userID])
+            .then(updateResponse => {
+              res.send(updateResponse);
+            }))
+    )
     .catch((error) => {
       console.log(error);
       res.sendStatus(500);

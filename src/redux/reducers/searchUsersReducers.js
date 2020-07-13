@@ -22,7 +22,19 @@ const noUserFoundError = (state = '', action) => {
   }
 };
 
+const sentFriendRequestSuccessMessage = (state = '', action) => {
+  switch (action.type) {
+    case 'SET_FRIEND_REQUEST_SENT_SUCCESSFULLY':
+      return action.payload;
+    case 'CLEAR_FRIEND_REQUEST_SENT_SUCCESSFULLY':
+      return '';
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   usersSearchResults: usersReducer,
-  noResultsErrorText: noUserFoundError
+  noResultsErrorText: noUserFoundError,
+  sentFriendRequestSuccessMessage
 });

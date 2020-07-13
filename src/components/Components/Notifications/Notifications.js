@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import SearchTablePresets from '../GamesTable/GamesTable';
+import Snack from '../../Components/Snack';
 import { Button, MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -34,8 +35,16 @@ class Table extends React.Component {
     }})
   }
 
-  friend = (type, ID) => {
-    console.log(type, 'friend with ID', ID);
+  friend = (agreedBool, alertID, friendRequestID) => {
+    console.log(agreedBool, 'friend with ID', alertID, friendRequestID);
+    this.props.dispatch({
+      type: 'SET_FRIEND_REQUEST_UPDATED_STATE',
+      payload: {
+        alertID: alertID,
+        agreed: agreedBool,
+        friendRequestID: friendRequestID
+      }
+    })
   }
 
   list = () => {
@@ -75,7 +84,7 @@ class Table extends React.Component {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => this.friend('Accept', friendNotificationObj.friend_request_id)}
+                onClick={() => this.friend(true, friendNotificationObj.alert_id, friendNotificationObj.friend_request_id)}
               >
                 Accept
               </Button>
@@ -83,7 +92,7 @@ class Table extends React.Component {
               <Button
                 variant="contained"
                 color="secondary"
-                onClick={() => this.friend('Decline', friendNotificationObj.friend_request_id)}
+                onClick={() => this.friend(false, friendNotificationObj.alert_id, friendNotificationObj.friend_request_id)}
               >
                 Decline
               </Button>
@@ -106,6 +115,12 @@ class Table extends React.Component {
                 <Drawer anchor={anchor} open={this.state.drawIsOpen} onClose={() => this.toggleDrawer(anchor, false)}>
                   {this.list(anchor)}
                 </Drawer>
+                <Snack
+                  onCloseDispatchText='CLEAR_FRIEND_REQUEST_SENT_SUCCESSFULLY'
+                  autoHideDuration={5000}
+                  message={this.props.searchUsers.sentFriendRequestSuccessMessage}
+                  severity={'success'}
+                />
               </MuiThemeProvider>
             </React.Fragment>
           ))
@@ -116,7 +131,8 @@ class Table extends React.Component {
 }
 
 const mapStateToProps = reduxState => ({
-  alerts: reduxState.user.alerts
+  alerts: reduxState.user.alerts,
+  searchUsers: reduxState.searchUsers,
 });
 
 export default connect(mapStateToProps)(Table);
