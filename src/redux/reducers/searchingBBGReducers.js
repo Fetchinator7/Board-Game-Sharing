@@ -25,7 +25,6 @@ const formattedGamesReducer = (state = [], action) => {
 const titlesReducer = (state = [], action) => {
   switch (action.type) {
     case 'SET_SEARCH_TITLES':
-      console.log('new search titles:', action.payload);
       return action.payload;
     case 'RESET_SEARCH_TITLES':
       return [];

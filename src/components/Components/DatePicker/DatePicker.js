@@ -116,7 +116,6 @@ class DateAndTimePickers extends React.Component {
 
   dispatchLoanRequest = () => {
     const { gameID, ownerID } = this.props;
-    console.log('dispatch', this.state.start, this.state.end, this.state.message);
     this.props.dispatch({
       type: this.state.dispatchTypeStr,
       payload: {
@@ -135,7 +134,6 @@ class DateAndTimePickers extends React.Component {
       moment(loanDay).isBetween(this.state.start, date)
     )
     if (isInAcceptedLoanRange || isInBlockOutRange) {
-      console.log('Error, invalid range');
       this.setState({ showErrorMessage: true })
     } else {
       this.setState({ end: date })

@@ -6,10 +6,8 @@ const router = express.Router();
 
 router.get('/username/:search', (req, res) => {
   const search = req.params.search;
-  console.log('search for username:', search);
   pool.query('SELECT user_name, user_id FROM users WHERE "visibility" <= 1 AND user_name ILIKE $1', [`%${search}%`])
     .then(results => {
-      console.log('users', results.rows);
       res.send(results.rows);
     })
     .catch(error => {
@@ -105,7 +103,6 @@ router.post('/borrow-game-request', rejectUnauthenticated, (req, res) => {
   const ownerID = req.body.ownerID;
   const startDate = req.body.startDate;
   const endDate = req.body.endDate;
-  console.log('gameID', gameID, 'userID', userID, 'ownerID', ownerID, 'startDate', startDate, 'endDate', endDate);
   const queryText = 'INSERT INTO "loaned_game" ("game_id", "owner_id", "friend_id", "loan_start", "loan_end") VALUES ($1, $2, $3, $4, $5);';
   pool.query(queryText, [gameID, ownerID, userID, startDate, endDate])
     .then(queryResponse => res.send(queryResponse))

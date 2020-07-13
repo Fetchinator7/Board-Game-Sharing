@@ -37,7 +37,6 @@ class Table extends React.Component {
       <>      
         <List>
           {this.props.alerts.map((loanNotificationObj, index) => (
-            console.log(loanNotificationObj),
             loanNotificationObj.loaned_game_id &&
             <ListItem button key={`notification-loan-request-${index}`}>
             <ListItemIcon>{<CheckCircleIcon />}</ListItemIcon>

@@ -9,7 +9,6 @@ function* friendRequest(action) {
       friendRequestUserID: action.payload.friendRequestUserID,
       message: action.payload.message
     });
-    console.log('friendRequest', friendRequest);
     yield axios.post('/api/user/notification', {
       userID: action.payload.userID,
       createdAt: moment(),

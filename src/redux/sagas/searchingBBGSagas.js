@@ -88,7 +88,6 @@ function* searchGames(action) {
 }
 
 function* getGameByID(action) {
-  console.log('getGameInfo input:', action);
   try {
     yield put({ type: 'SHOW_LOADING' });
     yield put({ type: 'RESET_RAW_SEARCH_GAMES' });

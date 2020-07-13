@@ -40,7 +40,8 @@ class UserPage extends Component {
         }
       }
     );
-    if (this.props.userStatus.userIsSignedIn) {
+    if (this.props.userStatus.userIsSignedIn &&
+        this.props.usersFriends.some(friendObj => friendObj.friend_id === this.props.otherUsersID)) {
       options = {
         ...options,
         isRowExpandable: () => true,
@@ -52,7 +53,6 @@ class UserPage extends Component {
         expandableRowsOnClick: true,
         renderExpandableRow: (rowData, rowMeta) => {
           const colSpan = rowData.length + 1;
-          console.log(rowData, rowMeta);
           return (
             <TableRow>
               <TableCell colSpan={colSpan}>
@@ -66,7 +66,6 @@ class UserPage extends Component {
             </TableRow>
           );
         }
-        // onRowExpansionChange: (curExpanded, allExpanded, rowsExpanded) => console.log(curExpanded, allExpanded, rowsExpanded)
       };
     }
     return (
@@ -97,7 +96,8 @@ const mapStateToProps = reduxState => ({
   otherUserGetErrorMessage: reduxState.loggedOut.otherUsersGamesServerErrorMessage,
   otherUsersGamesSuccessMessage: reduxState.loggedOut.otherUsersGamesSuccessMessage,
   otherUsersID: reduxState.loggedOut.otherUsersID,
-  userStatus: reduxState.status
+  userStatus: reduxState.status,
+  usersFriends: reduxState.user.friends
 });
 
 export default connect(mapStateToProps)(UserPage);

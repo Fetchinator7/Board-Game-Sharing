@@ -58,7 +58,6 @@ router.post('/notification', rejectUnauthenticated, (req, res) => {
   const alertText = req.body.alertText;
   const loanedGameID = req.body.loanedGameID;
   const friendRequestID = req.body.friendRequestID;
-  console.log('userID', userID, 'createdAt', createdAt, 'loanedGameID', loanedGameID, 'friendRequestUserID', friendRequestID, 'alertText', alertText);
   const queryText = 'INSERT INTO "alert" ("user_id", "created_at", "alert_text", "loaned_game_id", "friend_request_id") VALUES ($1, $2, $3, $4, $5);';
   pool.query(queryText, [userID, createdAt, alertText, loanedGameID, friendRequestID])
     .then(queryResponse => res.send(queryResponse))
@@ -75,8 +74,6 @@ router.post('/register', (req, res, next) => {
   const username = req.body.username;
   const email = req.body.email;
   const password = encryptLib.encryptPassword(req.body.password);
-  console.log(username, email, password);
-
   const queryText = "INSERT INTO users (user_name, email, password, visibility) VALUES ($1, $2, $3, '1') RETURNING user_id;";
   pool.query(queryText, [username, email, password])
     .then(() => res.sendStatus(201))

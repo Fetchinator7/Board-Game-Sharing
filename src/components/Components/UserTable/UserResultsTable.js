@@ -29,11 +29,9 @@ class Table extends React.Component {
   }
 
   changeFriendStatus = () => {
-    console.log('Send request', this.state);
     if (!this.state.selectedSearchResultUsersAreFriends) {
       // this.props.dispatch() remove and block.
     } else {
-      console.log('add');
       this.props.dispatch({
         type: 'CREATE_FRIEND_REQUEST',
         payload: {
@@ -54,7 +52,6 @@ class Table extends React.Component {
   }
 
   showConfirmationDialogue = (userName, usersAreFriends, otherUsersID) => {
-    console.log('Change friend status pop-up', userName, usersAreFriends);
     if (usersAreFriends) {
       this.setState({
         confirmationWindowIsOpen: true,
