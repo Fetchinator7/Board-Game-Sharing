@@ -24,6 +24,7 @@ import LogOutButton from '../LogOutButton/LogOutButton';
 // import ExpandLess from '@material-ui/icons/ExpandLess';
 // import ExpandMore from '@material-ui/icons/ExpandMore';
 // import StarBorder from '@material-ui/icons/StarBorder';
+import Notifications from '../../Components/Notifications/Notifications';
 import './Nav.css';
 
 const Nav = (props) => (
@@ -44,6 +45,7 @@ const Nav = (props) => (
       </Link>
       {props.status.userIsSignedIn && (
         <>
+          <Notifications />
           <Link className='nav-link' to='/settings'>
             Settings
           </Link>

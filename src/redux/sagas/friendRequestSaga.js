@@ -15,7 +15,8 @@ function* friendRequest(action) {
       createdAt: moment(),
       // TODO Do a join table to get the username instead of their id.
       alertText: `A user with the ID "${action.payload.friendRequestUserID}" wants to be your friend and said: "${action.payload.message}"`,
-      friendRequestID: friendRequest.data.rows[0].request_id
+      friendRequestID: friendRequest.data.rows[0].request_id,
+      loanedGameID: null
     });
     // SET_USER_NOTIFICATION
     // TODO create a new alert to display in a user's notifications.

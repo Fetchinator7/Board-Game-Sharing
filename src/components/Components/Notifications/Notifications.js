@@ -10,7 +10,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-// import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles = createMuiTheme(
   SearchTablePresets.theme
@@ -25,26 +24,28 @@ class Table extends React.Component {
     this.setState({ drawIsOpen: !this.state.drawIsOpen })
   }
 
-  loan = (type) => {
-    console.log(type);
+  loan = (type, ID) => {
+    console.log(type, 'loan with ID', ID);
   }
 
-  friend = (type) => {
-    console.log(type);
+  friend = (type, ID) => {
+    console.log(type, 'friend with ID', ID);
   }
 
-  list = (anchor) => {
+  list = () => {
     return (
       <>      
         <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem button key={text}>
+          {this.props.alerts.map((loanNotificationObj, index) => (
+            console.log(loanNotificationObj),
+            loanNotificationObj.loaned_game_id &&
+            <ListItem button key={`notification-loan-request-${index}`}>
             <ListItemIcon>{<CheckCircleIcon />}</ListItemIcon>
-            <ListItemText primary={'X user wants to be your friend!'} />
+              <ListItemText primary={loanNotificationObj.alert_text} />
             <Button
               variant="contained"
               color="primary"
-              onClick={() => this.loan('Accept')}
+                onClick={() => this.loan('Accept', loanNotificationObj.loaned_game_id)}
             >
               Accept
               </Button>
@@ -52,7 +53,7 @@ class Table extends React.Component {
             <Button
               variant="contained"
               color="secondary"
-              onClick={() => this.loan('Decline')}
+              onClick={() => this.loan('Decline', loanNotificationObj.loaned_game_id)}
             >
               Decline
               </Button>
@@ -61,14 +62,15 @@ class Table extends React.Component {
         </List>
         <Divider />
         <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
+          {this.props.alerts.map((friendNotificationObj, index) => (
+            friendNotificationObj.friend_request_id &&
+            <ListItem button key={`notification-friend-request-${index}`}>
               <ListItemIcon>{<PersonAddIcon />}</ListItemIcon>
-              <ListItemText primary={'X user wants to be your friend!  '} />
+              <ListItemText primary={friendNotificationObj.alert_text} />
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => this.loan('Accept')}
+                onClick={() => this.friend('Accept', friendNotificationObj.friend_request_id)}
               >
                 Accept
               </Button>
@@ -76,7 +78,7 @@ class Table extends React.Component {
               <Button
                 variant="contained"
                 color="secondary"
-                onClick={() => this.loan('Decline')}
+                onClick={() => this.friend('Decline', friendNotificationObj.friend_request_id)}
               >
                 Decline
               </Button>
@@ -88,13 +90,14 @@ class Table extends React.Component {
   }
 
   render() {
+    const anchor = 'right';
     return (
       <>
         {
-          ['Notifications'].map((anchor) => (
+          ['Notifications'].map((buttonText) => (
             <React.Fragment key={anchor}>
               <MuiThemeProvider theme={useStyles}>
-                <Button onClick={() => this.toggleDrawer(anchor, true)}>{anchor}</Button>
+                <Button onClick={() => this.toggleDrawer(anchor, true)}>{buttonText}</Button>
                 <Drawer anchor={anchor} open={this.state.drawIsOpen} onClose={() => this.toggleDrawer(anchor, false)}>
                   {this.list(anchor)}
                 </Drawer>

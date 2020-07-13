@@ -25,7 +25,7 @@ const ownedGames = (state = [], action) => {
 const alerts = (state = [], action) => {
   switch (action.type) {
     case 'SET_USER_NOTIFICATION':
-      return [].concat(...state, action.payload);
+      return action.payload;
     case 'CLEAR_USER_NOTIFICATION':
       return [];
     default:

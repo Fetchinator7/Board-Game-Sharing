@@ -1,5 +1,6 @@
 import { takeEvery, select, put } from 'redux-saga/effects';
 import Axios from 'axios';
+import moment from 'moment';
 
 function* requestLoan(action) {
   try {
@@ -10,6 +11,14 @@ function* requestLoan(action) {
       ownerID: action.payload.ownerID,
       startDate: action.payload.startDate,
       endDate: action.payload.endDate
+    });
+    // TODO display the name of the game instead of the id.
+    yield Axios.post('/api/user/notification', {
+      userID: globalState.user.userAttributes.user_id,
+      createdAt: moment(),
+      alertText: `Your friend with the ID "${action.payload.ownerID}" wants to borrow your game with ID: "${action.payload.gameID}"`,
+      loanedGameID: action.payload.gameID,
+      friendRequestID: null
     });
     yield put({ type: 'SET_GAME_LOAN_CREATION_SUCCESS_FOR_A_DIFFERENT_USER', payload: 'Successfully submitted loan request!' });
   } catch (error) {

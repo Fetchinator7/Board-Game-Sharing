@@ -56,10 +56,11 @@ router.post('/notification', rejectUnauthenticated, (req, res) => {
   const userID = req.body.userID;
   const createdAt = req.body.createdAt;
   const alertText = req.body.alertText;
+  const loanedGameID = req.body.loanedGameID;
   const friendRequestID = req.body.friendRequestID;
-  console.log('userID', userID, 'createdAt', createdAt, 'friendRequestUserID', friendRequestID, 'alertText', alertText);
-  const queryText = 'INSERT INTO "alert" ("user_id", "created_at", "alert_text", "friend_request_id") VALUES ($1, $2, $3, $4);';
-  pool.query(queryText, [userID, createdAt, alertText, friendRequestID])
+  console.log('userID', userID, 'createdAt', createdAt, 'loanedGameID', loanedGameID, 'friendRequestUserID', friendRequestID, 'alertText', alertText);
+  const queryText = 'INSERT INTO "alert" ("user_id", "created_at", "alert_text", "loaned_game_id", "friend_request_id") VALUES ($1, $2, $3, $4, $5);';
+  pool.query(queryText, [userID, createdAt, alertText, loanedGameID, friendRequestID])
     .then(queryResponse => res.send(queryResponse))
     .catch((error) => {
       console.log(error);

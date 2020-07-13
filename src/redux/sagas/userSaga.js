@@ -26,10 +26,8 @@ function* fetchUser() {
     yield put({ type: 'SET_ALL_DATABASE_GAMES', payload: allDataBaseBGGGameIDs.data.rows });
     const usersFriends = yield axios.get(`/api/search/users/friends/${response.data.user_id}`);
     yield put({ type: 'SET_USER_FRIENDS', payload: usersFriends.data.rows });
-
-    const usersPendingFriendRequests = yield axios.get(`/api/user/notifications/${response.data.user_id}`);
-    console.log('usersPendingFriendRequests.data', usersPendingFriendRequests.data.rows);
-    yield put({ type: 'SET_USER_NOTIFICATION', payload: usersPendingFriendRequests.data.rows });
+    const usersNewNotifications = yield axios.get(`/api/user/notifications/${response.data.user_id}`);
+    yield put({ type: 'SET_USER_NOTIFICATION', payload: usersNewNotifications.data.rows });
   } catch (error) {
     console.log('User get request failed', error);
   }
