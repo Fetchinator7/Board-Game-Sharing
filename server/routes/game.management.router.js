@@ -40,11 +40,11 @@ router.get('/game-table-id/:BGGId', rejectUnauthenticated, (req, res) => {
 });
 
 router.post('/database/game', rejectUnauthenticated, (req, res) => {
-  const gameID = req.body.BGGid;
-  const artwork = req.body.artwork;
+  const gameID = req.body.bgg_game_id;
+  const artwork = req.body.game_img;
   const title = req.body.title;
-  const playerRange = req.body.playerRange;
-  const playTime = req.body.playTime;
+  const playerRange = req.body.player_range;
+  const playTime = req.body.playtime;
   const queryText = 'INSERT INTO "game" ("bgg_game_id", "game_img", "title", "player_range", "playtime") VALUES ($1, $2, $3, $4, $5);';
   pool.query(queryText, [gameID, artwork, title, playerRange, playTime])
     .then(queryResponse => res.send(queryResponse))
