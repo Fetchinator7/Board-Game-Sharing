@@ -17,7 +17,7 @@ class Table extends React.Component {
       gameObj.title,
       <a key={`game-table-row-${index}`} id={gameObj.BGGid} href={`https://boardgamegeek.com/boardgame/${gameObj.BGGid}`}>More Info</a>,
       gameObj.playerRange,
-      gameObj.playTime
+      gameObj.playTimes
     ]);
     let fullData = baseData;
     const columns = [...SearchTablePresets.columns];

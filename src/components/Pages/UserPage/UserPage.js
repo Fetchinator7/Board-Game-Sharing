@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import LogOutButton from '../../App/LogOutButton/LogOutButton';
-import FriendsTable from '../../Components/UserTable/UserResultsTable';
+// import FriendsTable from '../../Components/UserTable/UserResultsTable';
 // import GamesTable from '../../Pages/SearchPageGames/SearchPageGamesTable';
 // import Games from './UserGamesTable';
 
@@ -18,7 +18,7 @@ class UserPage extends Component {
         </div>
         <br />
         {/* <Games tableData={this.props.user.ownedGames} /> */}
-        <FriendsTable tableData={this.props.user.friends} />
+        {/* <FriendsTable tableData={this.props.user.friends} /> */}
       </>
     );
   }
