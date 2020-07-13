@@ -14,9 +14,9 @@ function* requestLoan(action) {
     });
     // TODO display the name of the game instead of the id.
     yield Axios.post('/api/user/notification', {
-      userID: globalState.user.userAttributes.user_id,
+      otherUserID: action.payload.ownerID,
       createdAt: moment(),
-      alertText: `Your friend with the ID "${action.payload.ownerID}" wants to borrow your game with ID: "${action.payload.gameID}"`,
+      alertText: `Your friend with the ID "${globalState.user.userAttributes.user_id}" wants to borrow your game with ID: "${action.payload.gameID}"`,
       loanedGameID: action.payload.gameID,
       friendRequestID: null
     });

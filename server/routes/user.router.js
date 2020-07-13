@@ -53,13 +53,13 @@ router.put('/settings-privacy', rejectUnauthenticated, (req, res) => {
 });
 
 router.post('/notification', rejectUnauthenticated, (req, res) => {
-  const userID = req.body.userID;
+  const otherUserID = req.body.otherUserID;
   const createdAt = req.body.createdAt;
   const alertText = req.body.alertText;
   const loanedGameID = req.body.loanedGameID;
   const friendRequestID = req.body.friendRequestID;
   const queryText = 'INSERT INTO "alert" ("user_id", "created_at", "alert_text", "loaned_game_id", "friend_request_id") VALUES ($1, $2, $3, $4, $5);';
-  pool.query(queryText, [userID, createdAt, alertText, loanedGameID, friendRequestID])
+  pool.query(queryText, [otherUserID, createdAt, alertText, loanedGameID, friendRequestID])
     .then(queryResponse => res.send(queryResponse))
     .catch((error) => {
       console.log(error);

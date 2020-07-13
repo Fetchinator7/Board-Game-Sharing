@@ -10,10 +10,10 @@ function* friendRequest(action) {
       message: action.payload.message
     });
     yield axios.post('/api/user/notification', {
-      userID: action.payload.userID,
+      otherUserID: action.payload.friendRequestUserID,
       createdAt: moment(),
       // TODO Do a join table to get the username instead of their id.
-      alertText: `A user with the ID "${action.payload.friendRequestUserID}" wants to be your friend and said: "${action.payload.message}"`,
+      alertText: `A user with the ID "${action.payload.userID}" wants to be your friend and said: "${action.payload.message}"`,
       friendRequestID: friendRequest.data.rows[0].request_id,
       loanedGameID: null
     });
