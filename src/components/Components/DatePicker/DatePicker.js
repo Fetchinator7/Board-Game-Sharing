@@ -79,15 +79,17 @@ class DateAndTimePickers extends React.Component {
       }
       return daysArr;
     }
-    // moment(start.diff(gameLoan.loan_end, 'days');
     for (const gameLoan of loanDaysArray) {
       const daysBetweenLoanStartAndEnd = getDaysBetween(moment(gameLoan.loan_start), moment(gameLoan.loan_end));
       // Skip this loop because the owner declined this loan.
       // BLock out day.
       if (gameLoan.friend_id === null) {
         blockOutDays.push(daysBetweenLoanStartAndEnd);
+      // The owner declined this loan so see if the current user is the user who had the loan declined.
       } else if (gameLoan.agreed === false && gameLoan.viewed === true) {
-        // 
+        if (gameLoan.friend_id === this.props.currentUserID) {
+          blockOutDays.push(daysBetweenLoanStartAndEnd);
+        }
       } else if (gameLoan.agreed === true) {
         acceptedLoanDays.push(daysBetweenLoanStartAndEnd);
       } else {
@@ -232,4 +234,8 @@ class DateAndTimePickers extends React.Component {
   }
 }
 
-export default connect()(DateAndTimePickers);
+const mapStateToProps = reduxState => ({
+  currentUserID: reduxState.user.userAttributes.user_id
+});
+
+export default connect(mapStateToProps)(DateAndTimePickers);
