@@ -122,7 +122,7 @@ class DateAndTimePickers extends React.Component {
       type: this.state.dispatchTypeStr,
       payload: {
         gameID: gameID,
-        ownerID: ownerID,
+        otherUserID: ownerID,
         startDate: this.state.start,
         endDate: this.state.end
     }})

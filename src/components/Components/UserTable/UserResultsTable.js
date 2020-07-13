@@ -35,8 +35,7 @@ class Table extends React.Component {
       this.props.dispatch({
         type: 'CREATE_FRIEND_REQUEST',
         payload: {
-          userID: this.props.userID,
-          friendRequestUserID: this.state.otherUsersID,
+          otherUserID: this.state.otherUsersID,
           message: this.state.message
         }
       })
@@ -52,25 +51,25 @@ class Table extends React.Component {
   }
 
   showConfirmationDialogue = (userName, usersAreFriends, otherUsersID) => {
+    this.setState({
+      confirmationWindowIsOpen: true,
+      showTextField: true,
+      prompt: `"${userName}" is more likely to accept your friend request if you send a message!`,
+      otherUsersID: otherUsersID,
+      selectedSearchResultUserName: userName,
+      selectedSearchResultUsersAreFriends: usersAreFriends
+    })
     if (usersAreFriends) {
       this.setState({
-        confirmationWindowIsOpen: true,
         trueButtonAction: 'SEND',
         showTextField: true,
         prompt: `"${userName}" is more likely to accept your friend request if you send a message!`,
-        otherUsersID: otherUsersID,
-        selectedSearchResultUserName: userName,
-        selectedSearchResultUsersAreFriends: usersAreFriends
       })
     } else {
       this.setState({
-        confirmationWindowIsOpen: true,
         trueButtonAction: 'YES',
         showTextField: false,
         prompt: `Are you sure you want to remove your friend "${userName}"?`,
-        otherUsersID: otherUsersID,
-        selectedSearchResultUserName: userName,
-        selectedSearchResultUsersAreFriends: usersAreFriends
       })
     }
     
@@ -190,7 +189,6 @@ const mapStateToProps = reduxState => ({
   searchUsers: reduxState.searchUsers,
   userStatus: reduxState.status,
   userFriends: reduxState.user.friends,
-  userID: reduxState.user.userAttributes.user_id
 });
 
 export default connect(mapStateToProps)(Table);

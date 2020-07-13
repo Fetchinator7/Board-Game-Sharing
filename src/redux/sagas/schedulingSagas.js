@@ -4,22 +4,14 @@ import moment from 'moment';
 
 function* requestLoan(action) {
   try {
-    const globalState = yield select();
-    const loanRequestID = yield Axios.post('/api/search/users/borrow-game-request', {
+    Axios.post('/api/search/users/other-user-request', {
       gameID: action.payload.gameID,
-      userID: globalState.user.userAttributes.user_id,
-      ownerID: action.payload.ownerID,
+      otherUserID: action.payload.otherUserID,
       startDate: action.payload.startDate,
-      endDate: action.payload.endDate
+      endDate: action.payload.endDate,
+      actionType: 'loan'
     });
     // TODO display the name of the game instead of the id.
-    yield Axios.post('/api/user/notification', {
-      otherUserID: action.payload.ownerID,
-      createdAt: moment(),
-      alertText: `Your friend with the ID "${globalState.user.userAttributes.user_id}" wants to borrow your game with ID: "${action.payload.gameID}" from ${action.payload.startDate.format('MM/DD')}-${action.payload.endDate.format('MM/DD')}`,
-      loanedGameID: loanRequestID.data.rows[0].loan_id,
-      friendRequestID: null
-    });
     yield put({ type: 'SET_GAME_LOAN_CREATION_SUCCESS_FOR_A_DIFFERENT_USER', payload: 'Successfully submitted loan request!' });
   } catch (error) {
     yield put({ type: 'SET_ERROR_FROM_A_DIFFERENT_USER', payload: 'Server error trying to make the loan request' });
