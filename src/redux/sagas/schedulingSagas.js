@@ -5,7 +5,7 @@ import moment from 'moment';
 function* requestLoan(action) {
   try {
     const globalState = yield select();
-    yield Axios.post('/api/search/users/borrow-game-request', {
+    const loanRequestID = yield Axios.post('/api/search/users/borrow-game-request', {
       gameID: action.payload.gameID,
       userID: globalState.user.userAttributes.user_id,
       ownerID: action.payload.ownerID,
@@ -16,13 +16,30 @@ function* requestLoan(action) {
     yield Axios.post('/api/user/notification', {
       otherUserID: action.payload.ownerID,
       createdAt: moment(),
-      alertText: `Your friend with the ID "${globalState.user.userAttributes.user_id}" wants to borrow your game with ID: "${action.payload.gameID}"`,
-      loanedGameID: action.payload.gameID,
+      alertText: `Your friend with the ID "${globalState.user.userAttributes.user_id}" wants to borrow your game with ID: "${action.payload.gameID}" from ${action.payload.startDate.format('MM/DD')}-${action.payload.endDate.format('MM/DD')}`,
+      loanedGameID: loanRequestID.data.rows[0].loan_id,
       friendRequestID: null
     });
     yield put({ type: 'SET_GAME_LOAN_CREATION_SUCCESS_FOR_A_DIFFERENT_USER', payload: 'Successfully submitted loan request!' });
   } catch (error) {
-    yield put({ type: 'SET_ERROR_FROM_A_DIFFERENT_USER', payload: 'Error making server loan request' });
+    yield put({ type: 'SET_ERROR_FROM_A_DIFFERENT_USER', payload: 'Server error trying to make the loan request' });
+    console.log('Error', error);
+  }
+}
+
+function* updateLoan(action) {
+  try {
+    const globalState = yield select();
+    yield Axios.post('/api/search/users/update-borrow-game-request', {
+      viewedAt: moment(),
+      alertID: action.payload.alertID,
+      agreed: action.payload.agreed,
+      userID: globalState.user.userAttributes.user_id,
+      loanedGameID: action.payload.loanedGameID
+    });
+    // yield put({ type: 'SET_GAME_LOAN_CREATION_SUCCESS_FOR_A_DIFFERENT_USER', payload: 'Successfully submitted loan request!' });
+  } catch (error) {
+    // yield put({ type: 'SET_ERROR_FROM_A_DIFFERENT_USER', payload: 'Error making server loan request' });
     console.log('Error', error);
   }
 }
@@ -39,6 +56,7 @@ function* setBlockOut(action) {
 
 function* updateUserAttributesSaga() {
   yield takeEvery('SET_LOAN_REQUEST_TIME_FRAME', requestLoan);
+  yield takeEvery('SET_LOAN_REQUEST_UPDATED_STATE', updateLoan);
   yield takeEvery('SET_BLOCK_OUT_TIME_FRAME', setBlockOut);
 }
 

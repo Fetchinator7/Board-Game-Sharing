@@ -30,7 +30,7 @@ router.get('/games/:userID', rejectUnauthenticated, (req, res) => {
 router.get('/notifications/:userID', rejectUnauthenticated, (req, res) => {
   const userID = req.params.userID;
   // TODO change this to also get viewed notifications? Archived section?
-  const queryText = `SELECT "created_at", "alert_text", "loaned_game_id", "friend_request_id"
+  const queryText = `SELECT "alert_id", "created_at", "alert_text", "loaned_game_id", "friend_request_id"
                     FROM "alert" WHERE "viewed_at" IS NULL AND user_id = $1;`;
   pool.query(queryText, [userID])
     .then(queryResponse => res.send(queryResponse))

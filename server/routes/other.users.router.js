@@ -103,9 +103,30 @@ router.post('/borrow-game-request', rejectUnauthenticated, (req, res) => {
   const ownerID = req.body.ownerID;
   const startDate = req.body.startDate;
   const endDate = req.body.endDate;
-  const queryText = 'INSERT INTO "loaned_game" ("game_id", "owner_id", "friend_id", "loan_start", "loan_end") VALUES ($1, $2, $3, $4, $5);';
+  const queryText = 'INSERT INTO "loaned_game" ("game_id", "owner_id", "friend_id", "loan_start", "loan_end") VALUES ($1, $2, $3, $4, $5) returning "loan_id";';
   pool.query(queryText, [gameID, ownerID, userID, startDate, endDate])
     .then(queryResponse => res.send(queryResponse))
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
+    });
+});
+
+router.post('/update-borrow-game-request', rejectUnauthenticated, (req, res) => {
+  const viewedAt = req.body.viewedAt;
+  const alertID = req.body.alertID;
+  const agreed = req.body.agreed;
+  const userID = req.body.userID;
+  const loanedGameID = req.body.loanedGameID;
+  console.log(viewedAt, alertID, agreed, userID);
+  const updateAlertText = 'UPDATE "alert" SET "viewed_at" = $1 WHERE alert_id = $2 AND user_id = $3;';
+  const updateLoanText = 'UPDATE "loaned_game" SET "agreed" = $1, "viewed" = TRUE WHERE "loan_id" = $2 AND owner_id = $3;';
+  pool.query(updateAlertText, [viewedAt, alertID, userID])
+    .then(() =>
+      pool.query(updateLoanText, [agreed, loanedGameID, userID])
+        .then(updateResponse => {
+          res.send(updateResponse);
+        }))
     .catch((error) => {
       console.log(error);
       res.sendStatus(500);

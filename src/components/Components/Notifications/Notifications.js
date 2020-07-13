@@ -24,8 +24,14 @@ class Table extends React.Component {
     this.setState({ drawIsOpen: !this.state.drawIsOpen })
   }
 
-  loan = (type, ID) => {
-    console.log(type, 'loan with ID', ID);
+  loan = (agreedBool, alertID, loanedGameID) => {
+    this.props.dispatch({
+      type: 'SET_LOAN_REQUEST_UPDATED_STATE',
+      payload: {
+        alertID: alertID,
+        agreed: agreedBool,
+        loanedGameID: loanedGameID
+    }})
   }
 
   friend = (type, ID) => {
@@ -44,7 +50,7 @@ class Table extends React.Component {
             <Button
               variant="contained"
               color="primary"
-                onClick={() => this.loan('Accept', loanNotificationObj.loaned_game_id)}
+                onClick={() => this.loan(true, loanNotificationObj.alert_id, loanNotificationObj.loaned_game_id)}
             >
               Accept
               </Button>
@@ -52,7 +58,7 @@ class Table extends React.Component {
             <Button
               variant="contained"
               color="secondary"
-              onClick={() => this.loan('Decline', loanNotificationObj.loaned_game_id)}
+                onClick={() => this.loan(false, loanNotificationObj.alert_id, loanNotificationObj.loaned_game_id)}
             >
               Decline
               </Button>
