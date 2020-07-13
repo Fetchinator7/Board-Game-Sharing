@@ -4,6 +4,7 @@ import SearchTablePresets from './GamesTable/GamesTable';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+import Fade from '@material-ui/core/Fade';
 
 const useStyles = createMuiTheme(
   SearchTablePresets.theme
@@ -22,6 +23,7 @@ class UserPage extends Component {
     return (
       <MuiThemeProvider theme={useStyles}>
         <Snackbar
+          TransitionComponent={Fade} TransitionProps={{ timeout: 600 }}
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           open={message ? true : false}
           autoHideDuration={autoHideDuration === null ? null : autoHideDuration}

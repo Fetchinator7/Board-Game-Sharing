@@ -27,9 +27,6 @@ class SearchResult extends Component {
       game_img: gameObj.image && gameObj.image._text
     })
     this.props.status.userIsSignedIn && this.setState({ owned: userOwnsGame })
-    // TODO const userOwnsGame = this.props.dispatch({ type: "CHECK_IF_OWNED", payload: gameObj._attributes.id });;
-    // const userOwnsGame = this.props.gamesGlobalState.games.ownedGames.some(userGameObj => userGameObj.bgg_game_id === gameObj._attributes.id)
-    // this.state.title && this.props.dispatch({ type: 'SET_FORMATTED_SEARCH_GAMES', payload: this.state });
   }
 
   getTitle = (boardgameNameObj) => {

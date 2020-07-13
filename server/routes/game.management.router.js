@@ -40,7 +40,6 @@ router.get('/game-table-id/:BGGId', rejectUnauthenticated, (req, res) => {
 });
 
 router.post('/database/game', rejectUnauthenticated, (req, res) => {
-  // TODO make this more secure so only the server itself can run this.
   const gameID = req.body.BGGid;
   const artwork = req.body.artwork;
   const title = req.body.title;

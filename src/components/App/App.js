@@ -14,6 +14,7 @@ import SearchPage from '../Pages/SearchPageGames/SearchPageGames';
 import UsersSearchPage from '../Pages/SearchPageUsers/SearchPageUsers';
 import UsersSettingsPage from '../Pages/UserPage/UserPageSettings';
 import DatePicker from '../Components/DatePicker/DatePicker';
+import Notifications from '../Components/Notifications/Notifications';
 
 import './App.css';
 
@@ -27,8 +28,7 @@ class App extends Component {
       <Router>
         <>
           <Nav />
-          <Switch>
-            <Redirect exact path='/' to='/home' />
+          <Switch> 
             <Route
               exact
               path='/search/games'
@@ -50,6 +50,11 @@ class App extends Component {
               path='/user/:userName'
               component={LoggedOutUser}
             />
+            <Route
+              exact
+              path='/notifications'
+              component={Notifications}
+            />
             <Route exact path='/calendar'>
               <DatePicker mode='request' />
             </Route>
@@ -70,6 +75,7 @@ class App extends Component {
             />
             {/* If none of the other routes matched, we will show a 404. */}
             <Route render={() => <h1>404</h1>} />
+            <Redirect exact path='/' to='/home' />
           </Switch>
           {/* <Footer /> */}
         </>
