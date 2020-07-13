@@ -1,6 +1,7 @@
 const express = require('express');
 const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 const pool = require('../modules/pool');
+const moment = require('moment');
 
 const router = express.Router();
 
@@ -16,8 +17,8 @@ router.get('/username/:search', (req, res) => {
     });
 });
 
-router.get('/friends/:userID', rejectUnauthenticated, (req, res) => {
-  const userID = req.params.userID;
+router.get('/friends', rejectUnauthenticated, (req, res) => {
+  const userID = req.user.user_id;
   const queryText = `SELECT "friend".friend_id, "users".user_name 
                     FROM "friend"
                     JOIN "users" ON "friend".friend_id="users".user_id
@@ -84,40 +85,57 @@ router.get('/user/profile/:userName', (req, res) => {
     });
 });
 
-router.post('/friend-request', rejectUnauthenticated, (req, res) => {
-  const userID = req.body.userID;
-  const friendRequestUserID = req.body.friendRequestUserID;
-  const message = req.body.message;
-  const queryText = 'INSERT INTO "friend_request" ("from_user_id", "to_user_id", "message") VALUES ($1, $2, $3) returning "request_id";';
-  pool.query(queryText, [userID, friendRequestUserID, message])
-    .then(queryResponse => res.send(queryResponse))
-    .catch((error) => {
-      console.log(error);
-      res.sendStatus(500);
-    });
-});
-
-router.post('/borrow-game-request', rejectUnauthenticated, (req, res) => {
-  const gameID = req.body.gameID;
-  const userID = req.body.userID;
-  const ownerID = req.body.ownerID;
-  const startDate = req.body.startDate;
-  const endDate = req.body.endDate;
-  const queryText = 'INSERT INTO "loaned_game" ("game_id", "owner_id", "friend_id", "loan_start", "loan_end") VALUES ($1, $2, $3, $4, $5) returning "loan_id";';
-  pool.query(queryText, [gameID, ownerID, userID, startDate, endDate])
-    .then(queryResponse => res.send(queryResponse))
-    .catch((error) => {
-      console.log(error);
-      res.sendStatus(500);
-    });
+router.post('/other-user-request', rejectUnauthenticated, (req, res) => {
+  const userID = req.user.user_id;
+  const otherUsersUserName = req.user.user_name;
+  const otherUserID = req.body.otherUserID;
+  const now = moment();
+  const actionType = req.body.actionType;
+  if (actionType === 'friend') {
+    const message = req.body.message;
+    const friendAlertText = `The user with the user name "${otherUsersUserName}" wants to be your friend and said: "${message}"`;
+    const friendRequestQueryText = 'INSERT INTO "friend_request" ("from_user_id", "to_user_id", "message") VALUES ($1, $2, $3) returning "request_id";';
+    pool.query(friendRequestQueryText, [userID, otherUserID, message])
+      .then(friendRequestQueryResponse => {
+        console.log('friendRequestQueryResponse', friendRequestQueryResponse);
+        const queryText = 'INSERT INTO "alert" ("user_id", "created_at", "alert_text", "friend_request_id") VALUES ($1, $2, $3, $4);';
+        pool.query(queryText, [otherUserID, now, friendAlertText, friendRequestQueryResponse.rows[0].request_id])
+          .then(queryResponse => res.send(queryResponse));
+      })
+      .catch((error) => {
+        console.log(error);
+        res.sendStatus(500);
+      });
+  } else if (actionType === 'loan') {
+    const gameID = req.body.gameID;
+    const startDate = moment(req.body.startDate);
+    const endDate = moment(req.body.endDate);
+    console.log(startDate, endDate);
+    const borrowGameQueryText = 'INSERT INTO "loaned_game" ("game_id", "owner_id", "friend_id", "loan_start", "loan_end") VALUES ($1, $2, $3, $4, $5) returning "loan_id";';
+    pool.query(borrowGameQueryText, [gameID, otherUserID, userID, startDate, endDate])
+      .then(loanRequestQueryResponse => {
+        console.log('otherUserID', otherUserID);
+        console.log('loanRequestQueryResponse', loanRequestQueryResponse);
+        const loanQueryText = 'INSERT INTO "alert" ("user_id", "created_at", "alert_text", "loaned_game_id") VALUES ($1, $2, $3, $4);';
+        const loanAlertText = `Your friend with the user name "${otherUsersUserName}" wants to borrow your game with ID: "${gameID}" from ${startDate.format('MM/DD')}-${endDate.format('MM/DD')}`;
+        pool.query(loanQueryText, [otherUserID, now, loanAlertText, loanRequestQueryResponse.rows[0].loan_id])
+          .then(queryResponse => res.send(queryResponse));
+      })
+      .catch((error) => {
+        console.log(error);
+        res.sendStatus(500);
+      });
+  } else {
+    res.sendStatus(400);
+  }
 });
 
 // TODO combine these two into the same action based on whether loanedGameID or friendRequestID is null.
 router.post('/update-borrow-game-request', rejectUnauthenticated, (req, res) => {
-  const viewedAt = req.body.viewedAt;
+  const viewedAt = moment();
   const alertID = req.body.alertID;
   const agreed = req.body.agreed;
-  const userID = req.body.userID;
+  const userID = req.user.user_id;
   const loanedGameID = req.body.loanedGameID;
   console.log(viewedAt, alertID, agreed, userID);
   const updateAlertText = 'UPDATE "alert" SET "viewed_at" = $1 WHERE alert_id = $2 AND user_id = $3;';
@@ -134,11 +152,12 @@ router.post('/update-borrow-game-request', rejectUnauthenticated, (req, res) => 
     });
 });
 
+// TODO only allow a notification to be created for the signed in user, and
 router.post('/update-friend-request', rejectUnauthenticated, (req, res) => {
-  const viewedAt = req.body.viewedAt;
+  const viewedAt = moment();
   const alertID = req.body.alertID;
   const agreed = req.body.agreed;
-  const userID = req.body.userID;
+  const userID = req.user.user_id;
   const friendRequestID = req.body.friendRequestID;
   console.log(viewedAt, alertID, agreed, userID);
   console.log(userID, friendRequestID);
@@ -149,7 +168,7 @@ router.post('/update-friend-request', rejectUnauthenticated, (req, res) => {
     .then(() =>
       pool.query(updateFriendRequestText, [agreed, friendRequestID, userID])
         .then(friendID =>
-          pool.query(addFriendRelationText, [friendID.rows[0].from_user_id, userID])
+          agreed && pool.query(addFriendRelationText, [friendID.rows[0].from_user_id, userID])
             .then(updateResponse => {
               res.send(updateResponse);
             }))

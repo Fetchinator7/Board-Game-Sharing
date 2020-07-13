@@ -20,13 +20,13 @@ function* fetchUser() {
     // the client-side code know the user is logged in
     yield put({ type: 'SET_USER_IS_LOGGED_IN' });
     yield put({ type: 'SET_USER', payload: response.data });
-    const userGames = yield axios.get(`/api/user/games/${response.data.user_id}`);
+    const userGames = yield axios.get('/api/user/games');
     yield put({ type: 'SET_USER_OWNED_GAMES', payload: userGames.data.rows });
     const allDataBaseBGGGameIDs = yield axios.get('/api/game/management/all-database-games');
     yield put({ type: 'SET_ALL_DATABASE_GAMES', payload: allDataBaseBGGGameIDs.data.rows });
-    const usersFriends = yield axios.get(`/api/search/users/friends/${response.data.user_id}`);
+    const usersFriends = yield axios.get('/api/search/users/friends');
     yield put({ type: 'SET_USER_FRIENDS', payload: usersFriends.data.rows });
-    const usersNewNotifications = yield axios.get(`/api/user/notifications/${response.data.user_id}`);
+    const usersNewNotifications = yield axios.get('/api/user/notifications/');
     yield put({ type: 'SET_USER_NOTIFICATION', payload: usersNewNotifications.data.rows });
   } catch (error) {
     console.log('User get request failed', error);
@@ -36,7 +36,6 @@ function* fetchUser() {
 function* updateUsersPrivacySetting(action) {
   try {
     yield axios.put('/api/user/settings-privacy', {
-      userID: action.payload.userID,
       newVisibility: action.payload.newVisibility
     });
     yield put({ type: 'FETCH_USER' });

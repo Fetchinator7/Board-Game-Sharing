@@ -5,7 +5,7 @@ const pool = require('../modules/pool');
 const router = express.Router();
 
 router.put('/game', rejectUnauthenticated, (req, res) => {
-  const userID = req.body.userID;
+  const userID = req.user.user_id;
   const gameID = req.body.gameID;
   const queryText = 'DELETE FROM "user_owned_game" WHERE "user_owned_game".game_id = $1 AND "user_owned_game".user_id = $2';
   pool.query(queryText, [gameID, userID])
@@ -17,7 +17,7 @@ router.put('/game', rejectUnauthenticated, (req, res) => {
 });
 
 router.post('/game', rejectUnauthenticated, (req, res) => {
-  const userID = req.body.userID;
+  const userID = req.user.user_id;
   const gameID = req.body.gameID;
   const queryText = 'INSERT INTO "user_owned_game" ("game_id", "user_id") VALUES ($1, $2)';
   pool.query(queryText, [gameID, userID])

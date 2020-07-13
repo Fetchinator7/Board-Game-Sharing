@@ -12,7 +12,6 @@ class UserPage extends Component {
     this.props.dispatch({
       type: 'CHANGE_USERS_PROFILE_VISIBILITY',
       payload: {
-        userID: this.props.user.userAttributes.user_id,
         newVisibility: newVisibilityInt
       }
     });

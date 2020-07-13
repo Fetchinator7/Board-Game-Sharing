@@ -12,8 +12,8 @@ router.get('/', rejectUnauthenticated, (req, res) => {
   res.send(req.user);
 });
 
-router.get('/games/:userID', rejectUnauthenticated, (req, res) => {
-  const userID = req.params.userID;
+router.get('/games', rejectUnauthenticated, (req, res) => {
+  const userID = req.user.user_id;
   const queryText = `SELECT "user_owned_game".game_id, "bgg_game_id", 
                     "game_img", "title", "player_range", "playtime",
                     "user_owned_game".comments FROM "game"
@@ -27,8 +27,8 @@ router.get('/games/:userID', rejectUnauthenticated, (req, res) => {
     });
 });
 
-router.get('/notifications/:userID', rejectUnauthenticated, (req, res) => {
-  const userID = req.params.userID;
+router.get('/notifications', rejectUnauthenticated, (req, res) => {
+  const userID = req.user.user_id;
   // TODO change this to also get viewed notifications? Archived section?
   const queryText = `SELECT "alert_id", "created_at", "alert_text", "loaned_game_id", "friend_request_id"
                     FROM "alert" WHERE "viewed_at" IS NULL AND user_id = $1;`;
@@ -41,25 +41,10 @@ router.get('/notifications/:userID', rejectUnauthenticated, (req, res) => {
 });
 
 router.put('/settings-privacy', rejectUnauthenticated, (req, res) => {
-  const userID = req.body.userID;
+  const userID = req.user.user_id;
   const newVisibility = req.body.newVisibility;
   const queryText = 'UPDATE users SET visibility = $1 WHERE user_id = $2;';
   pool.query(queryText, [newVisibility, userID])
-    .then(queryResponse => res.send(queryResponse))
-    .catch((error) => {
-      console.log(error);
-      res.sendStatus(500);
-    });
-});
-
-router.post('/notification', rejectUnauthenticated, (req, res) => {
-  const otherUserID = req.body.otherUserID;
-  const createdAt = req.body.createdAt;
-  const alertText = req.body.alertText;
-  const loanedGameID = req.body.loanedGameID;
-  const friendRequestID = req.body.friendRequestID;
-  const queryText = 'INSERT INTO "alert" ("user_id", "created_at", "alert_text", "loaned_game_id", "friend_request_id") VALUES ($1, $2, $3, $4, $5);';
-  pool.query(queryText, [otherUserID, createdAt, alertText, loanedGameID, friendRequestID])
     .then(queryResponse => res.send(queryResponse))
     .catch((error) => {
       console.log(error);
