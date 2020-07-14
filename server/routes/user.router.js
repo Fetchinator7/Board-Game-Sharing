@@ -20,7 +20,24 @@ router.get('/games', rejectUnauthenticated, (req, res) => {
                     INNER JOIN "user_owned_game" ON "game".game_id="user_owned_game".game_id
                     WHERE "user_owned_game".user_id = $1;`;
   pool.query(queryText, [userID])
-    .then(queryResponse => res.send(queryResponse))
+    .then(allUsersGames => {
+      const loanedGamesQuery = `SELECT "loaned_game".game_id, "friend_id", "loan_start",
+                                "loan_end", "agreed", "viewed"
+                                FROM user_owned_game
+                                JOIN loaned_game
+                                ON user_owned_game.game_id = loaned_game.game_id
+                                WHERE owner_id = $1`;
+      pool.query(loanedGamesQuery, [userID])
+        .then(allUsersGameLoans => {
+          res.send(allUsersGames.rows.map(ownedGame => {
+            const infoObj = {
+              ...ownedGame,
+              loans: allUsersGameLoans.rows.filter(game => game.game_id === ownedGame.game_id)
+            };
+            return infoObj;
+          }));
+        });
+    })
     .catch((error) => {
       console.log(error);
       res.sendStatus(500);

@@ -21,7 +21,7 @@ function* fetchUser() {
     yield put({ type: 'SET_USER_IS_LOGGED_IN' });
     yield put({ type: 'SET_USER', payload: response.data });
     const userGames = yield axios.get('/api/user/games');
-    yield put({ type: 'SET_USER_OWNED_GAMES', payload: userGames.data.rows });
+    yield put({ type: 'SET_USER_OWNED_GAMES', payload: userGames.data });
     const allDataBaseBGGGameIDs = yield axios.get('/api/game/management/all-database-games');
     yield put({ type: 'SET_ALL_DATABASE_GAMES', payload: allDataBaseBGGGameIDs.data.rows });
     const usersFriends = yield axios.get('/api/search/users/friends');
@@ -40,7 +40,11 @@ function* updateUsersPrivacySetting(action) {
     });
     yield put({ type: 'FETCH_USER' });
   } catch (error) {
-    console.log("Updating the user's privacy level failed:", error);
+    if (String(error).includes('403')) {
+      yield put({ type: 'SET_PROFILE_EDIT_ERROR', payload: "Error updating account because you're not authorized. Are you singed in?" });
+    } else {
+      yield put({ type: 'SET_PROFILE_EDIT_ERROR', payload: 'Error updating account.' });
+    }
   }
 }
 

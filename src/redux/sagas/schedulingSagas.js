@@ -29,6 +29,7 @@ function* updateLoan(action) {
       userID: globalState.user.userAttributes.user_id,
       loanedGameID: action.payload.loanedGameID
     });
+    yield put({ type: 'FETCH_USER' });
     // yield put({ type: 'SET_GAME_LOAN_CREATION_SUCCESS_FOR_A_DIFFERENT_USER', payload: 'Successfully submitted loan request!' });
   } catch (error) {
     // yield put({ type: 'SET_ERROR_FROM_A_DIFFERENT_USER', payload: 'Error making server loan request' });
