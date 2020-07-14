@@ -12,7 +12,6 @@ import HomePage from '../Pages/HomePage/HomePage';
 import LoggedOutUser from '../Pages/LoggedOutUserProfilePage/LoggedOutUserPage';
 import SearchPage from '../Pages/SearchPageGames/SearchPageGames';
 import UsersSearchPage from '../Pages/SearchPageUsers/SearchPageUsers';
-import UsersSettingsPage from '../Pages/UserPage/UserPageSettings';
 
 import './App.css';
 
@@ -54,16 +53,25 @@ class App extends Component {
               path='/home'
               component={HomePage}
             />
+            <Route
+              exact
+              path='/home'
+              component={HomePage}
+            />
             <ProtectedRoute
               exact
               path='/dashboard'
               component={UserPage}
             />
-            <ProtectedRoute
-              // exact
-              path='/settings'
-              component={UsersSettingsPage}
-            />
+            <ProtectedRoute exact path='/friends'>
+              <UserPage viewMode='friends' />
+            </ProtectedRoute>
+            <ProtectedRoute exact path='/settings'>
+              <UserPage viewMode='settings' />
+            </ProtectedRoute>
+            <ProtectedRoute exact path='/games'>
+              <UserPage viewMode='games' />
+            </ProtectedRoute>
             {/* If none of the other routes matched, we will show a 404. */}
             <Route render={() => <h1>404</h1>} />
           </Switch>

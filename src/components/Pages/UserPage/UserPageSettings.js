@@ -7,7 +7,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Snack from '../../Components/Snack';
 
-class UserPage extends Component {
+class UserSettings extends Component {
   changeVisibility(newVisibilityInt) {
     this.props.dispatch({
       type: 'CHANGE_USERS_PROFILE_VISIBILITY',
@@ -46,4 +46,4 @@ const mapStateToProps = state => ({
 });
 
 // this allows us to use <App /> in index.js
-export default connect(mapStateToProps)(UserPage);
+export default connect(mapStateToProps)(UserSettings);

@@ -46,6 +46,12 @@ const Nav = (props) => (
       {props.status.userIsSignedIn && (
         <>
           <Notifications />
+          <Link className='nav-link' to='/friends'>
+            Friends
+          </Link>
+          <Link className='nav-link' to='/games'>
+            Games
+          </Link>
           <Link className='nav-link' to='/settings'>
             Settings
           </Link>

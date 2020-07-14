@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import LogOutButton from '../../App/LogOutButton/LogOutButton';
-// import FriendsTable from '../../Components/UserTable/UserResultsTable';
-// import GamesTable from '../../Pages/SearchPageGames/SearchPageGamesTable';
-// import Games from './UserGamesTable';
+import FriendsTable from '../../Components/UserTable/UserResultsTable';
+import Games from './UserGamesTable';
+import UserSettings from './UserPageSettings';
 
 class UserPage extends Component {
   render() {
+    const { viewMode } = this.props;
     return (
       <>
         <div>
@@ -18,7 +19,9 @@ class UserPage extends Component {
         </div>
         <br />
         {/* <Games tableData={this.props.user.ownedGames} /> */}
-        {/* <FriendsTable tableData={this.props.user.friends} /> */}
+        {viewMode === 'friends' && <FriendsTable tableData={this.props.user.friends} />}
+        {viewMode === 'games' && <Games />}
+        {viewMode === 'settings' && <UserSettings />}
       </>
     );
   }
