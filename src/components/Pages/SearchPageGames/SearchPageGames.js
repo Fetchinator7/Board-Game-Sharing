@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, TextField } from "@material-ui/core";
@@ -7,15 +6,9 @@ import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import SearchResult from './GameSearchResult';
 import Table from './SearchPageGamesTable';
 import './SearchPageGames.css';
-
-const filterOptions = createFilterOptions({
-  matchFrom: 'any',
-  // stringify: option => option.title,
-});
 
 class SearchPage extends Component {
   state = {
@@ -32,73 +25,29 @@ class SearchPage extends Component {
   render() {
     return (
       <>
-        <Autocomplete
-          options={this.props.searchBGG.searchTitles}
-          getOptionLabel={titleResultObj => titleResultObj.name && titleResultObj.name._attributes.value}
-          style={{ width: 300 }}
-          disableClearable
-          inputValue={this.state.search}
-          noOptionsText=''
-          filterOptions={filterOptions}
-          onChange={(event, value, reason) => {
-            console.log(event, value, reason)
-            if (reason === 'select-option') {
+          <TextField
+            variant="outlined"
+            value={this.state.search}
+            type="text"
+            autoFocus
+            maxLength={1000}
+            onChange={(event) => {
+              event.persist()
               this.setState({
-                search: ''
+                search: event.target.value
               }, () => {
-                this.props.dispatch({ type: "FETCH_GAME_DETAILS", payload: [value._attributes.id] });
+                this.props.dispatch({ type: "FETCH_GAMES", payload: event.target.value, searchType: 'titles' });
+              })
+            }
+            }
+            onKeyPress={(event) => {
+              // If there's text to search for and the user pressed enter search BBG.
+              if (event.key === 'Enter' && this.state.search) {
+                this.searchInput()
+                event.preventDefault();
               }
-              )
-            } else {
-              console.log('nope', reason);
-            }
-          }}
-          renderInput={(params) =>
-            <TextField
-              {...params}
-              variant="outlined"
-              // value={this.state.search}
-              type="text"
-              maxLength={1000}
-              onChange={event => {
-                event.persist()
-                this.setState({
-                  search: event.target.value
-                }, () => {
-                  this.props.dispatch({ type: "FETCH_GAMES", payload: event.target.value, searchType: 'titles' });
-                })
-              }}
-              onKeyPress={(event) => {
-                // If there's text to search for and the user pressed enter search BBG.
-                if (event.key === 'Enter' && this.state.search) {
-                  this.searchInput()
-                  event.preventDefault();
-                }
-              }}
-            />}
-        />
-        <TextField
-          variant="outlined"
-          value={this.state.search}
-          type="text"
-          maxLength={1000}
-          onChange={(event) => {
-            event.persist()
-            this.setState({
-              search: event.target.value
-            }, () => {
-              this.props.dispatch({ type: "FETCH_GAMES", payload: event.target.value, searchType: 'titles' });
-            })
-          }
-          }
-          onKeyPress={(event) => {
-            // If there's text to search for and the user pressed enter search BBG.
-            if (event.key === 'Enter' && this.state.search) {
-              this.searchInput()
-              event.preventDefault();
-            }
-          }}
-        />
+            }}
+          />
         {this.props.loading && <CircularProgress />}
         {<br />}
         {
