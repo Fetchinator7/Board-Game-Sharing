@@ -49,7 +49,6 @@ function* searchGames(action) {
         }
       } catch (error) {
         yield put({ type: 'SET_GAME_SEARCH__GAME_NOT_FOUND', payload: `Error, game: "${action.payload}" not found.` });
-        console.log('error fetching games', error);
       }
     } else if (action.searchType === 'titles') {
       const minCharactersBeforeSearching = 4;
@@ -72,7 +71,7 @@ function* searchGames(action) {
           yield put({ type: 'SET_SEARCH_TITLES', payload: boardGamesArr });
         } catch (error) {
           yield put({ type: 'RESET_SEARCH_TITLES' });
-          console.log('error fetching game titles', error);
+          yield put({ type: 'SET_GAME_SEARCH__GAME_NOT_FOUND', payload: 'Error, fetching game titles.' });
         } finally {
           if (yield cancelled()) {
             console.log('canceled search for', action.payload);
@@ -96,8 +95,6 @@ function* getGameByID(action) {
     yield put({ type: 'RESET_SEARCH_TITLES' });
     const result = yield Axios.get(`/api/search/game-id/${action.payload}`);
     yield put({ type: 'SET_RAW_SEARCH_GAMES', payload: [result.data] });
-  } catch (error) {
-    console.log(`error fetching game info with id "${action.payload}"`, error);
   } finally {
     yield put({ type: 'HIDE_LOADING' });
   }
