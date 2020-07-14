@@ -14,7 +14,7 @@ const gamesReducer = (state = [], action) => {
 const formattedGamesReducer = (state = [], action) => {
   switch (action.type) {
     case 'SET_FORMATTED_SEARCH_GAMES':
-      return [].concat(...state, action.payload);
+      return action.payload;
     case 'RESET_FORMATTED_SEARCH_GAMES':
       return [];
     default:

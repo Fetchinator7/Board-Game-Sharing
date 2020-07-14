@@ -77,9 +77,6 @@ class SearchPage extends Component {
             )}
           </MenuList>
         </Paper>
-          {this.props.searchBGG.rawGameSearchResults.map((gameObj, index) =>
-            <SearchResult gameObj={gameObj} key={`search-result-row-${index}`}/>
-            )}
         <Table />
         <Snack
           onCloseDispatchText='RESET_GAME_SEARCH__GAME_NOT_FOUND'

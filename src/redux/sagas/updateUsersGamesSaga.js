@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { put, takeEvery, select } from 'redux-saga/effects';
 
-// worker Saga: will be fired on "FETCH_USER" actions
 function* updateGameOwnedStatus(action) {
   console.log(action);
   try {
@@ -22,7 +21,6 @@ function* updateGameOwnedStatus(action) {
 
     const dataBaseGameID = yield axios.get(`/api/game/management/game-table-id/${BGGid}`);
     const bodyObj = {
-      userID: globalState.user.userAttributes.user_id,
       gameID: dataBaseGameID.data.rows[0].game_id
     };
 
@@ -34,9 +32,8 @@ function* updateGameOwnedStatus(action) {
       yield axios.post('/api/game/management/game', bodyObj);
     }
 
-    const userGames = yield axios.get(`/api/user/games/${globalState.user.userAttributes.user_id}`);
+    const userGames = yield axios.get('/api/user/games');
     yield put({ type: 'SET_USER_OWNED_GAMES', payload: userGames.data.rows });
-    // yield put({ type: 'FETCH_USER' });
   } catch (error) {
     console.log('Error updating owned game status:', error);
     yield put({ type: 'SET_EDIT_GAMES_ERROR', payload: 'Error updating owned game status.' });
