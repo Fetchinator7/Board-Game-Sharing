@@ -1,67 +1,88 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import baseGamesDataArray from '../../Components/GamesTable/GamesTableStandardColumns';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import SearchTablePresets from '../../Components/GamesTable/GamesTable';
 import MUIDataTable from 'mui-datatables';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+import ConfirmationDialogue from '../../Components/Notifications/ConfirmationDialogue';
 
 const useStyles = createMuiTheme(
   SearchTablePresets.theme
 );
 
 class Table extends React.Component {
+  state = {
+    gameTitle: '',
+    bodyObj: {},
+    showDialogue: false
+  }
+
+  confirmBeforeDeleting = (proceedBool, message) => {
+    console.log(message);
+    this.setState({ showDialogue: false })
+    console.log('proceedBool', proceedBool);
+  }
+
   render() {
-    const baseData = this.props.searchBGG.formattedGameSearchResults.map((gameObj, index) => [
-      <img src={gameObj.artwork} alt={gameObj.title} key={`game-result-artwork-${index}`} />,
-      gameObj.title,
-      <a key={`game-table-row-${index}`} id={gameObj.BGGid} href={`https://boardgamegeek.com/boardgame/${gameObj.BGGid}`}>More Info</a>,
-      gameObj.playerRange,
-      gameObj.playTimes
-    ]);
+    const baseData = baseGamesDataArray(this.props.usersGames);
     let fullData = baseData;
     const columns = [...SearchTablePresets.columns];
-    if (this.props.userStatus.userIsSignedIn) {
-      columns.unshift(
-        {
-          name: 'Owned',
-          options: {
-            filter: true,
-            customBodyRender: (value = false, tableMeta) => {
-              return (
-                <FormControlLabel
-                  control={
-                    <Checkbox color='primary' checked={value.props.checked} value={value.props.checked} />
-                  }
-                  onClick={() => {
-                    const bodyObj = {
-                      ownedStatus: value.props.checked,
-                      BGGid: tableMeta.rowData[SearchTablePresets.moreInfoColumnIndex].props.id
-                    };
-                    this.props.dispatch({ type: 'UPDATE_USER_OWNED_GAME', payload: bodyObj });
-                  }}
-                />
-              );
-            }
+    columns.push(
+      {
+        name: 'Edit',
+        options: {
+          filter: true,
+          customBodyRender: (value = false) => {
+            return (
+              <FormControlLabel
+                control={
+                  <DeleteIcon color='secondary' />
+                }
+                onClick={() => {
+                  console.log(value);
+                  const bodyObj = {
+                    dataBaseGameID: value.props.game_id
+                  };
+                  this.setState({ gameTitle: value.props.title, showDialogue: true, bodyObj: bodyObj });
+                }}
+              />
+            );
           }
         }
-      );
-      fullData = this.props.searchBGG.formattedGameSearchResults.map((gameObj, index) => {
-        return [<Checkbox color='primary' checked={gameObj.owned} key={`game-search-table-row-${index}`} />, ...baseData[index]];
-      });
-    }
+      }
+    );
+    fullData = this.props.usersGames.map((gameObj, index) => {
+      return (
+      [...baseData[index],
+      <DeleteIcon
+        game_id={gameObj.game_id}
+        title={gameObj.title}
+        color='secondary'
+        key={`game-search-table-row-${index}`}
+      />]
+   )});
 
     return (
-      <MuiThemeProvider theme={useStyles}>
-        <MUIDataTable title='Search Page' data={fullData} columns={columns} options={SearchTablePresets.options} />
-      </MuiThemeProvider>
+      <>
+        <MuiThemeProvider theme={useStyles}>
+          <MUIDataTable title='Search Page' data={fullData} columns={columns} options={SearchTablePresets.options} />
+        </MuiThemeProvider>
+        <ConfirmationDialogue
+          parentCallBackFunc={this.confirmBeforeDeleting}
+          visible={this.state.showDialogue}
+          title={`Are you sure you want to delete your game "${this.state.gameTitle}"?`}
+          trueButtonAction={'Proceed'}
+          showTextField={false}
+        />
+      </>
     );
   }
 }
 
 const mapStateToProps = reduxState => ({
-  searchBGG: reduxState.searchBGG,
-  userStatus: reduxState.status
+  usersGames: reduxState.user.ownedGames
 });
 
 export default connect(mapStateToProps)(Table);
