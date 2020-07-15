@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import SearchTablePresets from '../GamesTable/GamesTable';
 import Snack from '../../Components/Snack';
-import { Button, MuiThemeProvider, createMuiTheme } from "@material-ui/core";
+import { Button, MuiThemeProvider, createMuiTheme, Badge, Link } from "@material-ui/core";
+import NotificationsIcon from '@material-ui/icons/Notifications';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -11,6 +12,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import '../../App/Nav/Nav.css';
 
 const useStyles = createMuiTheme(
   SearchTablePresets.theme
@@ -108,10 +110,10 @@ class Table extends React.Component {
     return (
       <>
         {
-          ['Notifications'].map((buttonText) => (
+          [<Badge className='nav-link' badgeContent={this.props.alerts.length} color='primary'><NotificationsIcon /></Badge>].map((buttonText) => (
             <React.Fragment key={anchor}>
               <MuiThemeProvider theme={useStyles}>
-                <Button onClick={() => this.toggleDrawer(anchor, true)}>{buttonText}</Button>
+                <Button className='nav-link' onClick={() => this.toggleDrawer(anchor, true)}>{buttonText}</Button>
                 <Drawer anchor={anchor} open={this.state.drawIsOpen} onClose={() => this.toggleDrawer(anchor, false)}>
                   {this.list(anchor)}
                 </Drawer>

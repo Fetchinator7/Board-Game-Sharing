@@ -25,6 +25,8 @@ import LogOutButton from '../LogOutButton/LogOutButton';
 // import ExpandMore from '@material-ui/icons/ExpandMore';
 // import StarBorder from '@material-ui/icons/StarBorder';
 import Notifications from '../../Components/Notifications/Notifications';
+import SearchIcon from '@material-ui/icons/Search';
+import SettingsIcon from '@material-ui/icons/Settings';
 import './Nav.css';
 
 const Nav = (props) => (
@@ -35,25 +37,27 @@ const Nav = (props) => (
     <div className='nav-right'>
       {/* Show the link to the info page and the logout button if the user is logged in */}
       <Link className='nav-link' to='/search/users'>
-        Search Users
+        <SearchIcon />
+        Users
       </Link>
       <Link className='nav-link' to='/search/games'>
-        Search Games
+        <SearchIcon />
+         Games
       </Link>
       <Link className='nav-link' to='/dashboard'>
         {props.status.userIsSignedIn ? 'Dash Board' : 'Login / Register'}
       </Link>
       {props.status.userIsSignedIn && (
         <>
-          <Notifications />
+          {/* <Badge className='nav-link' badgeContent={4} color='primary'>
+            <NotificationsIcon /> */}
           <Link className='nav-link' to='/friends'>
             Friends
           </Link>
-          <Link className='nav-link' to='/games'>
-            Games
-          </Link>
+          <Notifications className='nav-link' />
+          {/* </Badge> */}
           <Link className='nav-link' to='/settings'>
-            Settings
+            <SettingsIcon />
           </Link>
           <LogOutButton className='nav-link' />
         </>
