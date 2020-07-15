@@ -25,7 +25,7 @@ class UserSettings extends Component {
           <RadioGroup aria-label='settings' name='settings1' value={this.props.user.userAttributes.visibility} onChange={event => this.changeVisibility(event.target.value)}>
             <FormControlLabel value={1} control={<Radio />} label='Public' />
             <FormControlLabel value={2} control={<Radio />} label='Only Those With The Profile Link' />
-            <FormControlLabel value={3} control={<Radio />} label='Friends Only' />
+            {/* <FormControlLabel value={3} control={<Radio />} label='Friends Only' /> */}
             <FormControlLabel value={4} control={<Radio />} label='Private' />
           </RadioGroup>
         </FormControl>
