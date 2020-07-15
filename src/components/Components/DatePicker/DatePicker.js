@@ -117,11 +117,12 @@ class DateAndTimePickers extends React.Component {
   }
 
   dispatchLoanRequest = () => {
-    const { gameID, ownerID } = this.props;
+    const { gameID, ownerID, gameTitle } = this.props;
     this.props.dispatch({
       type: this.state.dispatchTypeStr,
       payload: {
         gameID: gameID,
+        gameTitle: gameTitle,
         otherUserID: ownerID,
         startDate: this.state.start,
         endDate: this.state.end

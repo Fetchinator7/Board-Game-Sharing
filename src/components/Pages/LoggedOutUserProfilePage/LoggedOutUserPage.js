@@ -60,6 +60,7 @@ class UserPage extends Component {
                   mode='request'
                   loanDaysArray={this.props.otherUsersGames[rowMeta.rowIndex].loans}
                   gameID={this.props.otherUsersGames[rowMeta.rowIndex].game_id}
+                  gameTitle={this.props.otherUsersGames[rowMeta.rowIndex].title}
                   ownerID={this.props.otherUsersID}
                 />
               </TableCell>

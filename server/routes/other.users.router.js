@@ -108,6 +108,7 @@ router.post('/other-user-request', rejectUnauthenticated, (req, res) => {
       });
   } else if (actionType === 'loan') {
     const gameID = req.body.gameID;
+    const gameTitle = req.body.gameTitle;
     const startDate = moment(req.body.startDate);
     const endDate = moment(req.body.endDate);
     console.log(startDate, endDate);
@@ -117,7 +118,7 @@ router.post('/other-user-request', rejectUnauthenticated, (req, res) => {
         console.log('otherUserID', otherUserID);
         console.log('loanRequestQueryResponse', loanRequestQueryResponse);
         const loanQueryText = 'INSERT INTO "alert" ("user_id", "created_at", "alert_text", "loaned_game_id") VALUES ($1, $2, $3, $4);';
-        const loanAlertText = `Your friend with the user name "${otherUsersUserName}" wants to borrow your game with ID: "${gameID}" from ${startDate.format('MM/DD')}-${endDate.format('MM/DD')}`;
+        const loanAlertText = `Your friend with the user name "${otherUsersUserName}" wants to borrow your game: "${gameTitle}" from ${startDate.format('MM/DD')}-${endDate.format('MM/DD')}`;
         pool.query(loanQueryText, [otherUserID, now, loanAlertText, loanRequestQueryResponse.rows[0].loan_id])
           .then(queryResponse => res.send(queryResponse));
       })

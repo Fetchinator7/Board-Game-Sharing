@@ -161,6 +161,7 @@ class Table extends React.Component {
                   mode='request'
                   loanDaysArray={this.state.allGames[rowMeta.rowIndex].loans}
                   gameID={this.state.allGames[rowMeta.rowIndex].game_id}
+                  gameTitle={this.props.otherUsersGames[rowMeta.rowIndex].title}
                   ownerID={this.props.userID}
                 />
               </TableCell>

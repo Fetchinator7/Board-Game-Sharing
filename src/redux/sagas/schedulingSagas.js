@@ -6,6 +6,7 @@ function* requestLoan(action) {
   try {
     Axios.post('/api/search/users/other-user-request', {
       gameID: action.payload.gameID,
+      gameTitle: action.payload.gameTitle,
       otherUserID: action.payload.otherUserID,
       startDate: action.payload.startDate,
       endDate: action.payload.endDate,
