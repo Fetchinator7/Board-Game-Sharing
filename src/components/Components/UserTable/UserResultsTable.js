@@ -92,7 +92,7 @@ class Table extends React.Component {
     this.props.userStatus.userIsSignedIn && columns.push(
       {
         name: 'Friend Request',
-        label: 'Send Friend Request',
+        label: 'Friend Request',
         options: {
           filter: false,
           sort: false,
@@ -127,8 +127,10 @@ class Table extends React.Component {
       >{user.user_name}</Button>,
       this.props.userStatus.userIsSignedIn &&
       <Button
-        // This is an are arbitrary key I made up so the table can access this information.
-        isFriend={this.getFriendStatus(user.user_id)}
+        // These are arbitrary key I made up so the table can access this information.
+        // If this table is used for search results user user_id,
+        // but if it's displaying a user's friends use friend_id.
+        isFriend={this.getFriendStatus(user.user_id ? user.user_id : user.friend_id)}
         otherUsersID={user.user_id}
       />
     ])
@@ -167,7 +169,7 @@ class Table extends React.Component {
           <DialogActions>
               <Button
                 onClick={() => this.setState({ confirmationWindowIsOpen: false })}
-                color="primary"
+                color="secondary"
                 variant="contained">
               Cancel
           </Button>
