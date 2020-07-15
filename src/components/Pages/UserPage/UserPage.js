@@ -14,12 +14,11 @@ class UserPage extends Component {
           <h1 id='welcome'>
             Welcome, {this.props.user.userAttributes.user_name}
           </h1>
-          <p>Your Profile Visibility is: {this.props.user.userAttributes.visibility}</p>
         </div>
         <br />
         {/* <Games tableData={this.props.user.ownedGames} /> */}
         {viewMode === 'friends' && <FriendsTable tableData={this.props.user.friends} />}
-        {viewMode === 'games' && <Games />}
+        <Games />
         {viewMode === 'settings' && <UserSettings />}
         <Snack
           onCloseDispatchText='CLEAR_PROFILE_EDIT_ERROR'
