@@ -100,9 +100,25 @@ function* getGameByID(action) {
   }
 }
 
+function* getRandomGameByID(action) {
+  try {
+    const qtyBGGGames = 314425;
+    const qty = action.payload.qty;
+    const randomGamesArr = Array.from({ length: qty }, () => Math.floor(Math.random() * qtyBGGGames));
+    yield put({ type: 'SHOW_LOADING' });
+    const result = yield Axios.get(`/api/search/game-id/${randomGamesArr.toString()}`);
+    console.log(randomGamesArr.toString());
+    console.log(result);
+    yield put({ type: 'SET_RAW_RANDOM_SEARCH_GAMES', payload: result.data });
+  } finally {
+    yield put({ type: 'HIDE_LOADING' });
+  }
+}
+
 function* searchingBBGSaga() {
   yield takeLatest('FETCH_GAMES', searchGames);
   yield takeEvery('FETCH_GAME_DETAILS', getGameByID);
+  yield takeEvery('FETCH_RANDOM_GAME_DETAILS', getRandomGameByID);
 }
 
 export default searchingBBGSaga;

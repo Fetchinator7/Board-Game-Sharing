@@ -11,6 +11,28 @@ const gamesReducer = (state = [], action) => {
   }
 };
 
+const randomRawGamesReducer = (state = [], action) => {
+  switch (action.type) {
+    case 'SET_RAW_RANDOM_SEARCH_GAMES':
+      return [].concat(...state, action.payload);
+    case 'CLEAR_RAW_RANDOM_SEARCH_GAMES':
+      return [];
+    default:
+      return state;
+  }
+};
+
+const formattedRandomGamesReducer = (state = [], action) => {
+  switch (action.type) {
+    case 'SET_RANDOM_FORMATTED_SEARCH_GAMES':
+      return action.payload;
+    case 'CLEAR_RANDOM_FORMATTED_SEARCH_GAMES':
+      return [];
+    default:
+      return state;
+  }
+};
+
 const formattedGamesReducer = (state = [], action) => {
   switch (action.type) {
     case 'SET_FORMATTED_SEARCH_GAMES':
@@ -56,6 +78,8 @@ const noGameFoundError = (state = '', action) => {
 };
 
 export default combineReducers({
+  randomRawGameResults: randomRawGamesReducer,
+  formattedRandomGameResults: formattedRandomGamesReducer,
   rawGameSearchResults: gamesReducer,
   formattedGameSearchResults: formattedGamesReducer,
   searchTitles: titlesReducer,
