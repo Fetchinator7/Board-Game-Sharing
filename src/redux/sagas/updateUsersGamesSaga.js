@@ -2,7 +2,6 @@ import axios from 'axios';
 import { put, takeEvery, select } from 'redux-saga/effects';
 
 function* updateGameOwnedStatus(action) {
-  console.log(action);
   try {
     const globalState = yield select();
     const ownedStatus = action.payload.ownedStatus;
@@ -33,15 +32,46 @@ function* updateGameOwnedStatus(action) {
     }
 
     const userGames = yield axios.get('/api/user/games');
-    yield put({ type: 'SET_USER_OWNED_GAMES', payload: userGames.data.rows });
+    yield put({ type: 'SET_USER_OWNED_GAMES', payload: userGames.data });
   } catch (error) {
-    console.log('Error updating owned game status:', error);
+    yield put({ type: 'SET_EDIT_GAMES_ERROR', payload: 'Error updating owned game status.' });
+  }
+}
+
+function* commentUsersGame(action) {
+  try {
+    const bodyObj = {
+      gameID: action.payload.game_id,
+      comment: action.payload.comments
+    };
+    // Comment this game from the database.
+    yield axios.post('/api/game/management/comment', bodyObj);
+  } catch (error) {
+    yield put({ type: 'SET_EDIT_GAMES_ERROR', payload: 'Error updating the comment for a game.' });
+  } finally {
+    const userGames = yield axios.get('/api/user/games');
+    yield put({ type: 'SET_USER_OWNED_GAMES', payload: userGames.data });
+  }
+}
+
+function* deleteUsersGame(action) {
+  try {
+    const bodyObj = {
+      gameID: action.payload.dataBaseGameID
+    };
+    // Delete/remove this game from the database.
+    yield axios.put('/api/game/management/game', bodyObj);
+    const userGames = yield axios.get('/api/user/games');
+    yield put({ type: 'SET_USER_OWNED_GAMES', payload: userGames.data });
+  } catch (error) {
     yield put({ type: 'SET_EDIT_GAMES_ERROR', payload: 'Error updating owned game status.' });
   }
 }
 
 function* updateGameStatus() {
   yield takeEvery('UPDATE_USER_OWNED_GAME', updateGameOwnedStatus);
+  yield takeEvery('COMMENT_USER_OWNED_GAME', commentUsersGame);
+  yield takeEvery('DELETE_USER_OWNED_GAME', deleteUsersGame);
 }
 
 export default updateGameStatus;

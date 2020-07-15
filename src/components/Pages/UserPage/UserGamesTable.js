@@ -5,7 +5,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import SearchTablePresets from '../../Components/GamesTable/GamesTable';
 import MUIDataTable from 'mui-datatables';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { MuiThemeProvider, createMuiTheme, TableRow } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
+import { MuiThemeProvider, createMuiTheme, TableRow, TextField } from '@material-ui/core';
 import TableCell from '@material-ui/core/TableCell';
 import ConfirmationDialogue from '../../Components/Notifications/ConfirmationDialogue';
 import DatePicker from '../../Components/DatePicker/DatePicker';
@@ -18,32 +19,110 @@ class Table extends React.Component {
   state = {
     gameTitle: '',
     bodyObj: {},
-    showDialogue: false
+    showDialogue: false,
+    inEditingMode: false,
+    edited: false,
+    allGames: []
   }
 
   confirmBeforeDeleting = (proceedBool, message) => {
     console.log(message);
+    this.updateGamesComments();
     this.setState({ showDialogue: false })
-    console.log('proceedBool', proceedBool);
+    if (proceedBool) {
+      this.props.dispatch({ type: 'DELETE_USER_OWNED_GAME', payload: this.state.bodyObj });
+    }
+    this.setState({
+      // The game was deleted from the server, but not yet so delete it from local state to match the server.
+      allGames: this.props.usersGames.filter(game => game.game_id !== this.state.bodyObj.dataBaseGameID),
+      bodyObj: {},
+      gameTitle: '',
+      showDialogue: false
+    })
+  }
+
+  updateGamesComments = () => {
+    if (this.state.edited) {
+      const editedGames = this.state.allGames.map((game, index) => {
+        return Object.is(game, this.props.usersGames[index]) && game !== {} ? false : this.state.allGames[index]
+      });
+      editedGames.map(editedGameObj =>
+        editedGameObj && this.props.dispatch({ type: 'COMMENT_USER_OWNED_GAME', payload: editedGameObj })
+      )
+    }
+  }
+
+  componentDidMount() {
+    this.setState({ allGames: this.props.usersGames })
+  }
+
+  componentWillUnmount() {
+    this.updateGamesComments();
   }
 
   render() {
-    const baseData = baseGamesDataArray(this.props.usersGames);
+    const baseData = baseGamesDataArray(this.state.allGames);
     let fullData = baseData;
     const columns = [...SearchTablePresets.columns];
     let options = SearchTablePresets.options;
     columns.push(
-      {
+      this.state.inEditingMode
+        ? {
+          name: 'Comments',
+          options: {
+            filter: true,
+            sort: true,
+            customBodyRender: (value, tableMeta) => {
+              return (
+                <FormControlLabel
+                  onBlur={event => {
+                    const text = event.target.value
+                    this.setState({
+                      allGames: this.state.allGames.map((gameObj, index) => tableMeta.rowIndex === index ? { ...gameObj, comments: text } : gameObj),
+                      edited: true
+                    }, () => {
+                      this.updateGamesComments();
+                    })}
+                  }
+                  control={
+                    <TextField color='primary' defaultValue={value} />
+                  }
+                />
+              );
+            }
+          }
+        }
+      : {
         name: 'Comments',
         options: {
           filter: true,
-          sort: true
+          sort: true,
         }
       },
       {
         name: 'Edit',
         options: {
-          filter: true,
+          filter: false,
+          sort: false,
+          customBodyRender: (value = false) => {
+            return (
+              <FormControlLabel
+                control={
+                  <EditIcon color='primary' />
+                }
+                onClick={() => {
+                  this.setState({ inEditingMode: !this.state.inEditingMode });
+                }}
+              />
+            );
+          }
+        }
+      },
+      {
+        name: 'Delete',
+        options: {
+          filter: false,
+          sort: false,
           customBodyRender: (value = false) => {
             return (
               <FormControlLabel
@@ -51,7 +130,6 @@ class Table extends React.Component {
                   <DeleteIcon color='secondary' />
                 }
                 onClick={() => {
-                  console.log(value);
                   const bodyObj = {
                     dataBaseGameID: value.props.game_id
                   };
@@ -73,7 +151,7 @@ class Table extends React.Component {
         responsive: 'standard',
         expandableRows: true,
         expandableRowsHeader: false,
-        expandableRowsOnClick: true,
+        expandableRowsOnClick: false,
         renderExpandableRow: (rowData, rowMeta) => {
           const colSpan = rowData.length + 1;
           return (
@@ -81,8 +159,8 @@ class Table extends React.Component {
               <TableCell colSpan={colSpan}>
                 <DatePicker
                   mode='request'
-                  loanDaysArray={this.props.usersGames[rowMeta.rowIndex].loans}
-                  gameID={this.props.usersGames[rowMeta.rowIndex].game_id}
+                  loanDaysArray={this.state.allGames[rowMeta.rowIndex].loans}
+                  gameID={this.state.allGames[rowMeta.rowIndex].game_id}
                   ownerID={this.props.userID}
                 />
               </TableCell>
@@ -90,16 +168,22 @@ class Table extends React.Component {
           );
         }
       };
-      fullData = this.props.usersGames.map((gameObj, index) => {
+      fullData = this.state.allGames.map((gameObj, index) => {
         return (
           [...baseData[index],
-            gameObj.comments,
-          <DeleteIcon
-            game_id={gameObj.game_id}
-            title={gameObj.title}
-            color='secondary'
-            key={`game-search-table-row-${index}`}
-          />]
+          gameObj.comments,
+            <DeleteIcon
+              game_id={gameObj.game_id}
+              title={gameObj.title}
+              color='secondary'
+              key={`game-search-table-row-${index}`}
+            />,
+            <EditIcon
+              game_id={gameObj.game_id}
+              title={gameObj.title}
+              color='secondary'
+              key={`game-search-table-row-${index}`}
+            />]
         )
       });
     }
@@ -108,7 +192,7 @@ class Table extends React.Component {
     return (
       <>
         <MuiThemeProvider theme={useStyles}>
-          <MUIDataTable title='Search Page' data={fullData} columns={columns} options={options} />
+          <MUIDataTable title='Your Games!' data={fullData} columns={columns} options={options} />
         </MuiThemeProvider>
         <ConfirmationDialogue
           parentCallBackFunc={this.confirmBeforeDeleting}

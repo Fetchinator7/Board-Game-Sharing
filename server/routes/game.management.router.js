@@ -8,6 +8,10 @@ router.put('/game', rejectUnauthenticated, (req, res) => {
   const userID = req.user.user_id;
   const gameID = req.body.gameID;
   const queryText = 'DELETE FROM "user_owned_game" WHERE "user_owned_game".game_id = $1 AND "user_owned_game".user_id = $2';
+  // const loanID = Delete from loaned_game returning loaned_game_id
+  // For each in the loanID.data.rows.map(gameLoanID =>
+  // Delete from alert where loaned_game_id = gameLoanID
+  // )
   pool.query(queryText, [gameID, userID])
     .then(res.sendStatus(204))
     .catch((error) => {
@@ -28,6 +32,20 @@ router.post('/game', rejectUnauthenticated, (req, res) => {
     });
 });
 
+router.post('/comment', rejectUnauthenticated, (req, res) => {
+  const userID = req.user.user_id;
+  const gameID = req.body.gameID;
+  const comment = req.body.comment;
+  console.log(gameID, comment);
+  const queryText = 'UPDATE user_owned_game SET "comments" = $1 WHERE user_id = $2 AND game_id = $3';
+  pool.query(queryText, [comment, userID, gameID])
+    .then(queryResponse => res.send(queryResponse))
+    .catch((error) => {
+      console.log(error);
+      res.sendStatus(500);
+    });
+});
+
 router.get('/game-table-id/:BGGId', rejectUnauthenticated, (req, res) => {
   const BGGId = req.params.BGGId;
   const queryText = 'SELECT "game_id" FROM "game" WHERE "bgg_game_id" = $1';
@@ -40,6 +58,7 @@ router.get('/game-table-id/:BGGId', rejectUnauthenticated, (req, res) => {
 });
 
 router.post('/database/game', rejectUnauthenticated, (req, res) => {
+  // TODO get from bgg directly and add it on the server side.
   const gameID = req.body.bgg_game_id;
   const artwork = req.body.game_img;
   const title = req.body.title;
