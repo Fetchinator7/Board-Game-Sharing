@@ -64,13 +64,14 @@ class App extends Component {
               component={UserPage}
             />
             <ProtectedRoute exact path='/friends'>
-              <UserPage viewMode='friends' />
+              {this.props.userID
+                ? <UserPage viewMode='friends' />
+                : <Redirect to='/home' />}
             </ProtectedRoute>
             <ProtectedRoute exact path='/settings'>
-              <UserPage viewMode='settings' />
-            </ProtectedRoute>
-            <ProtectedRoute exact path='/games'>
-              <UserPage viewMode='games' />
+              {this.props.userID
+                ? <UserPage viewMode='settings' />
+                : <Redirect to='/home' />}
             </ProtectedRoute>
             {/* If none of the other routes matched, we will show a 404. */}
             <Route render={() => <h1>404</h1>} />

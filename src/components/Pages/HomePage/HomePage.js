@@ -27,7 +27,6 @@ class RandomGamesTable extends React.Component {
       result.push(SearchResult(gameObj, this.props.usersGames));
     });
     result.length !== 0 && this.props.dispatch({ type: 'CLEAR_RAW_RANDOM_SEARCH_GAMES' });
-    console.log(data);
     result.length !== 0 && this.props.dispatch({ type: 'SET_RANDOM_FORMATTED_SEARCH_GAMES', payload: result });
 
     const baseData = baseGamesDataArray(this.props.searchBGG.formattedRandomGameResults);
