@@ -27,6 +27,12 @@ class UserPage extends Component {
           message={this.props.errors.editProfileFailureMessage}
           severity='error'
         />
+        <Snack
+          onCloseDispatchText='CLEAR_EDIT_GAMES_ERROR'
+          autoHideDuration={10000}
+          message={this.props.errors.editGamesMessage}
+          severity='error'
+        />
       </>
     );
   }

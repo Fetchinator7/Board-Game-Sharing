@@ -139,7 +139,7 @@ class Table extends React.Component {
     return (
       <>
         <MuiThemeProvider theme={SearchTablePresets.theme}>
-          <MUIDataTable title='Search Users' data={data} columns={columns} options={options} />
+          <MUIDataTable title='Users' data={data} columns={columns} options={options} />
         </MuiThemeProvider>
         <MuiThemeProvider theme={useStyles}>
         <Dialog open={this.state.confirmationWindowIsOpen} onClose={() => this.setState({ confirmationWindowIsOpen: false })} aria-labelledby="form-dialog-title">

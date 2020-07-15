@@ -72,7 +72,7 @@ class UserPage extends Component {
       <>
         {`This is ${this.props.match.params.userName}'s logged out page`}
         <MuiThemeProvider theme={useStyles}>
-          <MUIDataTable title='Search Page' data={fullData} columns={columns} options={options} />
+          <MUIDataTable title={`Search ${this.props.match.params.userName}'s Games`} data={fullData} columns={columns} options={options} />
         </MuiThemeProvider>
         <Snack
           onCloseDispatchText='CLEAR_ERROR_GETTING_A_DIFFERENT_USERS_GAMES'

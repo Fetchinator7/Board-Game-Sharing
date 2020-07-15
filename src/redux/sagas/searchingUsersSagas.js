@@ -13,7 +13,7 @@ function* searchUsers(action) {
     }
     yield put({ type: 'SET_USER_SEARCH_RESULTS', payload: [result.data] });
   } catch (error) {
-    console.log(`error fetching user info for username "${action.payload}"`, error);
+    yield put({ type: 'SET_USER_SEARCH__USER_NOT_FOUND', payload: `Error, unable to search for user: "${action.payload}"` });
   } finally {
     yield put({ type: 'HIDE_LOADING' });
   }
