@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Snack from '../../Components/Snack';
+import TablePresets from '../../Components/GamesTable/GamesTable';
+import { TextField, createMuiTheme, MuiThemeProvider, Input } from '@material-ui/core';
+
+const useStyles = createMuiTheme(
+  TablePresets.theme
+);
 
 class RegisterPage extends Component {
   state = {
@@ -26,12 +32,6 @@ class RegisterPage extends Component {
     }
   }
 
-  handleInputChangeFor = propertyName => (event) => {
-    this.setState({
-      [propertyName]: event.target.value,
-    });
-  }
-
   render() {
     return (
       <>
@@ -41,61 +41,57 @@ class RegisterPage extends Component {
           message={this.props.errors.registrationMessage}
           severity='error'
         />
-        <div>
-          <form onSubmit={this.registerUser}>
-            <h1>Register User</h1>
-            <div>
-              <label htmlFor="username">
-                Username:
-              <input
-                  type="text"
-                  name="username"
-                  value={this.state.username}
-                  onChange={this.handleInputChangeFor('username')}
-                />
-              </label>
-            </div>
-            <div>
-              <label htmlFor="password">
-                Email:
-              <input
-                  type="text"
-                  name="email"
-                  value={this.state.email}
-                  onChange={this.handleInputChangeFor('email')}
-                />
-              </label>
-            </div>
-            <div>
-              <label htmlFor="password">
-                Password:
-              <input
-                  type="password"
-                  name="password"
-                  value={this.state.password}
-                  onChange={this.handleInputChangeFor('password')}
-                />
-              </label>
-            </div>
-            <div>
-              <input
+        <MuiThemeProvider theme={useStyles}>
+          <form autoComplete="off" onSubmit={this.registerUser}>
+            <>
+              <TextField
+                label="username"
+                fullWidth
+                required
+                maxLength='10'
+                value={this.state.username}
+                onChange={
+                  // Set maximum number of message characters to 100.
+                  event => event.target.value.length <= 100 && this.setState({ username: event.target.value })
+                }
+              />
+              <TextField
+                label="email"
+                fullWidth
+                required
+                maxLength='10'
+                value={this.state.email}
+                onChange={
+                  // Set maximum number of message characters to 100.
+                  event => event.target.value.length <= 100 && this.setState({ email: event.target.value })
+                }
+              />
+              <TextField
+                label="password"
+                fullWidth
+                required
+                maxLength='10'
+                type="password"
+                autoComplete="current-password"
+                value={this.state.password}
+                onChange={
+                  // Set maximum number of message characters to 100.
+                  event => event.target.value.length <= 100 && this.setState({ password: event.target.value })
+                }
+              />
+              <Input
+                // type='submit'
                 className="register"
                 type="submit"
                 name="submit"
                 value="Register"
-              />
-            </div>
+                variant="contained"
+                color="primary"
+              >
+              </Input>
+            </>
           </form>
-          <center>
-            <button
-              type="button"
-              className="link-button"
-              onClick={() => { this.props.dispatch({ type: 'SET_TO_LOGIN_MODE' }) }}
-            >
-              Login
-          </button>
-          </center>
-        </div>
+        </MuiThemeProvider>
       </>
     );
   }

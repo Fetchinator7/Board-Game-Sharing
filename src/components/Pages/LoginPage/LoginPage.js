@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Snack from '../../Components/Snack';
+import TablePresets from '../../Components/GamesTable/GamesTable';
+import { TextField, createMuiTheme, MuiThemeProvider, Button } from '@material-ui/core';
+
+const useStyles = createMuiTheme(
+  TablePresets.theme
+);
 
 class LoginPage extends Component {
   state = {
@@ -22,7 +28,7 @@ class LoginPage extends Component {
     } else {
       this.props.dispatch({ type: 'LOGIN_INPUT_ERROR' });
     }
-  } // end login
+  }
 
   handleInputChangeFor = propertyName => (event) => {
     this.setState({
@@ -39,50 +45,42 @@ class LoginPage extends Component {
           message={this.props.errors.loginMessage}
           severity='error'
         />
-        <div>
-          <form onSubmit={this.login}>
-            <h1>Login</h1>
-            <div>
-              <label htmlFor="username">
-                Username:
-              <input
-                  type="text"
-                  name="username"
-                  value={this.state.username}
-                  onChange={this.handleInputChangeFor('username')}
-                />
-              </label>
-            </div>
-            <div>
-              <label htmlFor="password">
-                Password:
-              <input
-                  type="password"
-                  name="password"
-                  value={this.state.password}
-                  onChange={this.handleInputChangeFor('password')}
-                />
-              </label>
-            </div>
-            <div>
-              <input
-                className="log-in"
-                type="submit"
-                name="submit"
-                value="Log In"
+        <MuiThemeProvider theme={useStyles}>
+          <form autoComplete="off" onSubmit={this.login}>
+            <>
+              <TextField
+                label="username"
+                fullWidth
+                required
+                maxLength='10'
+                value={this.state.username}
+                onChange={this.handleInputChangeFor('username')}
               />
-            </div>
+              <TextField
+                label="password"
+                fullWidth
+                required
+                maxLength='10'
+                type="password"
+                autoComplete="current-password"
+                value={this.state.password}
+                onChange={this.handleInputChangeFor('password')}
+              />
+              <Button
+                className="register"
+                type="submit"
+                color="primary"
+              > Log In
+              </Button>
+              <Button
+                type="button"
+                className="link-button"
+                onClick={() => { this.props.dispatch({ type: 'SET_TO_REGISTER_MODE' }) }}
+              > Register
+              </Button>
+            </>
           </form>
-          <center>
-            <button
-              type="button"
-              className="link-button"
-              onClick={() => { this.props.dispatch({ type: 'SET_TO_REGISTER_MODE' }) }}
-            >
-              Register
-          </button>
-          </center>
-        </div>
+        </MuiThemeProvider>
       </>
     );
   }
