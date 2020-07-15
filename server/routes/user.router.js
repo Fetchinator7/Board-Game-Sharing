@@ -18,7 +18,7 @@ router.get('/games', rejectUnauthenticated, (req, res) => {
                     "game_img", "title", "player_range", "playtime",
                     "user_owned_game".comments FROM "game"
                     INNER JOIN "user_owned_game" ON "game".game_id="user_owned_game".game_id
-                    WHERE "user_owned_game".user_id = $1;`;
+                    WHERE "user_owned_game".user_id = $1 ORDER BY "title";`;
   pool.query(queryText, [userID])
     .then(allUsersGames => {
       const loanedGamesQuery = `SELECT "loaned_game".game_id, "friend_id", "loan_start",
