@@ -47,7 +47,8 @@ class SearchPage extends Component {
         >
           Search
         </Button>
-        <Table tableData={this.props.searchUsers.usersSearchResults} />
+        {/* Don't show the current user in the search results. */}
+        <Table tableData={this.props.searchUsers.usersSearchResults.filter(searchResultUser => searchResultUser.user_id !== this.props.userID)} />
         <Snack
           onCloseDispatchText='RESET_USER_SEARCH__USER_NOT_FOUND'
           autoHideDuration={10000}
@@ -61,7 +62,8 @@ class SearchPage extends Component {
 
 const mapStateToProps = reduxState => ({
   searchUsers: reduxState.searchUsers,
-  loading: reduxState.status.loading
+  loading: reduxState.status.loading,
+  userID: reduxState.user.userAttributes.user_id
 });
 
 export default connect(mapStateToProps)(SearchPage);
