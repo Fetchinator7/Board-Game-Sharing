@@ -56,11 +56,10 @@ class Table extends React.Component {
                     <Checkbox color='primary' checked={value.props.checked} value={value.props.checked} />
                   }
                   onClick={() => {
-                    const BGGid = tableMeta.rowData[SearchTablePresets.moreInfoColumnIndex].props.id
                     const bodyObj = {
                       ownedStatus: value.props.checked,
-                      BGGid: BGGid,
-                      gameTitle: tableMeta.rowData[SearchTablePresets.moreInfoColumnIndex].props.id
+                      BGGid: this.props.searchBGG.formattedGameSearchResults[tableMeta.rowIndex].bgg_game_id,
+                      gameTitle: this.props.searchBGG.formattedGameSearchResults[tableMeta.rowIndex].title
                     };
                     if (value.props.checked) {
                       this.setState({
