@@ -1,6 +1,8 @@
 # Board Game Sharing
 Are you a board game enthusiast who wants to loan your collection out to others but has a hassle keeping track of all the logistics? Well then this is the site for you!
 
+From ypur profile page you can display all the games you want to loan out which enables other users to view those games and request specific days to borrow them.
+
 You can make an account and add games to your collection, but only games found at [Board Game Geek](https://boardgamegeek.com/) can be added.
 If you're signed in when searching for a game you'll get access to a checkbox to add the specified game to your collection.
 ![Search Games While Logged In](README-images/search-games-while-logged-in.png?raw=true)
@@ -16,27 +18,32 @@ If you're friends with someone and you're viewing their profile you get access t
 ![Game Dropdown](README-images/game-drop-down.png?raw=true)
 
 By default the calendar days won't have an icons, but there are three icons that can appear each with their own special meanings:
-![Date Picker](README-images/date-picker.png?raw=true)
-If there's a ✅ that means the owner has agreed for a game to be loaned out those days.
-A ❓means someone has requested to borrow this game in the given time-frame, but the owner hasn't responded yet.
-If you see a 🚫 on a day that means the user has blocked out the day so no one can borrow in that time frame, or if you previous requested a game and the owner declined you won't be able to select those days again.
+![Date Picker](README-images/date-picker.png)
+If there's a "✅" that means the owner has agreed for a game to be loaned out those days.
+A "❓" means someone has requested to borrow this game in the given time-frame, but the owner hasn't responded yet.
+If you see a "🚫" on a day that means the user has blocked out the day so no one can borrow in that time frame, or if you previous requested a game and the owner declined you won't be able to select those days again.
 
-Once someone sends you a friend request or a game loan request it will appear in the notifications drop-down and give you the option to accept or decline.
+Once someone sends you a friend request or a game loan request it will appear in the notifications drop-down and gives you the option to accept or decline.
 
 ## Setting it up
-In the terminal navigate to the directory you want and enter:
+In the computer terminal navigate to the root directory you want to store this in and enter:
+`git clone https://github.com/Fetchinator7/Board-Game-Sharing.git`
+Then
+
 `npm install`
 or
 `yarn install`
 
-Open [Database Preset(database.sql) and use a client such as [Postico](https://eggerapps.at/postico/) to run those commands.
+Open ![Database Preset(database.sql) and use a client such as [Postico](https://eggerapps.at/postico/) to run those commands.
 
 Create a .env file in the root directory with the name of the database and a server session secret, such as:
 `DATABASE_NAME=example-database-name`
+
 `SERVER_SESSION_SECRET=25POU<234@4;cp-bVt^#)$JDILsd9shp3npaSdFx6`
 
 If you're running it locally open two different terminal windows and run:
 `npm run server`
+
 `npm run client`
 
 From there everything should be all set to go so make an account and start adding some games!
