@@ -25,7 +25,7 @@ function* fetchUser() {
     const allDataBaseBGGGameIDs = yield axios.get('/api/game/management/all-database-games');
     yield put({ type: 'SET_ALL_DATABASE_GAMES', payload: allDataBaseBGGGameIDs.data.rows });
     const usersFriends = yield axios.get('/api/search/users/friends');
-    yield put({ type: 'SET_USER_FRIENDS', payload: usersFriends.data.rows });
+    yield put({ type: 'SET_USER_FRIENDS', payload: usersFriends.data });
     const usersNewNotifications = yield axios.get('/api/user/notifications/');
     yield put({ type: 'SET_USER_NOTIFICATION', payload: usersNewNotifications.data.rows });
   } catch (error) {

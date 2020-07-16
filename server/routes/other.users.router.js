@@ -19,12 +19,26 @@ router.get('/username/:search', (req, res) => {
 
 router.get('/friends', rejectUnauthenticated, (req, res) => {
   const userID = req.user.user_id;
-  const queryText = `SELECT "friend".friend_id, "users".user_name 
-                    FROM "friend"
-                    JOIN "users" ON "friend".friend_id="users".user_id
-                    WHERE "friend".user_id = $1;`;
-  pool.query(queryText, [userID])
-    .then(queryResponse => res.send(queryResponse))
+  // Friends are in pairs, so get the pairs where the current user is first because a friend accepted their request.
+  // but the second one will get the ones where this user accepted a friend request.
+  // For example, if the user is 15 and has the friends 13, 16, 17 in this configuration:
+  // (15, 13), (16, 15), (17, 15)
+  // this query selects the first pair where 15 is first, and the next query selects the two where 15 is second.
+  const userIsUserID = `SELECT "friend".friend_id, "users".user_name 
+                        FROM "friend"
+                        JOIN "users" ON "friend".friend_id="users".user_id
+                        WHERE "friend".user_id = $1;`;
+  pool.query(userIsUserID, [userID])
+    .then(queryResponse => {
+      const userIsFriendID = `SELECT "friend".user_id as "friend_id", "users".user_name 
+                              FROM "friend"
+                              JOIN "users" ON "friend".user_id="users".user_id
+                              WHERE "friend".friend_id = $1;`;
+      pool.query(userIsFriendID, [userID])
+        .then(friendUserResponse => {
+          res.send([...queryResponse.rows, ...friendUserResponse.rows]);
+        });
+    })
     .catch((error) => {
       console.log(error);
       res.sendStatus(500);
