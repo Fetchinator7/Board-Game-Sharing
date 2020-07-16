@@ -10,27 +10,31 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-// import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles = createMuiTheme(
   SearchTablePresets.theme
 );
 
+// This componenet will display the input user object results.
 class Table extends React.Component {
   state = {
     confirmationWindowIsOpen: false,
+    // This component has multiple purposes so change the confirm button text based on
+    // which mode is running.
     trueButtonAction: '',
     prompt: '',
+    // The text the user entered in the text input.
     message: '',
     showTextField: true,
     otherUsersID: '',
+    // 
     selectedSearchResultUserName: '',
     selectedSearchResultUsersAreFriends: ''
   }
 
   changeFriendStatus = () => {
     if (!this.state.selectedSearchResultUsersAreFriends) {
-      // this.props.dispatch() remove and block.
+      // TODO this.props.dispatch() remove and block.
     } else {
       this.props.dispatch({
         type: 'CREATE_FRIEND_REQUEST',
@@ -75,11 +79,15 @@ class Table extends React.Component {
     
   }
 
+  // See if these users are friend by checking if the other user's id appears in the array
+  // of all the friends the current user has.
   getFriendStatus = (userSearchResultID) => {
     return !this.props.userFriends.some(userObj => userObj.friend_id === userSearchResultID)
   }
 
   render() {
+    // This array controls which columns appear in the table. Always show the users column,
+    // but only show the send friend request if the user is signed in.
     const columns = [
       {
         name: 'Users',
@@ -101,7 +109,7 @@ class Table extends React.Component {
               <FormControlLabel
                 control={
                   <Button
-                    color={value.props.isFriend ? 'primary' : 'secondary'}
+                    color='primary'
                     variant="contained"
                     value={value}
                     startIcon={value.props.isFriend ? <SendIcon /> : <DeleteIcon />}
@@ -120,6 +128,7 @@ class Table extends React.Component {
     // tableData comes from the parent so this table can be used for display all users or
     // only one user's friends.
     const data = this.props.tableData.map(user => [
+      // Make this button open a differnet user's profile when clicked.
       <Button
         variant="contained"
         color="primary"
@@ -127,13 +136,15 @@ class Table extends React.Component {
       >{user.user_name}</Button>,
       this.props.userStatus.userIsSignedIn &&
       <Button
-        // These are arbitrary key I made up so the table can access this information.
+        // These are arbitrary keys I made up so the table can access this information.
         // If this table is used for search results user user_id,
         // but if it's displaying a user's friends use friend_id.
         isFriend={this.getFriendStatus(user.user_id ? user.user_id : user.friend_id)}
         otherUsersID={user.user_id}
       />
     ])
+    // Use the default table options, except don't let the user search inside this table 
+    // because there's no point in this case.
     const options = {
       ...SearchTablePresets.options,
       search: false
@@ -141,6 +152,7 @@ class Table extends React.Component {
     return (
       <>
         <MuiThemeProvider theme={SearchTablePresets.theme}>
+          {/* Render the table */}
           <MUIDataTable title='Users' data={data} columns={columns} options={options} />
         </MuiThemeProvider>
         <MuiThemeProvider theme={useStyles}>
@@ -150,6 +162,7 @@ class Table extends React.Component {
             <DialogContentText>
               {this.state.prompt}
           </DialogContentText>
+          {/* Dialogue that prompts the user to send a message for a new user request. */}
               {this.state.showTextField &&
             <TextField
               autoFocus
@@ -166,6 +179,7 @@ class Table extends React.Component {
             />
           }
           </DialogContent>
+          {/* Confirm or cancel buttons. */}
           <DialogActions>
               <Button
                 onClick={() => this.setState({ confirmationWindowIsOpen: false })}

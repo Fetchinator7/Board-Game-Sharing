@@ -7,7 +7,6 @@ const sessionMiddleware = require('./modules/session-middleware');
 
 const passport = require('./strategies/user.strategy');
 
-// Route includes
 const userRouter = require('./routes/user.router');
 const searchRouter = require('./routes/search.router');
 const otherUserRouter = require('./routes/other.users.router');
@@ -17,26 +16,25 @@ const gameManagementRouter = require('./routes/game.management.router');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Passport Session Configuration //
+// Passport Session Configuration
 app.use(sessionMiddleware);
 
-// start up passport sessions
+// Start up passport sessions
 app.use(passport.initialize());
 app.use(passport.session());
 
-/* Routes */
 app.use('/api/user', userRouter);
 app.use('/api/search', searchRouter);
 app.use('/api/search/users', otherUserRouter);
 app.use('/api/game/management', gameManagementRouter);
 
-// Serve static files
+// Serve static files.
 app.use(express.static('build'));
 
-// App Set //
+// App Set.
 const PORT = process.env.PORT || 5000;
 
-/** Listen * */
+// Display that the app is running.
 app.listen(PORT, () => {
   console.log(`Listening on port: ${PORT}`);
 });

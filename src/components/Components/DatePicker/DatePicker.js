@@ -1,4 +1,3 @@
-// import TextField from '@material-ui/core/TextField';
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
@@ -6,7 +5,6 @@ import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MomentUtils from '@date-io/moment';
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme, Button, TextField } from "@material-ui/core";
-import green from "@material-ui/core/colors/green";
 import { Badge } from "@material-ui/core";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -14,66 +12,60 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 const materialTheme = createMuiTheme({
   palette: {
-    primary: green,
     type: 'dark'
   },
-  overrides: {
-    // MuiPickersToolbar: {
-    //   toolbar: {
-    //     backgroundColor: '#757ce8',
-    //   },
-    // },
-    // MuiPickersCalendarHeader: {
-    //   switchHeader: {
-    //     backgroundColor: '#757ce8',
-    //     color: "green",
-    //   },
-    // },
-    MuiPickersDay: {
-      // day: {
-      //   color: '#1331c9',
-      // },
-      // daySelected: {
-      //   backgroundColor: '#2e7d32',
-      // },
-      // dayDisabled: {
-      //   color: '#c91313',
-      // },
-      // current cv 
-    },
     MuiPickersModal: {
       dialogAction: {
         color: '#757ce8',
-      },
-    },
-  },
+      }
+    }
 });
 
 class DateAndTimePickers extends React.Component {
   state = {
+    // The dispatch type can either be request or blockout so store that here in local state.
     dispatchTypeStr: '',
+    // Controls if the calender window is visible.
     selectionWindowOpen: false,
+    // Set the default start and end day to today.
     start: moment().format('yyyy-MM-DD'),
     end: moment().format('yyyy-MM-DD'),
+    // Controls if the error message is visible.
     showErrorMessage: false,
+    // What to display in the error message (such as how they can't select overlapping times.)
     message: '',
+    // These arrays determine which (if any) badge will be dispalyed with a day.
+    // requestedDays is the question mark.
     requestedDays: [],
+    // blockOutDays is the prohibited badge. 
     blockOutDays: [],
+    // acceptedLoanDays is the checkmark.
     acceptedLoanDays: []
   }
 
   componentDidMount() {
+    // This is a prop that gets passed in from the parent to say if the calendar should be
+    // in request mode (requesting a different user's game) or blockout
+    // (the user can exclude loan days) mode.
     const dateSetMode = this.props.mode;
+    // This is the array that comes with a game object containing all the loans days for said game.
     const { loanDaysArray } = this.props;
+    // These are temporary arrays to store which type of day to blockout which are set
+    // to the local state after the arrays have been flattened.
     const requestedDays = [];
     const blockOutDays = [];
     const acceptedLoanDays = [];
+    // This function takes in two moment objects and returns a string for each day inbetween
+    // those two days. This is because the calendar needs days to be explcitly specifed
+    // to block them out, but the database can just store the start and end date.
     function getDaysBetween(start, end) {
       const daysArr = [start.format('yyyy-MM-DD')];
+      // Get an int of the differnece between days, such as "-3".
       const dif = moment(end).diff(moment(start), 'days')
       if (dif !== 0) {
         for (let index = 0; index < dif; index++) {
-          // const element = array[index];
+          // There is a date range (as apposed to one day loans) so run a for loop to get the
+          // days in between. Get the next day by adding one to the current day index.
           daysArr.push(moment(start, 'yyyy-MM-DD').add(index + 1, 'days').format('yyyy-MM-DD'));
         }
       }
@@ -81,11 +73,11 @@ class DateAndTimePickers extends React.Component {
     }
     for (const gameLoan of loanDaysArray) {
       const daysBetweenLoanStartAndEnd = getDaysBetween(moment(gameLoan.loan_start), moment(gameLoan.loan_end));
-      // Skip this loop because the owner declined this loan.
-      // BLock out day.
+      // Skip this loop because the owner declined this loan (block out day).
       if (gameLoan.friend_id === null) {
         blockOutDays.push(daysBetweenLoanStartAndEnd);
       // The owner declined this loan so see if the current user is the user who had the loan declined.
+      // If they are then don't let them select the same days again.
       } else if (gameLoan.agreed === false && gameLoan.viewed === true) {
         if (gameLoan.friend_id === this.props.currentUserID) {
           blockOutDays.push(daysBetweenLoanStartAndEnd);
@@ -97,6 +89,7 @@ class DateAndTimePickers extends React.Component {
       }
     }
     let dispatchTypeStr;
+    // Set the mode this component is in (request or blockout).
     if (dateSetMode === 'request') {
       dispatchTypeStr = 'SET_LOAN_REQUEST_TIME_FRAME';
     } else if (dateSetMode === 'blockOut') {
@@ -104,19 +97,22 @@ class DateAndTimePickers extends React.Component {
     } else {
       throw new Error(`The DatePicker component only accepts modes of "request" and "blockOut" not "${dateSetMode}"`);
     }
+    // Set the local state to the arrays generated by this function after flatening them.
     this.setState({
       dispatchTypeStr: dispatchTypeStr,
       requestedDays: requestedDays.flat(),
       blockOutDays: blockOutDays.flat(),
       acceptedLoanDays: acceptedLoanDays.flat(),
     })
-    // If today is an invalid day change the starting values to null.
+    // If today is an invalid day change the starting values to null. The calendar will
+    // automatically start with the next eligable day after it's clicked.
     if (this.state.blockOutDays.includes(moment().format('yyyy-MM-DD')) || this.state.acceptedLoanDays.includes(moment().format('yyyy-MM-DD'))) {
       this.setState({ start: null, end: null })
     }
   }
 
   dispatchLoanRequest = () => {
+    // Dispatch to saga which will do a post to the loan requests.
     const { gameID, ownerID, gameTitle } = this.props;
     this.props.dispatch({
       type: this.state.dispatchTypeStr,
@@ -130,6 +126,8 @@ class DateAndTimePickers extends React.Component {
     }})
   }
 
+  // Confirm that the user isn't trying to select a time range that overlaps when someone
+  // else is borrowing this game.
   checkIfValidBorrowingRange = (date) => {
     const isInAcceptedLoanRange = this.state.acceptedLoanDays.some(loanDay =>
       moment(loanDay).isBetween(this.state.start, date)
@@ -144,6 +142,7 @@ class DateAndTimePickers extends React.Component {
     }
   }
 
+  // This makes a custom componet to render a day of the month adding the badeges if appropiate.
   renderDay = (day, isInCurrentMonth, dayComponent) => {
     const isRequestedLoanDay = isInCurrentMonth && this.state.requestedDays.includes(day.format('yyyy-MM-DD'));
     const isBlockedOutDay = isInCurrentMonth && this.state.blockOutDays.includes(day.format('yyyy-MM-DD'));
@@ -154,6 +153,8 @@ class DateAndTimePickers extends React.Component {
     // https://emojipedia.org/question-mark/
   }
 
+  // Check if a date should be disabled because it's in any of the block out day arrays.
+  // TODO make this cleaner.
   shouldDisableDate = (day) => {
     return this.state.blockOutDays.includes(day.format('yyyy-MM-DD')) || this.state.acceptedLoanDays.includes(day.format('yyyy-MM-DD')) || this.state.requestedDays.includes(day.format('yyyy-MM-DD'))
   }
@@ -171,6 +172,7 @@ class DateAndTimePickers extends React.Component {
                 inputVariant="outlined"
                 label='Start Day'
                 shouldDisableDate={day => this.shouldDisableDate(day)}
+                // Don't let the user select a starting date before today.
                 disablePast={true}
                 renderDay={(day, selectedDate, isInCurrentMonth, dayComponent) =>
                   this.renderDay(day, isInCurrentMonth, dayComponent)
@@ -217,6 +219,7 @@ class DateAndTimePickers extends React.Component {
           </Button>
         }
         {<>
+          {/* Dialogue that pops up if the user attempts to select an invalid loan day range. */}
           <Dialog
             open={this.state.showErrorMessage}
             onClose={() => this.setState({ showErrorMessage: false })}

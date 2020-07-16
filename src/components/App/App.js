@@ -3,7 +3,6 @@ import { HashRouter as Router, Route, Redirect, Switch } from 'react-router-dom'
 import { connect } from 'react-redux';
 
 import Nav from './Nav/Nav';
-// import Footer from './Footer/Footer';
 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
@@ -27,6 +26,7 @@ class App extends Component {
           <Nav />
           <Switch>
             <Redirect exact path='/' to='/home' />
+            {/* Public routes always available to search. */}
             <Route
               exact
               path='/search/games'
@@ -37,12 +37,7 @@ class App extends Component {
               path='/search/users'
               component={UsersSearchPage}
             />
-            {/* <Route exact path='/user/:userName'>
-              {user is signed in:
-                ? (<Route exact path='/user/:userName' component={LoggedOutUser} />)
-                : (<Redirect exact path='/user/:userName' to='/home' />)}
-              <LoggedOutUser />
-            </Route> */}
+            {/* Show a user's profile (blocked if their profile is private.) */}
             <Route
               exact
               path='/user/:userName'
@@ -53,6 +48,7 @@ class App extends Component {
               path='/home'
               component={HomePage}
             />
+            {/* Protected routes only available when the user is logged in. */}
             <ProtectedRoute
               exact
               path='/dashboard'
@@ -74,7 +70,6 @@ class App extends Component {
             {/* If none of the other routes matched, we will show a 404. */}
             <Route render={() => <h1>404</h1>} />
           </Switch>
-          {/* <Footer /> */}
         </>
       </Router>
     );

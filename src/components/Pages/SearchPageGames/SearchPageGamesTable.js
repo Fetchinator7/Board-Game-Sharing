@@ -32,16 +32,24 @@ class Table extends React.Component {
   }
 
   render() {
+    // TODO change this so the formatting is done on the server.
+    // Get the raw game search results in an array and run them thorught the component to 
+    // get the format the databse is expecting.
+
     const data = this.props.searchBGG.rawGameSearchResults;
     const result = [];
     data && data.map(gameObj => {
       result.push(SearchResult(gameObj, this.props.usersGames));
     });
+    // If there are raw search results clear them after they are formatted to avaoid
+    // an infinate loop.
     result.length !== 0 && this.props.dispatch({ type: 'RESET_RAW_SEARCH_GAMES' });
     result.length !== 0 && this.props.dispatch({ type: 'SET_FORMATTED_SEARCH_GAMES', payload: result });
 
     const baseData = baseGamesDataArray(this.props.searchBGG.formattedGameSearchResults);
     let fullData = baseData;
+    
+    // Copy over the default columns and add a checkbox if the user is signed in.
     const columns = [...SearchTablePresets.columns];
     if (this.props.userStatus.userIsSignedIn) {
       columns.unshift(
@@ -77,6 +85,8 @@ class Table extends React.Component {
           }
         }
       );
+      // If the user is signed in add a checkbox at the beginning of the table that is
+      // checked if the user owns this game.
       fullData = this.props.searchBGG.formattedGameSearchResults.map((gameObj, index) => {
         const owned = this.props.usersGames.some(userGameObj => userGameObj.bgg_game_id === gameObj.bgg_game_id);
         return [<Checkbox color='primary' checked={owned} key={`game-search-table-row-${index}`} />, ...baseData[index]];
@@ -88,6 +98,7 @@ class Table extends React.Component {
       <MuiThemeProvider theme={useStyles}>
         <MUIDataTable title='Search Page' data={fullData} columns={columns} options={SearchTablePresets.options} />
       </MuiThemeProvider>
+      {/* Pop-up to confirm the user wants to delete the game because the uncked the check box. */}
       <ConfirmationDialogue
         parentCallBackFunc={this.confirmBeforeDeleting}
         visible={this.state.showDialogue}

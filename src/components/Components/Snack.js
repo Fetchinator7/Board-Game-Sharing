@@ -14,6 +14,7 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant='filled' {...props} />;
 }
 
+// This snack shows up at the top of the screen to give the user status updates.
 class UserPage extends Component {
   render() {
     const { onCloseDispatchText, autoHideDuration, message, severity } = this.props;
@@ -41,5 +42,4 @@ class UserPage extends Component {
   }
 }
 
-// this allows us to use <App /> in index.js
 export default connect()(UserPage);

@@ -12,6 +12,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
   res.send(req.user);
 });
 
+// Get all the games for the curent user and add any loans into the game object as an array.
 router.get('/games', rejectUnauthenticated, (req, res) => {
   const userID = req.user.user_id;
   const queryText = `SELECT "user_owned_game".game_id, "bgg_game_id", 
@@ -21,6 +22,8 @@ router.get('/games', rejectUnauthenticated, (req, res) => {
                     WHERE "user_owned_game".user_id = $1 ORDER BY "title";`;
   pool.query(queryText, [userID])
     .then(allUsersGames => {
+      // Now that we have all the user's games, get all the loan times for those games
+      // and add those to the game object as an array.
       const loanedGamesQuery = `SELECT "loaned_game".game_id, "friend_id", "loan_start",
                                 "loan_end", "agreed", "viewed"
                                 FROM user_owned_game
@@ -32,6 +35,8 @@ router.get('/games', rejectUnauthenticated, (req, res) => {
           res.send(allUsersGames.rows.map(ownedGame => {
             const infoObj = {
               ...ownedGame,
+              // Every single loan was returned from the query, but only add the loans
+              // to the current game object where the game_ids match.
               loans: allUsersGameLoans.rows.filter(game => game.game_id === ownedGame.game_id)
             };
             return infoObj;
@@ -44,6 +49,7 @@ router.get('/games', rejectUnauthenticated, (req, res) => {
     });
 });
 
+// Get all the notifications for the logged in user.
 router.get('/notifications', rejectUnauthenticated, (req, res) => {
   const userID = req.user.user_id;
   // TODO change this to also get viewed notifications? Archived section?
@@ -57,6 +63,7 @@ router.get('/notifications', rejectUnauthenticated, (req, res) => {
     });
 });
 
+// Update the profile privacy setting for the current user.
 router.put('/settings-privacy', rejectUnauthenticated, (req, res) => {
   const userID = req.user.user_id;
   const newVisibility = req.body.newVisibility;

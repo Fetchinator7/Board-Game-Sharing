@@ -24,6 +24,9 @@ class SearchPage extends Component {
   render() {
     return (
       <>
+          {/* When a usr inputs text into the search bar and it's >= 4 characters search BGG
+          to return the titles of all the games that match the input even though the usre hasn't
+          clicked search yet. */}
           <TextField
             variant="outlined"
             value={this.state.search}
@@ -39,8 +42,8 @@ class SearchPage extends Component {
               })
             }
             }
+            // If there's text to search for and the user pressed enter search BBG.
             onKeyPress={(event) => {
-              // If there's text to search for and the user pressed enter search BBG.
               if (event.key === 'Enter' && this.state.search) {
                 this.searchInput()
                 event.preventDefault();
@@ -60,6 +63,7 @@ class SearchPage extends Component {
           </Button>
         }
         <Paper className={'paper'}>
+          {/* Show all the results of BGG game titles that match what's in the search field. */}
           <MenuList>
             {this.props.searchBGG.searchTitles.map((titleResultObj, index) =>
               <MenuItem
@@ -76,6 +80,7 @@ class SearchPage extends Component {
           </MenuList>
         </Paper>
         <Table />
+        {/* Status snacks. */}
         <Snack
           onCloseDispatchText='RESET_GAME_SEARCH__GAME_NOT_FOUND'
           autoHideDuration={10000}

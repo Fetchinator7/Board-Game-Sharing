@@ -2,16 +2,20 @@ import React from 'react';
 import SearchTablePresets from '../GamesTable/GamesTable';
 import { Button, MuiThemeProvider, createMuiTheme, Dialog, DialogTitle, DialogContentText, DialogContent, TextField, DialogActions } from "@material-ui/core";
 
+// Import the style presets from my table preset.
 const useStyles = createMuiTheme(
   SearchTablePresets.theme
 );
 
+// Preset dialogue to display in the center of the screen for confirming certain actions
+// or submitting requests.
 class Dialogue extends React.Component {
   state = {
     message: ''
   }
   render() {
     const { parentCallBackFunc, visible, title, showTextField, trueButtonAction } = this.props;
+    // If visible is true dispaly this componet, but otherwise return null (to display nothing.)
     return (visible
       ? <>
         <MuiThemeProvider theme={useStyles}>

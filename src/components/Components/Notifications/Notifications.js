@@ -14,11 +14,13 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import '../../App/Nav/Nav.css';
 
+// Use styles from parent preset.
 const useStyles = createMuiTheme(
   SearchTablePresets.theme
 );
 
-class Table extends React.Component {
+// This component will show a drop down where users can manage their notifications.
+class Notifications extends React.Component {
   state = {
     drawIsOpen: false
   }
@@ -27,6 +29,7 @@ class Table extends React.Component {
     this.setState({ drawIsOpen: !this.state.drawIsOpen })
   }
 
+  // The user is responding to a friend request so dispatch the action to update that friend request.
   loan = (agreedBool, alertID, loanedGameID) => {
     this.props.dispatch({
       type: 'SET_LOAN_REQUEST_UPDATED_STATE',
@@ -37,8 +40,8 @@ class Table extends React.Component {
     }})
   }
 
+  // The user is responding to a friend request so dispatch the action to update that friend request.
   friend = (agreedBool, alertID, friendRequestID) => {
-    console.log(agreedBool, 'friend with ID', alertID, friendRequestID);
     this.props.dispatch({
       type: 'SET_FRIEND_REQUEST_UPDATED_STATE',
       payload: {
@@ -49,6 +52,7 @@ class Table extends React.Component {
     })
   }
 
+  // Display a list inside of this component with a couple different categories.
   list = () => {
     return (
       <>      
@@ -106,6 +110,7 @@ class Table extends React.Component {
   }
 
   render() {
+    // Display from the top-down.
     const anchor = 'top';
     return (
       <>
@@ -117,6 +122,7 @@ class Table extends React.Component {
                 <Drawer anchor={anchor} open={this.state.drawIsOpen} onClose={() => this.toggleDrawer(anchor, false)}>
                   {this.list(anchor)}
                 </Drawer>
+                {/* My preset snack to display a success message. */}
                 <Snack
                   onCloseDispatchText='CLEAR_FRIEND_REQUEST_SENT_SUCCESSFULLY'
                   autoHideDuration={5000}
@@ -137,4 +143,4 @@ const mapStateToProps = reduxState => ({
   searchUsers: reduxState.searchUsers,
 });
 
-export default connect(mapStateToProps)(Table);
+export default connect(mapStateToProps)(Notifications);

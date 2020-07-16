@@ -40,7 +40,6 @@ router.post('/comment', rejectUnauthenticated, (req, res) => {
   const userID = req.user.user_id;
   const gameID = req.body.gameID;
   const comment = req.body.comment;
-  console.log(gameID, comment);
   const queryText = 'UPDATE user_owned_game SET "comments" = $1 WHERE user_id = $2 AND game_id = $3';
   pool.query(queryText, [comment, userID, gameID])
     .then(queryResponse => res.send(queryResponse))
@@ -62,7 +61,8 @@ router.get('/game-table-id/:BGGId', rejectUnauthenticated, (req, res) => {
     });
 });
 
-// AddA
+// Add a new Board Game Geek game to the database by providing the required fileds.
+// This only happens i if a game isn't already in the database.
 router.post('/database/game', rejectUnauthenticated, (req, res) => {
   // TODO get from bgg directly and add it on the server side.
   const gameID = req.body.bgg_game_id;
@@ -79,6 +79,7 @@ router.post('/database/game', rejectUnauthenticated, (req, res) => {
     });
 });
 
+// Return all the games in the database as an array.
 router.get('/all-database-games', (req, res) => {
   const queryText = 'SELECT "bgg_game_id" FROM "game";';
   pool.query(queryText)

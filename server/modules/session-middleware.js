@@ -1,5 +1,3 @@
-// No changes should be required in this file
-
 const cookieSession = require('cookie-session');
 const warnings = require('../constants/warnings');
 
@@ -10,7 +8,7 @@ const warnings = require('../constants/warnings');
   something the server can confirm, and then we know that we have the right user.
 
   You can see this string that gets passed back and forth in the
-  `application` ->  `storage` -> `cookies` section of the chrome debugger
+  `application` ->  `storage` -> `cookies` section of the chrome debugger.
 */
 
 const serverSessionSecret = () => {
@@ -26,11 +24,11 @@ const serverSessionSecret = () => {
 
 module.exports = cookieSession({
   secret: serverSessionSecret() || 'secret',
-  // this is the name of the req.variable. 'user' is convention, but not required
+  // This is the name of the req.variable. 'user' is convention, but not required.
   key: 'user',
   reSave: 'false',
   saveUninitialized: false,
-  // Set to 1 hour - 60 min/hour * 60 s/min * 1000 ms/s
+  // Set to 1 hour - 60 min/hour * 60 s/min * 1000 ms/s.
   maxAge: 60 * 60 * 1000,
   secure: false
 });

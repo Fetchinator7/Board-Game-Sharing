@@ -1,6 +1,8 @@
 import { createMuiTheme } from '@material-ui/core';
 import green from '@material-ui/core/colors/green';
 
+// This is the base preset for the custom material-table component since most of the tables
+// dispaly at least these columns.
 const tablePreferences = {
   moreInfoColumnIndex: 3,
   columns: [
@@ -42,6 +44,7 @@ const tablePreferences = {
   options: {
     selectableRows: 'none',
     responsive: 'standard',
+    // Don't show the default print or download buttons that come with the default table.
     print: false,
     download: false,
     filter: true,

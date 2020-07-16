@@ -14,13 +14,20 @@ const useStyles = createMuiTheme(
 );
 
 class UserPage extends Component {
+  // Get the user's username based on the url.
   state = {
     userName: this.props.match.params.userName
   }
+
+  // Fetch details for the current url user.
   componentDidMount() {
     this.props.dispatch({ type: 'FETCH_A_DIFFERENT_USER', payload: this.props.match.params.userName });
   }
 
+  // This component loads for any user tha isn't logged in, so if the user enters another
+  // user in the url directly this component won't mount again, but it will receive new props
+  // so check if the url username is different than the one currently displayed so this knows
+  // to update the user information.
   componentDidUpdate() {
     if (this.state.userName !== this.props.match.params.userName) {
       this.props.dispatch({ type: 'CLEAR_A_DIFFERENT_USERS_OWNED_GAMES' });
@@ -30,13 +37,18 @@ class UserPage extends Component {
     }
   }
 
+  // The user is leaving the other user's page so clear the information since it can only
+  // show one user at a time.
   componentWillUnmount() {
     this.props.dispatch({ type: 'CLEAR_A_DIFFERENT_USERS_OWNED_GAMES' });
     this.props.dispatch({ type: 'CLEAR_A_DIFFERENT_USERS_ID' });
   }
 
   render() {
+    // Get the standard formatted information.
     const baseData = baseGamesDataArray(this.props.otherUsersGames);
+    
+    // Show a user's comments for any games they have.
     let fullData = baseData;
     fullData = this.props.otherUsersGames.map((gameObj, index) => {
       return [...baseData[index], gameObj.comments];
@@ -52,6 +64,8 @@ class UserPage extends Component {
         }
       }
     );
+
+    // If the user is singed in and they're friends with this user display the date picker expandable row.
     if (this.props.userStatus.userIsSignedIn &&
       this.props.usersFriends.some(friendObj => friendObj.friend_id === this.props.otherUsersID)) {
       options = {
@@ -83,12 +97,14 @@ class UserPage extends Component {
     }
     return (
       <>
-        <h1 id='welcome' className='profileText'>
+        <h1 className='profileText'>
           {`This is ${this.props.match.params.userName}'s logged out page`}
         </h1>
+        {/* Render the table. */}
         <MuiThemeProvider theme={useStyles}>
           <MUIDataTable title={`Search ${this.props.match.params.userName}'s Games`} data={fullData} columns={columns} options={options} />
         </MuiThemeProvider>
+        {/* Status snacks. */}
         <Snack
           onCloseDispatchText='CLEAR_ERROR_GETTING_A_DIFFERENT_USERS_GAMES'
           autoHideDuration={null}

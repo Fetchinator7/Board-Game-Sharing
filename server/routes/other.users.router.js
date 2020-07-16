@@ -5,6 +5,8 @@ const moment = require('moment');
 
 const router = express.Router();
 
+// Search for users in the database with usernames containing the input, but only
+// returning users whose privacy level is (1) public.
 router.get('/username/:search', (req, res) => {
   const search = req.params.search;
   pool.query('SELECT user_name, user_id FROM users WHERE "visibility" <= 1 AND user_name ILIKE $1', [`%${search}%`])
@@ -17,6 +19,7 @@ router.get('/username/:search', (req, res) => {
     });
 });
 
+// Get the ids and user names for all the friends the current user has.
 router.get('/friends', rejectUnauthenticated, (req, res) => {
   const userID = req.user.user_id;
   // Friends are in pairs, so get the pairs where the current user is first because a friend accepted their request.
@@ -45,6 +48,7 @@ router.get('/friends', rejectUnauthenticated, (req, res) => {
     });
 });
 
+// Get just the user id for the user with the input user name.
 router.get('/user/ID/:userName', (req, res) => {
   const userName = req.params.userName;
   const queryText = 'SELECT "user_id" FROM "users" WHERE "user_name" = $1;';
@@ -56,13 +60,16 @@ router.get('/user/ID/:userName', (req, res) => {
     });
 });
 
+// Get all the games for the input user name assuming their privacy level is (1) Public
+// or (2) Only those with the link and add the loan time frames.
 router.get('/user/profile/:userName', (req, res) => {
   const userName = req.params.userName;
   const queryText = 'SELECT "user_id" FROM "users" WHERE "visibility" <= 2 AND user_name = $1;';
   pool.query(queryText, [userName])
     .then(queryResponse => {
       if (queryResponse.rows[0]) {
-        // If there profile is 1: Public or 2: Those with the link then show all the game results.
+        // If a result was found (the user exists and their profile is public) get all the
+        // games (objects) that they own in an array.
         const userID = queryResponse.rows[0].user_id;
         const queryText = `SELECT "user_owned_game".game_id, "bgg_game_id", 
                             "game_img", "title", "player_range", "playtime",
@@ -71,6 +78,8 @@ router.get('/user/profile/:userName', (req, res) => {
                             WHERE "user_owned_game".user_id = $1;`;
         pool.query(queryText, [userID])
           .then(allUsersGames => {
+            // Now that we have all the user's games, get all the loan times for those games
+            // and add those to the game object as an array.
             const loanedGamesQuery = `SELECT "loaned_game".game_id, "friend_id", "loan_start",
                                         "loan_end", "agreed", "viewed"
                                         FROM user_owned_game
@@ -82,6 +91,8 @@ router.get('/user/profile/:userName', (req, res) => {
                 res.send(allUsersGames.rows.map(ownedGame => {
                   const infoObj = {
                     ...ownedGame,
+                    // Every single loan was returned from the query, but only add the loans
+                    // to the current game object where the game_ids match.
                     loans: allUsersGameLoans.rows.filter(game => game.game_id === ownedGame.game_id)
                   };
                   return infoObj;
@@ -98,18 +109,30 @@ router.get('/user/profile/:userName', (req, res) => {
     });
 });
 
+// This route handles scheduling and notification messages so since a friend request and
+// game loan request are similar this excepts two "modes": friend and loan.
+// If the mode is friend then make a row in the friend_request table which is pulled from
+// whenever the user logs in.
 router.post('/other-user-request', rejectUnauthenticated, (req, res) => {
   const userID = req.user.user_id;
   const otherUsersUserName = req.user.user_name;
   const otherUserID = req.body.otherUserID;
+  // A notification is "unread" if the created_at time is null, so set that to the current time
+  // to "view" whatever this notification is.
   const now = moment();
   const actionType = req.body.actionType;
   const message = req.body.message;
   if (actionType === 'friend') {
+    // A friend_request defaults "answered" and "accepted" to false. If a user answered a
+    // request but didn't accept the loan then threat it as if the user blocked the other
+    // user. If both a true a new friend relationship is added to the "friend" table so
+    // the row in this table is essentially ignored.
     const friendAlertText = `The user with the user name "${otherUsersUserName}" wants to be your friend and said: "${message}"`;
     const friendRequestQueryText = 'INSERT INTO "friend_request" ("from_user_id", "to_user_id", "message") VALUES ($1, $2, $3) returning "request_id";';
     pool.query(friendRequestQueryText, [userID, otherUserID, message])
       .then(friendRequestQueryResponse => {
+        // A friend request was submitted so make a new notification for the other user
+        // so they can actually respond to it.
         const queryText = 'INSERT INTO "alert" ("user_id", "created_at", "alert_text", "friend_request_id") VALUES ($1, $2, $3, $4);';
         pool.query(queryText, [otherUserID, now, friendAlertText, friendRequestQueryResponse.rows[0].request_id])
           .then(queryResponse => res.send(queryResponse));
@@ -126,6 +149,8 @@ router.post('/other-user-request', rejectUnauthenticated, (req, res) => {
     const borrowGameQueryText = 'INSERT INTO "loaned_game" ("game_id", "owner_id", "friend_id", "loan_start", "loan_end") VALUES ($1, $2, $3, $4, $5) returning "loan_id";';
     pool.query(borrowGameQueryText, [gameID, otherUserID, userID, startDate, endDate])
       .then(loanRequestQueryResponse => {
+        // A loan request was submitted so make a new notification for the other user
+        // so they can actually respond to it.
         const loanQueryText = 'INSERT INTO "alert" ("user_id", "created_at", "alert_text", "loaned_game_id") VALUES ($1, $2, $3, $4);';
         const loanAlertText = `Your friend with the user name "${otherUsersUserName}" wants to borrow your game: "${gameTitle}" from ${startDate.format('MM/DD')}-${endDate.format('MM/DD')} and said "${message}"`;
         pool.query(loanQueryText, [otherUserID, now, loanAlertText, loanRequestQueryResponse.rows[0].loan_id])
@@ -141,13 +166,13 @@ router.post('/other-user-request', rejectUnauthenticated, (req, res) => {
 });
 
 // TODO combine these two into the same action based on whether loanedGameID or friendRequestID is null.
+// Update the status of a game loan to either accept or decline.
 router.post('/update-borrow-game-request', rejectUnauthenticated, (req, res) => {
   const viewedAt = moment();
   const alertID = req.body.alertID;
   const agreed = req.body.agreed;
   const userID = req.user.user_id;
   const loanedGameID = req.body.loanedGameID;
-  console.log(viewedAt, alertID, agreed, userID);
   const updateAlertText = 'UPDATE "alert" SET "viewed_at" = $1 WHERE alert_id = $2 AND user_id = $3;';
   const updateLoanText = 'UPDATE "loaned_game" SET "agreed" = $1, "viewed" = TRUE WHERE "loan_id" = $2 AND owner_id = $3;';
   pool.query(updateAlertText, [viewedAt, alertID, userID])
@@ -162,22 +187,25 @@ router.post('/update-borrow-game-request', rejectUnauthenticated, (req, res) => 
     });
 });
 
-// TODO only allow a notification to be created for the signed in user, and
+// TODO only allow a notification to be created for the signed in user.
+// Update the status of a friend request to either block or accept.
 router.post('/update-friend-request', rejectUnauthenticated, (req, res) => {
   const viewedAt = moment();
   const alertID = req.body.alertID;
   const agreed = req.body.agreed;
   const userID = req.user.user_id;
   const friendRequestID = req.body.friendRequestID;
-  console.log(viewedAt, alertID, agreed, userID);
-  console.log(userID, friendRequestID);
   const updateAlertText = 'UPDATE "alert" SET "viewed_at" = $1 WHERE alert_id = $2 AND user_id = $3;';
   const updateFriendRequestText = 'UPDATE "friend_request" SET "answered" = TRUE, "accepted" = $1 WHERE "request_id" = $2 AND to_user_id = $3 returning from_user_id;';
   const addFriendRelationText = 'INSERT INTO "friend" ("user_id", "friend_id") VALUES ($1, $2);';
   pool.query(updateAlertText, [viewedAt, alertID, userID])
+    // Set this alert to viewed.
     .then(() =>
       pool.query(updateFriendRequestText, [agreed, friendRequestID, userID])
+        // Set the friend request to viewed and either accept or decline the request.
         .then(friendID =>
+          // If the user agreed to the friend request insert a new friend relationship into
+          // the "friends" table.
           agreed && pool.query(addFriendRelationText, [friendID.rows[0].from_user_id, userID])
             .then(updateResponse => {
               res.send(updateResponse);
