@@ -34,7 +34,7 @@ Then
 or
 `yarn install`
 
-Open ![Database Preset](database.sql) and use a client such as [Postico](https://eggerapps.at/postico/) to run those commands.
+Open [Database Preset](database.sql) and use a client such as [Postico](https://eggerapps.at/postico/) to run those commands.
 
 Create a .env file in the root directory with the name of the database and a server session secret, such as:
 `DATABASE_NAME=example-database-name`
