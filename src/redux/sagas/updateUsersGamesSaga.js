@@ -7,7 +7,6 @@ function* updateGameOwnedStatus(action) {
     const ownedStatus = action.payload.ownedStatus;
     const BGGid = action.payload.BGGid;
     const formattedGame = globalState.searchBGG.formattedGameSearchResults.filter(game => game.bgg_game_id === BGGid);
-
     const allDataBaseGames = yield axios.get('/api/game/management/all-database-games');
     const gameIsInDatabase = allDataBaseGames.data.rows.some(dataBaseGame => dataBaseGame.bgg_game_id === BGGid);
     if (!gameIsInDatabase) {

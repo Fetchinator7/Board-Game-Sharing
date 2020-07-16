@@ -107,8 +107,6 @@ function* getRandomGameByID(action) {
     const randomGamesArr = Array.from({ length: qty }, () => Math.floor(Math.random() * qtyBGGGames));
     yield put({ type: 'SHOW_LOADING' });
     const result = yield Axios.get(`/api/search/game-id/${randomGamesArr.toString()}`);
-    console.log(randomGamesArr.toString());
-    console.log(result);
     yield put({ type: 'SET_RAW_RANDOM_SEARCH_GAMES', payload: result.data });
   } finally {
     yield put({ type: 'HIDE_LOADING' });

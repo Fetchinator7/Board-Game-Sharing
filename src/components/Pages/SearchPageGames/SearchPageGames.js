@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, TextField } from "@material-ui/core";
+import { Button, TextField,  } from "@material-ui/core";
 import Snack from '../../Components/Snack';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import SearchResult from './GameSearchResult';
+import CircularProgress from '@material-ui/core/CircularProgress'
 import Table from './SearchPageGamesTable';
 import './SearchPageGames.css';
 
