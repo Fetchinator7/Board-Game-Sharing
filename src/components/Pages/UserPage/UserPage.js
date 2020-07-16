@@ -16,9 +16,8 @@ class UserPage extends Component {
           </h1>
         </div>
         <br />
-        {/* <Games tableData={this.props.user.ownedGames} /> */}
         {viewMode === 'friends' && <FriendsTable tableData={this.props.user.friends} />}
-        <Games />
+        {viewMode === 'games' && <Games />}
         {viewMode === 'settings' && <UserSettings />}
         <Snack
           onCloseDispatchText='CLEAR_PROFILE_EDIT_ERROR'

@@ -58,11 +58,11 @@ class App extends Component {
               path='/home'
               component={HomePage}
             />
-            <ProtectedRoute
-              exact
-              path='/dashboard'
-              component={UserPage}
-            />
+            <ProtectedRoute exact path='/dashboard'>
+              {this.props.userID
+                ? <UserPage viewMode='games' />
+                : <Redirect to='/home' />}
+            </ProtectedRoute>
             <ProtectedRoute exact path='/friends'>
               {this.props.userID
                 ? <UserPage viewMode='friends' />

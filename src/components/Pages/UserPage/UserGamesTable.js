@@ -31,10 +31,13 @@ class Table extends React.Component {
     this.setState({ showDialogue: false })
     if (proceedBool) {
       this.props.dispatch({ type: 'DELETE_USER_OWNED_GAME', payload: this.state.bodyObj });
-    }
-    this.setState({
       // The game was deleted from the server, but not yet so delete it from local state to match the server.
-      allGames: this.props.usersGames.filter(game => game.game_id !== this.state.bodyObj.dataBaseGameID),
+      this.setState({  
+        allGames: this.props.usersGames.filter(game => game.game_id !== this.state.bodyObj.dataBaseGameID)
+      })
+    }
+    // The game wasn't deleted so leave the default state of this.props.usersGames.
+    this.setState({
       bodyObj: {},
       gameTitle: '',
       showDialogue: false
@@ -42,6 +45,8 @@ class Table extends React.Component {
   }
 
   updateGamesComments = () => {
+    // TODO Currently this posts an update for every game the user owns so only post the ones
+    // that were actually modified.
     if (this.state.edited) {
       const editedGames = this.state.allGames.map((game, index) => {
         return Object.is(game, this.props.usersGames[index]) && game !== {} ? false : this.state.allGames[index]
