@@ -3,20 +3,20 @@ Are you a board game enthusiast who wants to loan your collection out to others 
 
 You can make an account and add games to your collection, but only games found at [Board Game Geek](https://boardgamegeek.com/) can be added.
 If you're signed in when searching for a game you'll get access to a checkbox to add the specified game to your collection.
-![Search Games While Logged In](https://github.com/Fetchinator7/Board-Game-Sharing/blob/master/README images/search-games-while-logged-in.png?raw=true)
+![Search Games While Logged In](README-images/search-games-while-logged-in.png?raw=true)
 
 If you search for other users while signed in you'll get the option of sending them a friend request.
-![Search Games While Logged In](https://github.com/Fetchinator7/Board-Game-Sharing/blob/master/README images/search-friends-while-logged-in.png?raw=true)
+![Search Games While Logged In](README-images/search-friends-while-logged-in.png?raw=true)
 
 If you're not signed in then you can search all the games from [Board Game Geek](https://boardgamegeek.com/) or search for other users (who have their profile publicly visible).
 The cool stuff happens after you become friends with someone because then you can request to borrow their games.
 
 If you're friends with someone and you're viewing their profile you get access to this drop down where you can request a time frame to borrow a game!
 
-![Game Dropdown](https://github.com/Fetchinator7/Board-Game-Sharing/blob/master/README images/game-drop-down.png?raw=true)
+![Game Dropdown](README-images/game-drop-down.png?raw=true)
 
 By default the calendar days won't have an icons, but there are three icons that can appear each with their own special meanings:
-![Date Picker](https://github.com/Fetchinator7/Board-Game-Sharing/blob/master/README images/date-picker.png?raw=true)
+![Date Picker](README-images/date-picker.png?raw=true)
 If there's a ✅ that means the owner has agreed for a game to be loaned out those days.
 A ❓means someone has requested to borrow this game in the given time-frame, but the owner hasn't responded yet.
 If you see a 🚫 on a day that means the user has blocked out the day so no one can borrow in that time frame, or if you previous requested a game and the owner declined you won't be able to select those days again.
