@@ -14,8 +14,20 @@ const useStyles = createMuiTheme(
 );
 
 class UserPage extends Component {
+  state = {
+    userName: this.props.match.params.userName
+  }
   componentDidMount() {
     this.props.dispatch({ type: 'FETCH_A_DIFFERENT_USER', payload: this.props.match.params.userName });
+  }
+
+  componentDidUpdate() {
+    if (this.state.userName !== this.props.match.params.userName) {
+      this.props.dispatch({ type: 'CLEAR_A_DIFFERENT_USERS_OWNED_GAMES' });
+      this.props.dispatch({ type: 'CLEAR_A_DIFFERENT_USERS_ID' });
+      this.setState({ userName: this.props.match.params.userName })
+      this.props.dispatch({ type: 'FETCH_A_DIFFERENT_USER', payload: this.props.match.params.userName });
+    }
   }
 
   componentWillUnmount() {
@@ -41,7 +53,7 @@ class UserPage extends Component {
       }
     );
     if (this.props.userStatus.userIsSignedIn &&
-        this.props.usersFriends.some(friendObj => friendObj.friend_id === this.props.otherUsersID)) {
+      this.props.usersFriends.some(friendObj => friendObj.friend_id === this.props.otherUsersID)) {
       options = {
         ...options,
         isRowExpandable: () => true,
@@ -71,7 +83,9 @@ class UserPage extends Component {
     }
     return (
       <>
-        {`This is ${this.props.match.params.userName}'s logged out page`}
+        <h1 id='welcome' className='profileText'>
+          {`This is ${this.props.match.params.userName}'s logged out page`}
+        </h1>
         <MuiThemeProvider theme={useStyles}>
           <MUIDataTable title={`Search ${this.props.match.params.userName}'s Games`} data={fullData} columns={columns} options={options} />
         </MuiThemeProvider>
