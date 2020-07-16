@@ -61,7 +61,6 @@ router.get('/user/profile/:userName', (req, res) => {
   const queryText = 'SELECT "user_id" FROM "users" WHERE "visibility" <= 2 AND user_name = $1;';
   pool.query(queryText, [userName])
     .then(queryResponse => {
-      console.log(queryResponse);
       if (queryResponse.rows[0]) {
         // If there profile is 1: Public or 2: Those with the link then show all the game results.
         const userID = queryResponse.rows[0].user_id;
@@ -105,13 +104,12 @@ router.post('/other-user-request', rejectUnauthenticated, (req, res) => {
   const otherUserID = req.body.otherUserID;
   const now = moment();
   const actionType = req.body.actionType;
+  const message = req.body.message;
   if (actionType === 'friend') {
-    const message = req.body.message;
     const friendAlertText = `The user with the user name "${otherUsersUserName}" wants to be your friend and said: "${message}"`;
     const friendRequestQueryText = 'INSERT INTO "friend_request" ("from_user_id", "to_user_id", "message") VALUES ($1, $2, $3) returning "request_id";';
     pool.query(friendRequestQueryText, [userID, otherUserID, message])
       .then(friendRequestQueryResponse => {
-        console.log('friendRequestQueryResponse', friendRequestQueryResponse);
         const queryText = 'INSERT INTO "alert" ("user_id", "created_at", "alert_text", "friend_request_id") VALUES ($1, $2, $3, $4);';
         pool.query(queryText, [otherUserID, now, friendAlertText, friendRequestQueryResponse.rows[0].request_id])
           .then(queryResponse => res.send(queryResponse));
@@ -125,14 +123,11 @@ router.post('/other-user-request', rejectUnauthenticated, (req, res) => {
     const gameTitle = req.body.gameTitle;
     const startDate = moment(req.body.startDate);
     const endDate = moment(req.body.endDate);
-    console.log(startDate, endDate);
     const borrowGameQueryText = 'INSERT INTO "loaned_game" ("game_id", "owner_id", "friend_id", "loan_start", "loan_end") VALUES ($1, $2, $3, $4, $5) returning "loan_id";';
     pool.query(borrowGameQueryText, [gameID, otherUserID, userID, startDate, endDate])
       .then(loanRequestQueryResponse => {
-        console.log('otherUserID', otherUserID);
-        console.log('loanRequestQueryResponse', loanRequestQueryResponse);
         const loanQueryText = 'INSERT INTO "alert" ("user_id", "created_at", "alert_text", "loaned_game_id") VALUES ($1, $2, $3, $4);';
-        const loanAlertText = `Your friend with the user name "${otherUsersUserName}" wants to borrow your game: "${gameTitle}" from ${startDate.format('MM/DD')}-${endDate.format('MM/DD')}`;
+        const loanAlertText = `Your friend with the user name "${otherUsersUserName}" wants to borrow your game: "${gameTitle}" from ${startDate.format('MM/DD')}-${endDate.format('MM/DD')} and said "${message}"`;
         pool.query(loanQueryText, [otherUserID, now, loanAlertText, loanRequestQueryResponse.rows[0].loan_id])
           .then(queryResponse => res.send(queryResponse));
       })

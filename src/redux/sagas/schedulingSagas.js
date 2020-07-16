@@ -10,6 +10,7 @@ function* requestLoan(action) {
       otherUserID: action.payload.otherUserID,
       startDate: action.payload.startDate,
       endDate: action.payload.endDate,
+      message: action.payload.message,
       actionType: 'loan'
     });
     // TODO display the name of the game instead of the id.

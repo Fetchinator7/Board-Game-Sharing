@@ -121,6 +121,7 @@ class DateAndTimePickers extends React.Component {
     this.props.dispatch({
       type: this.state.dispatchTypeStr,
       payload: {
+        message: this.state.message,
         gameID: gameID,
         gameTitle: gameTitle,
         otherUserID: ownerID,
