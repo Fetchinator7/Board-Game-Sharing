@@ -11,7 +11,7 @@ class UserPage extends Component {
     return (
       <>
         <div>
-          <h1 id='welcome'>
+          <h1 id='welcome' className='profileText'>
             Welcome, {this.props.user.userAttributes.user_name}
           </h1>
         </div>

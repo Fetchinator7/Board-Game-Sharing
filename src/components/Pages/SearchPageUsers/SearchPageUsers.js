@@ -22,6 +22,7 @@ class SearchPage extends Component {
       <>
         <TextField
           variant="outlined"
+          autoFocus
           value={this.state.search}
           type="text"
           maxLength={1000}

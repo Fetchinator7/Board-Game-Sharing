@@ -70,11 +70,13 @@ class LoginPage extends Component {
                 className="register"
                 type="submit"
                 color="primary"
+                variant='contained'
               > Log In
               </Button>
               <Button
                 type="button"
                 className="link-button"
+                variant='contained'
                 onClick={() => { this.props.dispatch({ type: 'SET_TO_REGISTER_MODE' }) }}
               > Register
               </Button>

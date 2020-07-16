@@ -106,7 +106,7 @@ class Table extends React.Component {
   }
 
   render() {
-    const anchor = 'right';
+    const anchor = 'top';
     return (
       <>
         {

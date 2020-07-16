@@ -19,9 +19,11 @@ class UserSettings extends Component {
 
   render() {
     return (
-      <>
+      // TODO put this in a paper component.
+      <div className='profileText'>
+        Profile Visibility
         <FormControl component='fieldset'>
-          <FormLabel component='legend'>Profile Visibility</FormLabel>
+          {/* <FormLabel component='legend' className='profileText'>Profile Visibility</FormLabel> */}
           <RadioGroup aria-label='settings' name='settings1' value={this.props.user.userAttributes.visibility} onChange={event => this.changeVisibility(event.target.value)}>
             <FormControlLabel value={1} control={<Radio />} label='Public' />
             <FormControlLabel value={2} control={<Radio />} label='Only Those With The Profile Link' />
@@ -35,7 +37,7 @@ class UserSettings extends Component {
           message={this.props.errors.editGamesMessage}
           severity='error'
         />
-      </>
+      </div>
     );
   }
 }

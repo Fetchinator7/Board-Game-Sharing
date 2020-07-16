@@ -45,7 +45,7 @@ const Nav = (props) => (
          Games
       </Link>
       <Link className='nav-link' to='/dashboard'>
-        {props.status.userIsSignedIn ? 'Dash Board' : 'Login / Register'}
+        {props.status.userIsSignedIn ? 'Dashboard' : 'Login / Register'}
       </Link>
       {props.status.userIsSignedIn && (
         <>
