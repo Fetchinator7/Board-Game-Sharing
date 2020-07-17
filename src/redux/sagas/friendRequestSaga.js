@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { takeEvery, put } from 'redux-saga/effects';
 
+// This saga will catch a dispatch for sending a friend request.
 function* friendRequest(action) {
   try {
     yield axios.post('/api/search/users/other-user-request', {
@@ -17,6 +18,7 @@ function* friendRequest(action) {
   }
 }
 
+// Update the status of a friend request.
 function* updateRequest(action) {
   try {
     yield axios.post('/api/search/users/update-friend-request', {

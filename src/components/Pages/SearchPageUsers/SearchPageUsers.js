@@ -10,6 +10,7 @@ class SearchPage extends Component {
     search: '',
   }
 
+  // Search for users in the database that have a username with the characters from the input field.
   searchInput = () => {
     this.props.dispatch({ type: "FETCH_USERS", payload: this.state.search })
     this.setState({
@@ -38,6 +39,7 @@ class SearchPage extends Component {
             }
           }}
         />
+        {/* Show a loading indicator if the page is still loading. */}
         {this.props.loading && <CircularProgress />}
         <br />
         <Button

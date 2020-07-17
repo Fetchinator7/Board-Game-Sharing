@@ -15,7 +15,7 @@ class Dialogue extends React.Component {
   }
   render() {
     const { parentCallBackFunc, visible, title, showTextField, trueButtonAction } = this.props;
-    // If visible is true dispaly this componet, but otherwise return null (to display nothing.)
+    // If visible is true display this component, but otherwise return null (to display nothing.)
     return (visible
       ? <>
         <MuiThemeProvider theme={useStyles}>

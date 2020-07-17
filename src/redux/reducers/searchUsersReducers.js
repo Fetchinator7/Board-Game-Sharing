@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 
+// Reducer to store all of the user search results.
 const usersReducer = (state = [], action) => {
   switch (action.type) {
     case 'SET_USER_SEARCH_RESULTS':
@@ -11,6 +12,7 @@ const usersReducer = (state = [], action) => {
   }
 };
 
+// No user found error.
 const noUserFoundError = (state = '', action) => {
   switch (action.type) {
     case 'SET_USER_SEARCH__USER_NOT_FOUND':
@@ -22,6 +24,7 @@ const noUserFoundError = (state = '', action) => {
   }
 };
 
+// Error message if there was an error sending the message.
 const sentFriendRequestSuccessMessage = (state = '', action) => {
   switch (action.type) {
     case 'SET_FRIEND_REQUEST_SENT_SUCCESSFULLY':

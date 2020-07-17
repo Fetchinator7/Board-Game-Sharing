@@ -33,16 +33,16 @@ class Table extends React.Component {
 
   render() {
     // TODO change this so the formatting is done on the server.
-    // Get the raw game search results in an array and run them thorught the component to 
-    // get the format the databse is expecting.
+    // Get the raw game search results in an array and run them through the component to 
+    // get the format the database is expecting.
 
     const data = this.props.searchBGG.rawGameSearchResults;
     const result = [];
     data && data.map(gameObj => {
       result.push(SearchResult(gameObj, this.props.usersGames));
     });
-    // If there are raw search results clear them after they are formatted to avaoid
-    // an infinate loop.
+    // If there are raw search results clear them after they are formatted to avoid
+    // an infinite loop.
     result.length !== 0 && this.props.dispatch({ type: 'RESET_RAW_SEARCH_GAMES' });
     result.length !== 0 && this.props.dispatch({ type: 'SET_FORMATTED_SEARCH_GAMES', payload: result });
 
@@ -98,7 +98,7 @@ class Table extends React.Component {
       <MuiThemeProvider theme={useStyles}>
         <MUIDataTable title='Search Page' data={fullData} columns={columns} options={SearchTablePresets.options} />
       </MuiThemeProvider>
-      {/* Pop-up to confirm the user wants to delete the game because the uncked the check box. */}
+      {/* Pop-up to confirm the user wants to delete the game because they tried to uncheck the check box. */}
       <ConfirmationDialogue
         parentCallBackFunc={this.confirmBeforeDeleting}
         visible={this.state.showDialogue}

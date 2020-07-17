@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 
+// Get the results from BGG before they're formatted for displaying in search results.
 const gamesReducer = (state = [], action) => {
   switch (action.type) {
     case 'SET_RAW_SEARCH_GAMES':
@@ -11,6 +12,7 @@ const gamesReducer = (state = [], action) => {
   }
 };
 
+// Get the results from BGG before they're formatted.
 const randomRawGamesReducer = (state = [], action) => {
   switch (action.type) {
     case 'SET_RAW_RANDOM_SEARCH_GAMES':
@@ -22,6 +24,7 @@ const randomRawGamesReducer = (state = [], action) => {
   }
 };
 
+// An array of the different random formatted games from BGG for the home page.
 const formattedRandomGamesReducer = (state = [], action) => {
   switch (action.type) {
     case 'SET_RANDOM_FORMATTED_SEARCH_GAMES':
@@ -33,6 +36,7 @@ const formattedRandomGamesReducer = (state = [], action) => {
   }
 };
 
+// The formatted games from the search results.
 const formattedGamesReducer = (state = [], action) => {
   switch (action.type) {
     case 'SET_FORMATTED_SEARCH_GAMES':
@@ -44,6 +48,7 @@ const formattedGamesReducer = (state = [], action) => {
   }
 };
 
+// An array to show just the titles fo games for game search results.
 const titlesReducer = (state = [], action) => {
   switch (action.type) {
     case 'SET_SEARCH_TITLES':
@@ -55,6 +60,7 @@ const titlesReducer = (state = [], action) => {
   }
 };
 
+// String of the current game to search for.
 const searchForGame = (state = '', action) => {
   switch (action.type) {
     case 'CURRENT_SEARCH':
@@ -66,6 +72,7 @@ const searchForGame = (state = '', action) => {
   }
 };
 
+// Error if no game was found.
 const noGameFoundError = (state = '', action) => {
   switch (action.type) {
     case 'SET_GAME_SEARCH__GAME_NOT_FOUND':

@@ -32,6 +32,7 @@ const registrationMessage = (state = '', action) => {
   }
 };
 
+// This will display an error message if there's an error editing the user's games.
 const editGamesFailureMessage = (state = '', action) => {
   switch (action.type) {
     case 'SET_EDIT_GAMES_ERROR':
@@ -43,6 +44,7 @@ const editGamesFailureMessage = (state = '', action) => {
   }
 };
 
+// This will display an error if there was an error updating the user's profile (privacy settings).
 const editProfileFailureMessage = (state = '', action) => {
   switch (action.type) {
     case 'SET_PROFILE_EDIT_ERROR':
@@ -54,9 +56,6 @@ const editProfileFailureMessage = (state = '', action) => {
   }
 };
 
-// make one object that has keys loginMessage, registrationMessage
-// these will be on the redux state at:
-// state.errors.loginMessage and state.errors.registrationMessage
 export default combineReducers({
   loginMessage,
   registrationMessage,

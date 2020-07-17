@@ -24,8 +24,8 @@ class SearchPage extends Component {
   render() {
     return (
       <>
-          {/* When a usr inputs text into the search bar and it's >= 4 characters search BGG
-          to return the titles of all the games that match the input even though the usre hasn't
+          {/* When a user inputs text into the search bar and it's >= 4 characters search BGG
+          to return the titles of all the games that match the input even though the user hasn't
           clicked search yet. */}
           <TextField
             variant="outlined"
@@ -42,7 +42,7 @@ class SearchPage extends Component {
               })
             }
             }
-            // If there's text to search for and the user pressed enter search BBG.
+            // If there's text to search for and the user pressed enter search BGG.
             onKeyPress={(event) => {
               if (event.key === 'Enter' && this.state.search) {
                 this.searchInput()

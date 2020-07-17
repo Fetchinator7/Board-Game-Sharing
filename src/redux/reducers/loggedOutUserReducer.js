@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 
+// This will store an array of all the games for the user profile currently being viewed.
 const otherUsersGames = (state = [], action) => {
   switch (action.type) {
     case 'SET_A_DIFFERENT_USERS_OWNED_GAMES':
@@ -11,6 +12,7 @@ const otherUsersGames = (state = [], action) => {
   }
 };
 
+// Error trying to obtain a different user's games.
 const otherUsersGamesServerErrorMessage = (state = '', action) => {
   switch (action.type) {
     case 'SET_ERROR_FROM_A_DIFFERENT_USER':
@@ -22,6 +24,7 @@ const otherUsersGamesServerErrorMessage = (state = '', action) => {
   }
 };
 
+// Display a success message if a new loan request was created.
 const otherUsersGamesSuccessMessage = (state = '', action) => {
   switch (action.type) {
     case 'SET_GAME_LOAN_CREATION_SUCCESS_FOR_A_DIFFERENT_USER':
@@ -33,6 +36,7 @@ const otherUsersGamesSuccessMessage = (state = '', action) => {
   }
 };
 
+// Set the id of a different user (for sending messages and checking friend status.)
 const otherUsersID = (state = 0, action) => {
   switch (action.type) {
     case 'SET_A_DIFFERENT_USERS_ID':

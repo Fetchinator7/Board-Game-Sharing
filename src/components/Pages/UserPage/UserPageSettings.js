@@ -4,7 +4,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+// import FormLabel from '@material-ui/core/FormLabel';
 import Snack from '../../Components/Snack';
 
 class UserSettings extends Component {
@@ -22,6 +22,7 @@ class UserSettings extends Component {
       // TODO put this in a paper component.
       <div className='profileText'>
         Profile Visibility
+        {/* Show radio buttons which allow the user to change their profile visibility. */}
         <FormControl component='fieldset'>
           {/* <FormLabel component='legend' className='profileText'>Profile Visibility</FormLabel> */}
           <RadioGroup aria-label='settings' name='settings1' value={this.props.user.userAttributes.visibility} onChange={event => this.changeVisibility(event.target.value)}>
@@ -47,5 +48,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-// this allows us to use <App /> in index.js
 export default connect(mapStateToProps)(UserSettings);

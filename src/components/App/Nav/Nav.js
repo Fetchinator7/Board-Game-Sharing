@@ -33,7 +33,7 @@ const Nav = (props) => (
           </Link>
           {/* Open the notifications drop-down. */}
           <Notifications className='nav-link' />
-          {/* Show a gear ison to represent the settings page. */}
+          {/* Show a gear icon to represent the settings page. */}
           <Link className='nav-link' to='/settings'>
             <SettingsIcon />
           </Link>

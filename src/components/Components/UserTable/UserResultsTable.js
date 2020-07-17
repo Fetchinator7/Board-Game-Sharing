@@ -15,7 +15,7 @@ const useStyles = createMuiTheme(
   SearchTablePresets.theme
 );
 
-// This componenet will display the input user object results.
+// This component will display the input user object results.
 class Table extends React.Component {
   state = {
     confirmationWindowIsOpen: false,
@@ -128,7 +128,7 @@ class Table extends React.Component {
     // tableData comes from the parent so this table can be used for display all users or
     // only one user's friends.
     const data = this.props.tableData.map(user => [
-      // Make this button open a differnet user's profile when clicked.
+      // Make this button open a different user's profile when clicked.
       <Button
         variant="contained"
         color="primary"

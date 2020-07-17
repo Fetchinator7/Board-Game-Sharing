@@ -2,7 +2,7 @@ import { createMuiTheme } from '@material-ui/core';
 import green from '@material-ui/core/colors/green';
 
 // This is the base preset for the custom material-table component since most of the tables
-// dispaly at least these columns.
+// display at least these columns.
 const tablePreferences = {
   moreInfoColumnIndex: 3,
   columns: [

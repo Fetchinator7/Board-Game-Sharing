@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 
+// This reducer holdes an object from the server with all the user attributes.
 const userReducer = (state = {}, action) => {
   switch (action.type) {
     case 'SET_USER':
@@ -11,6 +12,7 @@ const userReducer = (state = {}, action) => {
   }
 };
 
+// An array of all the games a user owns.
 const ownedGames = (state = [], action) => {
   switch (action.type) {
     case 'SET_USER_OWNED_GAMES':
@@ -22,6 +24,7 @@ const ownedGames = (state = [], action) => {
   }
 };
 
+// An array of all the notifications a user has.
 const alerts = (state = [], action) => {
   switch (action.type) {
     case 'SET_USER_NOTIFICATION':
@@ -33,6 +36,7 @@ const alerts = (state = [], action) => {
   }
 };
 
+// An array of all the friends the current user has.
 const friends = (state = [], action) => {
   switch (action.type) {
     case 'SET_USER_FRIENDS':
@@ -44,8 +48,6 @@ const friends = (state = [], action) => {
   }
 };
 
-// user will be on the redux state at:
-// state.user
 export default combineReducers({
   userAttributes: userReducer,
   ownedGames,

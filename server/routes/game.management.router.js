@@ -61,7 +61,7 @@ router.get('/game-table-id/:BGGId', rejectUnauthenticated, (req, res) => {
     });
 });
 
-// Add a new Board Game Geek game to the database by providing the required fileds.
+// Add a new Board Game Geek game to the database by providing the required fields.
 // This only happens i if a game isn't already in the database.
 router.post('/database/game', rejectUnauthenticated, (req, res) => {
   // TODO get from bgg directly and add it on the server side.

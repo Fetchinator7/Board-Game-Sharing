@@ -5,7 +5,7 @@ const convert = require('xml-js');
 
 const router = express.Router();
 
-// search boardgamegeek.com for the given keyword and cover the xml reponse into a json.
+// search boardgamegeek.com for the given keyword and cover the xml response into a json.
 // NOTE: this only returns the game id and title, not the rest of the information I want
 // so if a user searches for something pull the ids out of this search results and search
 // for those id individually.
@@ -30,7 +30,7 @@ router.get('/keyword/:search', (req, res) => {
     });
 });
 
-// Get the info for a game baseed on the input id and covert the response to json.
+// Get the info for a game based on the input id and covert the response to json.
 router.get('/game-id/:id', (req, res) => {
   const search = req.params.id;
   axios.get(`http://boardgamegeek.com/xmlapi2/thing?id=${search}`)

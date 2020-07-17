@@ -16,9 +16,12 @@ class UserPage extends Component {
           </h1>
         </div>
         <br />
+        {/* This page will always show the above, and the App sends props for which part of
+        this page to show the user, but it defaults to showing the user's games. */}
         {viewMode === 'friends' && <FriendsTable tableData={this.props.user.friends} />}
         {viewMode === 'games' && <Games />}
         {viewMode === 'settings' && <UserSettings />}
+        {/* Error snacks. */}
         <Snack
           onCloseDispatchText='CLEAR_PROFILE_EDIT_ERROR'
           autoHideDuration={null}
@@ -41,5 +44,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-// this allows us to use <App /> in index.js
 export default connect(mapStateToProps)(UserPage);

@@ -7,7 +7,6 @@ function* fetchLoggedOutUser(action) {
     yield put({ type: 'SET_A_DIFFERENT_USERS_OWNED_GAMES', payload: user.data });
     const userID = yield axios.get(`/api/search/users/user/ID/${action.payload}`);
     yield put({ type: 'SET_A_DIFFERENT_USERS_ID', payload: userID.data.rows[0].user_id });
-    // yield put({ type: 'SET_A_DIFFERENT_USERS_PROFILE_VISIBILITY', payload: user.data });
   } catch (error) {
     if (String(error).includes('403')) {
       yield put({ type: 'SET_ERROR_FROM_A_DIFFERENT_USER', payload: "Error, you don't have permission to view this user's games." });

@@ -66,10 +66,13 @@ class Table extends React.Component {
   }
 
   render() {
+    // Get the base formatted data then add the "comments" column to the end.
     const baseData = baseGamesDataArray(this.state.allGames);
     let fullData = baseData;
     const columns = [...SearchTablePresets.columns];
     let options = SearchTablePresets.options;
+    // Since the user is viewing their games show a trash can to delete that game and
+    // a pen to edit the comments for their game.
     columns.push(
       this.state.inEditingMode
         ? {
@@ -147,6 +150,7 @@ class Table extends React.Component {
       }
     );
 
+    // Show the calendar drop down so the user can view/request loans for them self.
     if (this.props.userIsSignedIn) {
       options = {
         ...options,
@@ -194,12 +198,13 @@ class Table extends React.Component {
       });
     }
 
-
     return (
       <>
+        {/* Table. */}
         <MuiThemeProvider theme={useStyles}>
           <MUIDataTable title='Your Games!' data={fullData} columns={columns} options={options} />
         </MuiThemeProvider>
+        {/* Delete game confirmation dialogue. */}
         <ConfirmationDialogue
           parentCallBackFunc={this.confirmBeforeDeleting}
           visible={this.state.showDialogue}

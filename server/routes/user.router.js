@@ -12,7 +12,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
   res.send(req.user);
 });
 
-// Get all the games for the curent user and add any loans into the game object as an array.
+// Get all the games for the current user and add any loans into the game object as an array.
 router.get('/games', rejectUnauthenticated, (req, res) => {
   const userID = req.user.user_id;
   const queryText = `SELECT "user_owned_game".game_id, "bgg_game_id", 

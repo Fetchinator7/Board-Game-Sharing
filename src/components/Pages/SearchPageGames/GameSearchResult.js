@@ -1,4 +1,4 @@
-// This is a functional component that takes in the response from boardgamegeek.com and foramts
+// This is a functional component that takes in the response from boardgamegeek.com and formats
 // it into the format the database is expecting.
 const SearchResult = (gameObj, ownedGamesArr) => {
   return ({
