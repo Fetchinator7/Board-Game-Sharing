@@ -12,25 +12,37 @@ const useStyles = createMuiTheme(
 
 class RandomGamesTable extends React.Component {
   // TODO manually enter the top 50 games? Faster and better quality.
-  getRandomGames = (qty) => {
-    this.props.dispatch({ type: "FETCH_RANDOM_GAME_DETAILS", payload: { qty } });
+
+  // Get a random int in a range without any duplicates.
+  randomRange = length => {
+    const results = []
+    const possibleValues = Array.from({ length }, (value, i) => i)
+
+    for (let i = 0; i < length; i += 1) {
+      const possibleValuesRange = length - (length - possibleValues.length)
+      const randomNumber = Math.floor(Math.random() * possibleValuesRange)
+      const normalizedRandomNumber = randomNumber !== possibleValuesRange ? randomNumber : possibleValuesRange
+      const [nextNumber] = possibleValues.splice(normalizedRandomNumber, 1)
+      results.push(nextNumber)
+    }
+    return results
   }
 
   componentDidMount() {
-    this.getRandomGames(10);
+    this.props.dispatch({ type: 'FETCH_A_DIFFERENT_USER', payload: 'Admin' });
   }
 
   render() {
-    const data = this.props.searchBGG.randomRawGameResults;
-    const result = [];
-    data && data.map(gameObj => {
-      result.push(SearchResult(gameObj, this.props.usersGames));
-    });
-    result.length !== 0 && this.props.dispatch({ type: 'CLEAR_RAW_RANDOM_SEARCH_GAMES' });
-    result.length !== 0 && this.props.dispatch({ type: 'SET_RANDOM_FORMATTED_SEARCH_GAMES', payload: result });
-
-    const baseData = baseGamesDataArray(this.props.searchBGG.formattedRandomGameResults);
-    let fullData = baseData;
+    // Get all of the Admin user's games.
+    const baseData = baseGamesDataArray(this.props.otherUsersGames);
+    let randomIndexes = [];
+    // If there's data in the baseData (there isn't the first time the page loads) get 
+    // random integers that are in the range of the length of the Admin user's game collection.
+    baseData.length && (randomIndexes = this.randomRange(baseData.length));
+    // Only use the first 10 of the random indexes.
+    randomIndexes.length && (randomIndexes.length = 10);
+    // Make an array of the data to display by taking the game objects at the random indexes.
+    const fullData = randomIndexes.map(index => baseData[index]);
     const columns = [...SearchTablePresets.columns];
     return (
       <>
@@ -43,7 +55,7 @@ class RandomGamesTable extends React.Component {
 }
 
 const mapStateToProps = reduxState => ({
-  searchBGG: reduxState.searchBGG,
+  otherUsersGames: reduxState.loggedOut.otherUsersGames,
   userStatus: reduxState.status,
   usersGames: reduxState.user.ownedGames
 });

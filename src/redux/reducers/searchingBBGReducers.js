@@ -12,30 +12,6 @@ const gamesReducer = (state = [], action) => {
   }
 };
 
-// Get the results from BGG before they're formatted.
-const randomRawGamesReducer = (state = [], action) => {
-  switch (action.type) {
-    case 'SET_RAW_RANDOM_SEARCH_GAMES':
-      return [].concat(...state, action.payload);
-    case 'CLEAR_RAW_RANDOM_SEARCH_GAMES':
-      return [];
-    default:
-      return state;
-  }
-};
-
-// An array of the different random formatted games from BGG for the home page.
-const formattedRandomGamesReducer = (state = [], action) => {
-  switch (action.type) {
-    case 'SET_RANDOM_FORMATTED_SEARCH_GAMES':
-      return action.payload;
-    case 'CLEAR_RANDOM_FORMATTED_SEARCH_GAMES':
-      return [];
-    default:
-      return state;
-  }
-};
-
 // The formatted games from the search results.
 const formattedGamesReducer = (state = [], action) => {
   switch (action.type) {
@@ -85,8 +61,6 @@ const noGameFoundError = (state = '', action) => {
 };
 
 export default combineReducers({
-  randomRawGameResults: randomRawGamesReducer,
-  formattedRandomGameResults: formattedRandomGamesReducer,
   rawGameSearchResults: gamesReducer,
   formattedGameSearchResults: formattedGamesReducer,
   searchTitles: titlesReducer,
