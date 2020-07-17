@@ -29,7 +29,7 @@ class Notifications extends React.Component {
     this.setState({ drawIsOpen: !this.state.drawIsOpen })
   }
 
-  // The user is responding to a friend request so dispatch the action to update that friend request.
+  // The user is responding to a loan request so dispatch the action to update that loan request.
   loan = (agreedBool, alertID, loanedGameID) => {
     this.props.dispatch({
       type: 'SET_LOAN_REQUEST_UPDATED_STATE',

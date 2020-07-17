@@ -98,7 +98,7 @@ class UserPage extends Component {
     return (
       <>
         <h1 className='profileText'>
-          {`This is ${this.props.match.params.userName}'s logged out page`}
+          {`This is ${this.props.match.params.userName}'s profile page`}
         </h1>
         {/* Render the table. */}
         <MuiThemeProvider theme={useStyles}>

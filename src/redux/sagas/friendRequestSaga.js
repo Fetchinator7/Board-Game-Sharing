@@ -27,6 +27,7 @@ function* updateRequest(action) {
       friendRequestID: action.payload.friendRequestID
     });
     yield put({ type: 'SET_FRIEND_REQUEST_SENT_SUCCESSFULLY', payload: 'Successfully added this friend!' });
+    yield put({ type: 'FETCH_USER' });
   } catch (error) {
     yield put({ type: 'SET_USER_SEARCH__USER_NOT_FOUND', payload: 'Server error trying to make the friend request' });
     console.log('Error', error);

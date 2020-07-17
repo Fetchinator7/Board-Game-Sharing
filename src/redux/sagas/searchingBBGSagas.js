@@ -4,9 +4,9 @@ import Axios from 'axios';
 function* searchGames(action) {
   try {
     if (action.searchType === 'games') {
-      // Cap board game results at 100
+      // Cap board game results at 500
       // (101 because 5 % 1 so it gos in increments of 5 after that: 6, 11, 16, ...101)
-      const maxResults = 101;
+      const maxResults = 501;
       const qtyGamesPerQuery = 50;
       try {
         yield put({ type: 'SHOW_LOADING' });
@@ -33,7 +33,7 @@ function* searchGames(action) {
           // boardGamesArr.length === index means we hit the maximum number of results to
           // display so cut the loop off.
           // index % qtyGamesPerQuery === 0 means it's ready to query another batch of qtyGamesPerQuery.
-          if (index !== 0) {
+          if (index !== 0 || index + 1 === boardGamesArr.length) {
             if (index % qtyGamesPerQuery === 0 || boardGamesArr.length === index || index + 1 === boardGamesArr.length) {
               const result = yield Axios.get(`/api/search/game-id/${idStr}`);
               yield put({ type: 'SET_RAW_SEARCH_GAMES', payload: result.data });

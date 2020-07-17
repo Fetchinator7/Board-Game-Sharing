@@ -35,9 +35,9 @@ const formatRanges = (min, max, appendMinutes) => {
   if (appendMinutes) {
     returnStr += appendMinStr;
   }
-  // 0-0 ---> Unknown.
+  // 0-0 ---> ''.
   if (min === '0' && max === '0') {
-    return 'Unknown';
+    return '';
     // 0-180 --> 180.
   } else if (min === '0' && max !== '0') {
     return `${max}${returnStr}`;

@@ -40,7 +40,7 @@ const formattedRandomGamesReducer = (state = [], action) => {
 const formattedGamesReducer = (state = [], action) => {
   switch (action.type) {
     case 'SET_FORMATTED_SEARCH_GAMES':
-      return action.payload;
+      return [...state, ...action.payload];
     case 'RESET_FORMATTED_SEARCH_GAMES':
       return [];
     default:

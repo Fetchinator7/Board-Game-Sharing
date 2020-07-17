@@ -74,7 +74,7 @@ class DateAndTimePickers extends React.Component {
     for (const gameLoan of loanDaysArray) {
       const daysBetweenLoanStartAndEnd = getDaysBetween(moment(gameLoan.loan_start), moment(gameLoan.loan_end));
       // Skip this loop because the owner declined this loan (block out day).
-      if (gameLoan.friend_id === null) {
+      if (gameLoan.friend_id === null || gameLoan.friend_id === gameLoan.user_id) {
         blockOutDays.push(daysBetweenLoanStartAndEnd);
       // The owner declined this loan so see if the current user is the user who had the loan declined.
       // If they are then don't let them select the same days again.
