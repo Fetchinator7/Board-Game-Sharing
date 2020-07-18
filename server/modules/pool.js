@@ -6,7 +6,7 @@ let config = {};
 if (process.env.DATABASE_URL) {
   // Heroku gives a url, not a connection object:
   // https://github.com/Fetchinator7/node-pg-pool
-  const params = url.URL(process.env.DATABASE_URL);
+  const params = url.parse(process.env.DATABASE_URL);
   const auth = params.auth.split(':');
 
   config = {
