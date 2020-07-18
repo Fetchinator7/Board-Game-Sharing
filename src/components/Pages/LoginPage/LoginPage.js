@@ -50,6 +50,7 @@ class LoginPage extends Component {
             <>
               <TextField
                 label="username"
+                autoFocus
                 fullWidth
                 required
                 maxLength='10'
