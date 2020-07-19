@@ -19,7 +19,7 @@ class UserPage extends Component {
   render() {
     const { onCloseDispatchText, autoHideDuration, message, severity } = this.props;
     if (!onCloseDispatchText || typeof message !== 'string' || typeof severity !== 'string') {
-      throw new Error('the ErrorSnack requires all these attributes but at least one is missing: open, onCloseDispatchText, autoHideDuration, message');
+      throw new Error('the ErrorSnack requires all these attributes but at least one is missing: onCloseDispatchText, autoHideDuration, message, severity');
     }
     return (
       <MuiThemeProvider theme={useStyles}>
