@@ -43,11 +43,10 @@ class RandomGamesTable extends React.Component {
     randomIndexes.length && (randomIndexes.length = 10);
     // Make an array of the data to display by taking the game objects at the random indexes.
     const fullData = randomIndexes.map(index => baseData[index]);
-    const columns = [...SearchTablePresets.columns];
     return (
       <>
         <MuiThemeProvider theme={useStyles}>
-          <MUIDataTable title='Random Games' data={fullData} columns={columns} options={SearchTablePresets.options} />
+          <MUIDataTable title='Random Games' data={fullData} columns={SearchTablePresets.columns} options={SearchTablePresets.options} />
         </MuiThemeProvider>
       </>
     );
