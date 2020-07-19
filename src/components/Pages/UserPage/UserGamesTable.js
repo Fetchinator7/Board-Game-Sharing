@@ -65,6 +65,12 @@ class Table extends React.Component {
     this.updateGamesComments();
   }
 
+  componentDidUpdate() {
+    // The user's games aren't loaded immediately when the page loads so when the games do
+    // load add them to the local state.
+    (this.state.allGames.length === 0 && this.props.usersGames.length !== 0) && this.setState({ allGames: this.props.usersGames })
+  }
+
   render() {
     // Get the base formatted data then add the "comments" column to the end.
     const baseData = baseGamesDataArray(this.state.allGames);
