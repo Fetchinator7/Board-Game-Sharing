@@ -75,7 +75,7 @@ router.get('/user/profile/:userName', (req, res) => {
                             "game_img", "title", "player_range", "playtime",
                             "user_owned_game".comments FROM "game"
                             INNER JOIN "user_owned_game" ON "game".game_id="user_owned_game".game_id
-                            WHERE "user_owned_game".user_id = $1;`;
+                            WHERE "user_owned_game".user_id = $1 ORDER BY "title";`;
         pool.query(queryText, [userID])
           .then(allUsersGames => {
             // Now that we have all the user's games, get all the loan times for those games
@@ -216,5 +216,74 @@ router.post('/update-friend-request', rejectUnauthenticated, (req, res) => {
       res.sendStatus(500);
     });
 });
+
+// // TODO only allow a notification to be created for the signed in user.
+// // Update the status of a friend request to either block or accept.
+// router.post('/update-friend-request', rejectUnauthenticated, (req, res) => {
+//   const viewedAt = moment();
+//   const alertID = req.body.alertID;
+//   const agreed = req.body.agreed;
+//   const userID = req.user.user_id;
+//   const friendRequestID = req.body.friendRequestID;
+//   const updateAlertText = 'UPDATE "alert" SET "viewed_at" = $1 WHERE alert_id = $2 AND user_id = $3;';
+//   const updateFriendRequestText = 'UPDATE "friend_request" SET "answered" = TRUE, "accepted" = $1 WHERE "request_id" = $2 AND to_user_id = $3 returning from_user_id;';
+//   const addFriendRelationText = 'INSERT INTO "friend" ("user_id", "friend_id") VALUES ($1, $2);';
+//   const friendRequestNotification = 'INSERT INTO "alert" ("user_id", "created_at", "alert_text", "friend_request_id") VALUES ($1, $2, $3, $4);';
+//   const accepted = agreed ? 'accepted' : 'declined';
+//   const friendRequestAlertText = `The user "placeholder" ${accepted} your friend request.`;
+//   pool.query(updateAlertText, [viewedAt, alertID, userID])
+//     // Set this alert to viewed.
+//     .then(() =>
+//       pool.query(updateFriendRequestText, [agreed, friendRequestID, userID])
+//         // Set the friend request to viewed and either accept or decline the request.
+//         .then(friendID =>
+//           // If the user agreed to the friend request insert a new friend relationship into
+//           // the "friends" table.
+//           pool.query(friendRequestNotification, [userID, viewedAt, friendRequestAlertText, friendRequestID])
+//             // Set the friend request to viewed and either accept or decline the request.
+//             .then(() =>
+//               agreed && pool.query(addFriendRelationText, [friendID.rows[0].from_user_id, userID])
+//                 .then(updateResponse =>
+//                   res.send(updateResponse)
+//                 ))
+//         ))
+//     .catch((error) => {
+//       console.log(error);
+//       res.sendStatus(500);
+//     });
+// });
+
+// var title;
+// var headline;
+
+// // Use a function to get this value so it can be used other palces as well?
+// router.get('/test/code/:code', function (req, res, next) {
+//   var procedure = "EXECUTE procedureName 999, 'userName', " + req.params.code
+//   callFunc(procedure, function (title, headline) {
+
+//     res.render('display', {
+//       title: title,
+//       description: headline,
+//       var1: 'block sidebar',
+//       var2: 'block content',
+//       image: 'http://baidun.com/wp-content/uploads/2013/06/SI_RM_1070bw-900x598.jpg',
+//       url: 'https://www.youtube.com/watch?v=ZB_VPDXAhKU'
+
+//     })
+//   })
+// })
+
+
+// function callFunc(procedure, cb) {
+//   request.get('http://myWebservice.com/myService.asmx/myServiceDB?callback=&userName=username&procedureName=' + procedure, function (req, res, body) {
+
+//     var testValue = body.slice(1, -2);
+//     var result1 = JSON.parse(testValue);
+//     var result2 = JSON.parse(result1);
+//     title = result2.jobSelect[0].jobTitle;
+//     headline = decodeURI(result2.jobSelect[0].jobHeadline);
+//     cb(title, headline);
+//   })
+// }
 
 module.exports = router;
