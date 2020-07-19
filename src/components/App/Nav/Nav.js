@@ -14,13 +14,13 @@ const Nav = (props) => (
     </Link>
     <div className='nav-right'>
       {/* Show the link to the users search page and the games search page if the user is logged in. */}
+      {/* <SearchIcon /> */}
       <Link className='nav-link' to='/search/users'>
-        <SearchIcon />
-        Users
+        Search Users
       </Link>
       <Link className='nav-link' to='/search/games'>
-        <SearchIcon />
-         Games
+        {/* <SearchIcon /> */}
+        Search Games
       </Link>
       <Link className='nav-link' to='/dashboard'>
         {props.status.userIsSignedIn ? 'Dashboard' : 'Login / Register'}
@@ -35,7 +35,8 @@ const Nav = (props) => (
           <Notifications className='nav-link' />
           {/* Show a gear icon to represent the settings page. */}
           <Link className='nav-link' to='/settings'>
-            <SettingsIcon />
+            {/* <SettingsIcon className='nav-link' style={{  paddingBottom: 0 }} /> */}
+            Settings
           </Link>
           <LogOutButton className='nav-link' />
         </>
