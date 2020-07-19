@@ -49,7 +49,7 @@ class LoginPage extends Component {
           <form autoComplete="off" onSubmit={this.login}>
             <>
               <TextField
-                label="username"
+                label="Username"
                 autoFocus
                 fullWidth
                 required
@@ -58,7 +58,7 @@ class LoginPage extends Component {
                 onChange={this.handleInputChangeFor('username')}
               />
               <TextField
-                label="password"
+                label="Password"
                 fullWidth
                 required
                 maxLength='10'
