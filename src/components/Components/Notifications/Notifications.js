@@ -115,7 +115,7 @@ class Notifications extends React.Component {
     return (
       <>
         {
-          [<Badge className='nav-link' badgeContent={this.props.alerts.length} color='primary'><NotificationsIcon /></Badge>].map((buttonText) => (
+          [<Badge badgeContent={this.props.alerts.length} color='primary'><NotificationsIcon style={{ paddingTop: 15, paddingBottom: 15, color: 'white' }} /></Badge>].map((buttonText) => (
             <React.Fragment key={anchor}>
               <MuiThemeProvider theme={useStyles}>
                 <Button className='nav-link' onClick={() => this.toggleDrawer(anchor, true)}>{buttonText}</Button>
@@ -129,6 +129,12 @@ class Notifications extends React.Component {
                   message={this.props.searchUsers.sentFriendRequestSuccessMessage}
                   severity={'success'}
                 />
+                <Snack
+                  onCloseDispatchText='CLEAR_ERROR_UPDATING_FRIEND_REQUEST_STATUS'
+                  autoHideDuration={5000}
+                  message={this.props.errors.editFriendRequestStatusServerErrorMessage}
+                  severity={'error'}
+                />
               </MuiThemeProvider>
             </React.Fragment>
           ))
@@ -140,6 +146,7 @@ class Notifications extends React.Component {
 
 const mapStateToProps = reduxState => ({
   alerts: reduxState.user.alerts,
+  errors: reduxState.errors,
   searchUsers: reduxState.searchUsers,
 });
 

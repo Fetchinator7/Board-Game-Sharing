@@ -30,6 +30,7 @@ function* updateRequest(action) {
     yield put({ type: 'FETCH_USER' });
   } catch (error) {
     yield put({ type: 'SET_USER_SEARCH__USER_NOT_FOUND', payload: 'Server error trying to make the friend request' });
+    yield put({ type: 'SET_ERROR_UPDATING_FRIEND_REQUEST_STATUS', payload: 'Server error trying to update the friend status' });
     console.log('Error', error);
   }
 }

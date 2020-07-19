@@ -56,9 +56,21 @@ const editProfileFailureMessage = (state = '', action) => {
   }
 };
 
+const editFriendRequestStatusServerErrorMessage = (state = '', action) => {
+  switch (action.type) {
+    case 'SET_ERROR_UPDATING_FRIEND_REQUEST_STATUS':
+      return action.payload;
+    case 'CLEAR_ERROR_UPDATING_FRIEND_REQUEST_STATUS':
+      return '';
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   loginMessage,
   registrationMessage,
   editGamesMessage: editGamesFailureMessage,
-  editProfileFailureMessage
+  editProfileFailureMessage,
+  editFriendRequestStatusServerErrorMessage
 });
