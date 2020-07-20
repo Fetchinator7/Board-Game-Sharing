@@ -1,7 +1,7 @@
 # Board Game Sharing
 Are you a board game enthusiast who wants to loan your collection out to others but has a hassle keeping track of all the logistics? Well then this is the site for you!
 
-From ypur profile page you can display all the games you want to loan out which enables other users to view those games and request specific days to borrow them.
+From your profile page you can display all the games you want to loan out which enables other users to view those games and request specific days to borrow them.
 
 You can make an account and add games to your collection, but only games found at [Board Game Geek](https://boardgamegeek.com/) can be added.
 If you're signed in when searching for a game you'll get access to a checkbox to add the specified game to your collection.
@@ -18,10 +18,14 @@ If you're friends with someone and you're viewing their profile you get access t
 ![Game Dropdown](README-images/game-drop-down.png?raw=true)
 
 By default the calendar days won't have an icons, but there are three icons that can appear each with their own special meanings:
+
 ![Date Picker](README-images/date-picker.png)
-If there's a "✅" that means the owner has agreed for a game to be loaned out those days.
-A "❓" means someone has requested to borrow this game in the given time-frame, but the owner hasn't responded yet.
-If you see a "🚫" on a day that means the user has blocked out the day so no one can borrow in that time frame, or if you previous requested a game and the owner declined you won't be able to select those days again.
+
+|Icon|Meaning|
+|:--:|-------|
+|✅|The owner has agreed for a game to be loaned out those days.|
+|❓|Someone has requested to borrow this game in the given time-frame, but the owner hasn't responded yet.|
+|🚫|The user has blocked out the day so no one can borrow in that time frame, or if you previous requested a game and the owner declined you won't be able to select those days again.|
 
 Once someone sends you a friend request or a game loan request it will appear in the notifications drop-down and gives you the option to accept or decline.
 
