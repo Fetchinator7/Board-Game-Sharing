@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import SearchTablePresets from '../../Components/GamesTable/GamesTable';
 import MUIDataTable from 'mui-datatables';
-import SearchResult from '../SearchPageGames/GameSearchResult';
 import baseGamesDataArray from '../../Components/GamesTable/GamesTableStandardColumns';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 
@@ -30,6 +29,13 @@ class RandomGamesTable extends React.Component {
 
   componentDidMount() {
     this.props.dispatch({ type: 'FETCH_A_DIFFERENT_USER', payload: 'Admin' });
+  }
+
+  // The user is leaving the home page so clear the games in case the user view a different
+  // user's profile.
+  componentWillUnmount() {
+    this.props.dispatch({ type: 'CLEAR_A_DIFFERENT_USERS_OWNED_GAMES' });
+    this.props.dispatch({ type: 'CLEAR_A_DIFFERENT_USERS_ID' });
   }
 
   render() {
