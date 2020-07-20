@@ -32,6 +32,13 @@ class RandomGamesTable extends React.Component {
     this.props.dispatch({ type: 'FETCH_A_DIFFERENT_USER', payload: 'Admin' });
   }
 
+  // The user is leaving the home page so clear the games in case the user view a different
+  // user's profile.
+  componentWillUnmount() {
+    this.props.dispatch({ type: 'CLEAR_A_DIFFERENT_USERS_OWNED_GAMES' });
+    this.props.dispatch({ type: 'CLEAR_A_DIFFERENT_USERS_ID' });
+  }
+
   render() {
     // Get all of the Admin user's games.
     const baseData = baseGamesDataArray(this.props.otherUsersGames);
