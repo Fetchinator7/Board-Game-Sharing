@@ -1,0 +1,1057 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.3
+-- Dumped by pg_dump version 12.3
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: alert; Type: TABLE; Schema: public; Owner: Family
+--
+
+CREATE TABLE public.alert (
+    alert_id integer NOT NULL,
+    user_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    viewed_at timestamp without time zone,
+    alert_text character varying(2000) NOT NULL,
+    loaned_game_id integer,
+    friend_request_id integer
+);
+
+
+ALTER TABLE public.alert OWNER TO "Family";
+
+--
+-- Name: alert_alert_id_seq; Type: SEQUENCE; Schema: public; Owner: Family
+--
+
+CREATE SEQUENCE public.alert_alert_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.alert_alert_id_seq OWNER TO "Family";
+
+--
+-- Name: alert_alert_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Family
+--
+
+ALTER SEQUENCE public.alert_alert_id_seq OWNED BY public.alert.alert_id;
+
+
+--
+-- Name: alert_user_id_seq; Type: SEQUENCE; Schema: public; Owner: Family
+--
+
+CREATE SEQUENCE public.alert_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.alert_user_id_seq OWNER TO "Family";
+
+--
+-- Name: alert_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Family
+--
+
+ALTER SEQUENCE public.alert_user_id_seq OWNED BY public.alert.user_id;
+
+
+--
+-- Name: friend; Type: TABLE; Schema: public; Owner: Family
+--
+
+CREATE TABLE public.friend (
+    friends_id integer NOT NULL,
+    user_id integer NOT NULL,
+    friend_id integer NOT NULL
+);
+
+
+ALTER TABLE public.friend OWNER TO "Family";
+
+--
+-- Name: friend_friend_id_seq; Type: SEQUENCE; Schema: public; Owner: Family
+--
+
+CREATE SEQUENCE public.friend_friend_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.friend_friend_id_seq OWNER TO "Family";
+
+--
+-- Name: friend_friend_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Family
+--
+
+ALTER SEQUENCE public.friend_friend_id_seq OWNED BY public.friend.friend_id;
+
+
+--
+-- Name: friend_friends_id_seq; Type: SEQUENCE; Schema: public; Owner: Family
+--
+
+CREATE SEQUENCE public.friend_friends_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.friend_friends_id_seq OWNER TO "Family";
+
+--
+-- Name: friend_friends_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Family
+--
+
+ALTER SEQUENCE public.friend_friends_id_seq OWNED BY public.friend.friends_id;
+
+
+--
+-- Name: friend_request; Type: TABLE; Schema: public; Owner: Family
+--
+
+CREATE TABLE public.friend_request (
+    request_id integer NOT NULL,
+    from_user_id integer NOT NULL,
+    to_user_id integer NOT NULL,
+    answered boolean DEFAULT false NOT NULL,
+    accepted boolean DEFAULT false NOT NULL,
+    message text
+);
+
+
+ALTER TABLE public.friend_request OWNER TO "Family";
+
+--
+-- Name: friend_request_from_user_id_seq; Type: SEQUENCE; Schema: public; Owner: Family
+--
+
+CREATE SEQUENCE public.friend_request_from_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.friend_request_from_user_id_seq OWNER TO "Family";
+
+--
+-- Name: friend_request_from_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Family
+--
+
+ALTER SEQUENCE public.friend_request_from_user_id_seq OWNED BY public.friend_request.from_user_id;
+
+
+--
+-- Name: friend_request_request_id_seq; Type: SEQUENCE; Schema: public; Owner: Family
+--
+
+CREATE SEQUENCE public.friend_request_request_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.friend_request_request_id_seq OWNER TO "Family";
+
+--
+-- Name: friend_request_request_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Family
+--
+
+ALTER SEQUENCE public.friend_request_request_id_seq OWNED BY public.friend_request.request_id;
+
+
+--
+-- Name: friend_request_to_user_id_seq; Type: SEQUENCE; Schema: public; Owner: Family
+--
+
+CREATE SEQUENCE public.friend_request_to_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.friend_request_to_user_id_seq OWNER TO "Family";
+
+--
+-- Name: friend_request_to_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Family
+--
+
+ALTER SEQUENCE public.friend_request_to_user_id_seq OWNED BY public.friend_request.to_user_id;
+
+
+--
+-- Name: friend_user_id_seq; Type: SEQUENCE; Schema: public; Owner: Family
+--
+
+CREATE SEQUENCE public.friend_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.friend_user_id_seq OWNER TO "Family";
+
+--
+-- Name: friend_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Family
+--
+
+ALTER SEQUENCE public.friend_user_id_seq OWNED BY public.friend.user_id;
+
+
+--
+-- Name: game; Type: TABLE; Schema: public; Owner: Family
+--
+
+CREATE TABLE public.game (
+    game_id integer NOT NULL,
+    bgg_game_id character varying(255),
+    game_img character varying(255),
+    title character varying(255) NOT NULL,
+    player_range character varying(50),
+    playtime character varying(50)
+);
+
+
+ALTER TABLE public.game OWNER TO "Family";
+
+--
+-- Name: game_game_id_seq; Type: SEQUENCE; Schema: public; Owner: Family
+--
+
+CREATE SEQUENCE public.game_game_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.game_game_id_seq OWNER TO "Family";
+
+--
+-- Name: game_game_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Family
+--
+
+ALTER SEQUENCE public.game_game_id_seq OWNED BY public.game.game_id;
+
+
+--
+-- Name: loaned_game; Type: TABLE; Schema: public; Owner: Family
+--
+
+CREATE TABLE public.loaned_game (
+    loan_id integer NOT NULL,
+    game_id integer NOT NULL,
+    owner_id integer NOT NULL,
+    friend_id integer,
+    loan_start date NOT NULL,
+    loan_end date NOT NULL,
+    agreed boolean DEFAULT false NOT NULL,
+    viewed boolean DEFAULT false NOT NULL
+);
+
+
+ALTER TABLE public.loaned_game OWNER TO "Family";
+
+--
+-- Name: loaned_game_game_id_seq; Type: SEQUENCE; Schema: public; Owner: Family
+--
+
+CREATE SEQUENCE public.loaned_game_game_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.loaned_game_game_id_seq OWNER TO "Family";
+
+--
+-- Name: loaned_game_game_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Family
+--
+
+ALTER SEQUENCE public.loaned_game_game_id_seq OWNED BY public.loaned_game.game_id;
+
+
+--
+-- Name: loaned_game_loan_id_seq; Type: SEQUENCE; Schema: public; Owner: Family
+--
+
+CREATE SEQUENCE public.loaned_game_loan_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.loaned_game_loan_id_seq OWNER TO "Family";
+
+--
+-- Name: loaned_game_loan_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Family
+--
+
+ALTER SEQUENCE public.loaned_game_loan_id_seq OWNED BY public.loaned_game.loan_id;
+
+
+--
+-- Name: loaned_game_owner_id_seq; Type: SEQUENCE; Schema: public; Owner: Family
+--
+
+CREATE SEQUENCE public.loaned_game_owner_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.loaned_game_owner_id_seq OWNER TO "Family";
+
+--
+-- Name: loaned_game_owner_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Family
+--
+
+ALTER SEQUENCE public.loaned_game_owner_id_seq OWNED BY public.loaned_game.owner_id;
+
+
+--
+-- Name: user_owned_game; Type: TABLE; Schema: public; Owner: Family
+--
+
+CREATE TABLE public.user_owned_game (
+    owned_game_id integer NOT NULL,
+    game_id integer NOT NULL,
+    user_id integer NOT NULL,
+    comments character varying(5000)
+);
+
+
+ALTER TABLE public.user_owned_game OWNER TO "Family";
+
+--
+-- Name: user_owned_game_game_id_seq; Type: SEQUENCE; Schema: public; Owner: Family
+--
+
+CREATE SEQUENCE public.user_owned_game_game_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_owned_game_game_id_seq OWNER TO "Family";
+
+--
+-- Name: user_owned_game_game_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Family
+--
+
+ALTER SEQUENCE public.user_owned_game_game_id_seq OWNED BY public.user_owned_game.game_id;
+
+
+--
+-- Name: user_owned_game_owned_game_id_seq; Type: SEQUENCE; Schema: public; Owner: Family
+--
+
+CREATE SEQUENCE public.user_owned_game_owned_game_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_owned_game_owned_game_id_seq OWNER TO "Family";
+
+--
+-- Name: user_owned_game_owned_game_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Family
+--
+
+ALTER SEQUENCE public.user_owned_game_owned_game_id_seq OWNED BY public.user_owned_game.owned_game_id;
+
+
+--
+-- Name: user_owned_game_user_id_seq; Type: SEQUENCE; Schema: public; Owner: Family
+--
+
+CREATE SEQUENCE public.user_owned_game_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_owned_game_user_id_seq OWNER TO "Family";
+
+--
+-- Name: user_owned_game_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Family
+--
+
+ALTER SEQUENCE public.user_owned_game_user_id_seq OWNED BY public.user_owned_game.user_id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: Family
+--
+
+CREATE TABLE public.users (
+    user_id integer NOT NULL,
+    user_name character varying(50) NOT NULL,
+    email character varying(254) NOT NULL,
+    password character varying(128) NOT NULL,
+    visibility smallint
+);
+
+
+ALTER TABLE public.users OWNER TO "Family";
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: Family
+--
+
+CREATE SEQUENCE public.users_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_user_id_seq OWNER TO "Family";
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: Family
+--
+
+ALTER SEQUENCE public.users_user_id_seq OWNED BY public.users.user_id;
+
+
+--
+-- Name: alert alert_id; Type: DEFAULT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.alert ALTER COLUMN alert_id SET DEFAULT nextval('public.alert_alert_id_seq'::regclass);
+
+
+--
+-- Name: alert user_id; Type: DEFAULT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.alert ALTER COLUMN user_id SET DEFAULT nextval('public.alert_user_id_seq'::regclass);
+
+
+--
+-- Name: friend friends_id; Type: DEFAULT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.friend ALTER COLUMN friends_id SET DEFAULT nextval('public.friend_friends_id_seq'::regclass);
+
+
+--
+-- Name: friend user_id; Type: DEFAULT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.friend ALTER COLUMN user_id SET DEFAULT nextval('public.friend_user_id_seq'::regclass);
+
+
+--
+-- Name: friend friend_id; Type: DEFAULT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.friend ALTER COLUMN friend_id SET DEFAULT nextval('public.friend_friend_id_seq'::regclass);
+
+
+--
+-- Name: friend_request request_id; Type: DEFAULT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.friend_request ALTER COLUMN request_id SET DEFAULT nextval('public.friend_request_request_id_seq'::regclass);
+
+
+--
+-- Name: friend_request from_user_id; Type: DEFAULT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.friend_request ALTER COLUMN from_user_id SET DEFAULT nextval('public.friend_request_from_user_id_seq'::regclass);
+
+
+--
+-- Name: friend_request to_user_id; Type: DEFAULT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.friend_request ALTER COLUMN to_user_id SET DEFAULT nextval('public.friend_request_to_user_id_seq'::regclass);
+
+
+--
+-- Name: game game_id; Type: DEFAULT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.game ALTER COLUMN game_id SET DEFAULT nextval('public.game_game_id_seq'::regclass);
+
+
+--
+-- Name: loaned_game loan_id; Type: DEFAULT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.loaned_game ALTER COLUMN loan_id SET DEFAULT nextval('public.loaned_game_loan_id_seq'::regclass);
+
+
+--
+-- Name: loaned_game game_id; Type: DEFAULT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.loaned_game ALTER COLUMN game_id SET DEFAULT nextval('public.loaned_game_game_id_seq'::regclass);
+
+
+--
+-- Name: loaned_game owner_id; Type: DEFAULT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.loaned_game ALTER COLUMN owner_id SET DEFAULT nextval('public.loaned_game_owner_id_seq'::regclass);
+
+
+--
+-- Name: user_owned_game owned_game_id; Type: DEFAULT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.user_owned_game ALTER COLUMN owned_game_id SET DEFAULT nextval('public.user_owned_game_owned_game_id_seq'::regclass);
+
+
+--
+-- Name: user_owned_game game_id; Type: DEFAULT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.user_owned_game ALTER COLUMN game_id SET DEFAULT nextval('public.user_owned_game_game_id_seq'::regclass);
+
+
+--
+-- Name: user_owned_game user_id; Type: DEFAULT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.user_owned_game ALTER COLUMN user_id SET DEFAULT nextval('public.user_owned_game_user_id_seq'::regclass);
+
+
+--
+-- Name: users user_id; Type: DEFAULT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN user_id SET DEFAULT nextval('public.users_user_id_seq'::regclass);
+
+
+--
+-- Data for Name: alert; Type: TABLE DATA; Schema: public; Owner: Family
+--
+
+COPY public.alert (alert_id, user_id, created_at, viewed_at, alert_text, loaned_game_id, friend_request_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: friend; Type: TABLE DATA; Schema: public; Owner: Family
+--
+
+COPY public.friend (friends_id, user_id, friend_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: friend_request; Type: TABLE DATA; Schema: public; Owner: Family
+--
+
+COPY public.friend_request (request_id, from_user_id, to_user_id, answered, accepted, message) FROM stdin;
+\.
+
+
+--
+-- Data for Name: game; Type: TABLE DATA; Schema: public; Owner: Family
+--
+
+COPY public.game (game_id, bgg_game_id, game_img, title, player_range, playtime) FROM stdin;
+28	13	https://cf.geekdo-images.com/original/img/A-0yDJkve0avEicYQ4HoNO-HkK8=/0x0/pic2419375.jpg	Catan	3-4	60-120 Min
+31	27225	https://cf.geekdo-images.com/original/img/YkEZH0195Gs84brLmF8EPEtZFl4=/0x0/pic2463443.jpg	Bananagrams	1-8	15 Min
+32	4143	https://cf.geekdo-images.com/original/img/Fapg_eLu0LCjeBm_ramBX9jTKFY=/0x0/pic335812.jpg	Guess Who?	2	20 Min
+36	2375	https://cf.geekdo-images.com/original/img/j92TCxh6cdGu0S6GepM7_7jhI9E=/0x0/pic212893.jpg	Sequence	2-12	10-30 Min
+43	129395	https://cf.geekdo-images.com/original/img/QdzPmyuDL1bW3nxx8PBnnXeONt4=/0x0/pic1650507.jpg	Monopoly Millionaire Deal Card Game	2-5	15 Min
+81	178900	https://cf.geekdo-images.com/original/img/MJ6MNz8-_rb1C2VUTnYBTYOiiy0=/0x0/pic2582929.jpg	Codenames	2-8	15 Min
+82	822	https://cf.geekdo-images.com/original/img/o4p6f88SGE899BTNMzTvERVWZ-M=/0x0/pic2337577.jpg	Carcassonne	2-5	30-45 Min
+83	9209	https://cf.geekdo-images.com/original/img/bOcAJxw-W-B2Gz0x67z8bjqzJgY=/0x0/pic38668.jpg	Ticket to Ride	2-5	30-60 Min
+85	36218	https://cf.geekdo-images.com/original/img/oN8CHUZ8CF6P1dFnhMCJXvE8SOk=/0x0/pic394356.jpg	Dominion	2-4	30 Min
+86	14996	https://cf.geekdo-images.com/original/img/lN5ivSfgaJwEMXgyLijCtyKVUBs=/0x0/pic66668.jpg	Ticket to Ride: Europe	2-5	30-60 Min
+87	204583	https://cf.geekdo-images.com/original/img/iDSCIiCAd9SQHv3WoYX0QdvDE_0=/0x0/pic3132685.png	Kingdomino	2-4	15-20 Min
+88	1465	https://cf.geekdo-images.com/original/img/Uk2J7VGDyGMt6O3H_Pkt41GSlmQ=/0x0/pic5948.jpg	Wizard	3-6	45 Min
+89	164840	https://cf.geekdo-images.com/original/img/M3h0SSep2Qakn2E0QTUCtzHMa54=/0x0/pic2098412.jpg	Monopoly Deal	2-3	15 Min
+90	40398	https://cf.geekdo-images.com/original/img/sExC40CylWBJvonJeXubmblKTfc=/0x0/pic716758.jpg	Monopoly Deal Card Game	2-5	15 Min
+91	41095	https://cf.geekdo-images.com/original/img/T7deBhu5-wv2XOOQ3fP0EqFXa2M=/0x0/pic453352.jpg	Clue: Secrets & Spies	2-6	60 Min
+92	214224	https://cf.geekdo-images.com/original/img/1SNqcIy8bK2w7oN92WN4BMLt7s0=/0x0/pic3270628.jpg	Clue: Star Wars	3-6	20-60 Min
+93	320	https://cf.geekdo-images.com/original/img/lVqLm3lRviB_an3_gAqhvSJ6riA=/0x0/pic404651.jpg	Scrabble	2-4	90 Min
+94	192951	https://cf.geekdo-images.com/original/img/lbSChN2sRH4S8rYcC3KpMJAfObA=/0x0/pic2868179.jpg	Dominion: Empires	2-4	30 Min
+95	171915	https://cf.geekdo-images.com/original/img/bJvb7yCgE9crpfTWmBRVAwgj3Dw=/0x0/pic2374911.jpg	Dominion: Adventures	2-4	30 Min
+96	339	https://cf.geekdo-images.com/original/img/iMb0hbyGMbIpd9f_1sNNKCp6xZI=/0x0/pic1753681.jpg	Quiddler	1-8	30 Min
+98	2425	https://cf.geekdo-images.com/original/img/5kYXGo6qinql4h6Mvrc6m1pwdek=/0x0/pic2439783.png	Battleship	2	30 Min
+99	165283	https://cf.geekdo-images.com/original/img/Tu9KcoIIFXeaDXtmRMmqQ8ETXdY=/0x0/pic2180912.jpg	Battleship	2	15 Min
+100	5432	https://cf.geekdo-images.com/original/img/oF7J9WH63OEe5GU3X922ljeRS2Y=/0x0/pic4542661.jpg	Chutes and Ladders	2-6	30 Min
+101	5048	https://cf.geekdo-images.com/original/img/me1MkybeUpuy8Fdo9dZEcMRoLC8=/0x0/pic3542482.jpg	Candy Land	2-4	30 Min
+102	2921	https://cf.geekdo-images.com/original/img/pf_B8zrtboWZtYSp2kBtVNk8WQE=/0x0/pic288405.jpg	The Game of Life	2-6	60 Min
+103	166384	https://cf.geekdo-images.com/original/img/yiOudtz0yeRa8axxBWr94WuCwbM=/0x0/pic2453926.jpg	Spyfall	3-8	15 Min
+104	1410	https://cf.geekdo-images.com/original/img/LS2tq2EYkQE5eZWpeyIiULfp11w=/0x0/pic135797.jpg	Trouble	2-4	45 Min
+105	1406	https://cf.geekdo-images.com/original/img/YIoseMjEJX5vxUaw-JuD4rUOfWE=/0x0/pic4235383.jpg	Monopoly	2-8	60-180 Min
+106	3737	https://cf.geekdo-images.com/original/img/lyz4JhfmZgOOOFeD9VGfJXRP-pE=/0x0/pic153389.jpg	Operation	1-6	10 Min
+107	2679	https://cf.geekdo-images.com/original/img/w53pGbylDBi08OldUREGiGDv79A=/0x0/pic3915470.jpg	Mouse Trap	2-4	30 Min
+108	2407	https://cf.geekdo-images.com/original/img/IzDr7EwSlYtqzKrz2h3OVnNg5xY=/0x0/pic1187187.jpg	Sorry!	2-4	30 Min
+109	2136	https://cf.geekdo-images.com/original/img/qzluXZ2oloACgfZbj1M5_wcF1Bo=/0x0/pic516869.jpg	Pachisi	2-6	30 Min
+110	2719	https://cf.geekdo-images.com/original/img/lrJ1p0AI4ghZdmZkEzwIle3YDUw=/0x0/pic859430.jpg	Connect Four	2	10 Min
+111	4888	https://cf.geekdo-images.com/original/img/XrXuzoYsa2fw88qqlH2DXSNizKE=/0x0/pic289780.jpg	Don't Break the Ice	2-4	20 Min
+112	2223	https://cf.geekdo-images.com/original/img/z3OFp3362X0ZPf5CIc5vfxzwDsg=/0x0/pic981505.jpg	UNO	2-10	30 Min
+113	19370	https://cf.geekdo-images.com/original/img/DQHqr8JRc1-fKTw1_PA11z9GmIY=/0x0/pic200936.jpg	Quelf	3-8	60 Min
+115	2243	https://cf.geekdo-images.com/original/img/S9AmoNh3ZPyVXLxoqhOA7MBCN7M=/0x0/pic378237.jpg	Yahtzee	2-10	30 Min
+\.
+
+
+--
+-- Data for Name: loaned_game; Type: TABLE DATA; Schema: public; Owner: Family
+--
+
+COPY public.loaned_game (loan_id, game_id, owner_id, friend_id, loan_start, loan_end, agreed, viewed) FROM stdin;
+\.
+
+
+--
+-- Data for Name: user_owned_game; Type: TABLE DATA; Schema: public; Owner: Family
+--
+
+COPY public.user_owned_game (owned_game_id, game_id, user_id, comments) FROM stdin;
+142	28	28	\N
+143	31	28	\N
+144	82	28	\N
+145	81	28	\N
+146	87	28	\N
+147	88	28	\N
+148	32	28	\N
+149	89	28	\N
+150	90	28	\N
+151	43	28	\N
+152	83	28	\N
+153	86	28	\N
+154	91	28	\N
+155	92	28	\N
+156	93	28	\N
+157	94	28	\N
+158	95	28	\N
+159	96	28	\N
+161	98	28	\N
+162	99	28	\N
+163	100	28	\N
+164	101	28	\N
+165	102	28	\N
+166	103	28	\N
+167	104	28	\N
+168	105	28	\N
+169	106	28	\N
+170	107	28	\N
+171	108	28	\N
+172	109	28	\N
+173	110	28	\N
+174	111	28	\N
+175	112	28	\N
+176	113	28	\N
+178	115	28	\N
+198	36	28	\N
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: Family
+--
+
+COPY public.users (user_id, user_name, email, password, visibility) FROM stdin;
+28	Admin	Admin	$2a$10$Dca1R7XRwJK8D0H6b8jnou6UYkKaYOFO8VGjB8uao3G7gh7jpsnxa	1
+\.
+
+
+--
+-- Name: alert_alert_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Family
+--
+
+SELECT pg_catalog.setval('public.alert_alert_id_seq', 1, false);
+
+
+--
+-- Name: alert_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Family
+--
+
+SELECT pg_catalog.setval('public.alert_user_id_seq', 1, false);
+
+
+--
+-- Name: friend_friend_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Family
+--
+
+SELECT pg_catalog.setval('public.friend_friend_id_seq', 1, false);
+
+
+--
+-- Name: friend_friends_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Family
+--
+
+SELECT pg_catalog.setval('public.friend_friends_id_seq', 1, false);
+
+
+--
+-- Name: friend_request_from_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Family
+--
+
+SELECT pg_catalog.setval('public.friend_request_from_user_id_seq', 1, false);
+
+
+--
+-- Name: friend_request_request_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Family
+--
+
+SELECT pg_catalog.setval('public.friend_request_request_id_seq', 1, false);
+
+
+--
+-- Name: friend_request_to_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Family
+--
+
+SELECT pg_catalog.setval('public.friend_request_to_user_id_seq', 1, false);
+
+
+--
+-- Name: friend_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Family
+--
+
+SELECT pg_catalog.setval('public.friend_user_id_seq', 1, false);
+
+
+--
+-- Name: game_game_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Family
+--
+
+SELECT pg_catalog.setval('public.game_game_id_seq', 119, true);
+
+
+--
+-- Name: loaned_game_game_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Family
+--
+
+SELECT pg_catalog.setval('public.loaned_game_game_id_seq', 1, false);
+
+
+--
+-- Name: loaned_game_loan_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Family
+--
+
+SELECT pg_catalog.setval('public.loaned_game_loan_id_seq', 1, false);
+
+
+--
+-- Name: loaned_game_owner_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Family
+--
+
+SELECT pg_catalog.setval('public.loaned_game_owner_id_seq', 1, false);
+
+
+--
+-- Name: user_owned_game_game_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Family
+--
+
+SELECT pg_catalog.setval('public.user_owned_game_game_id_seq', 1, false);
+
+
+--
+-- Name: user_owned_game_owned_game_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Family
+--
+
+SELECT pg_catalog.setval('public.user_owned_game_owned_game_id_seq', 198, true);
+
+
+--
+-- Name: user_owned_game_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Family
+--
+
+SELECT pg_catalog.setval('public.user_owned_game_user_id_seq', 1, false);
+
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Family
+--
+
+SELECT pg_catalog.setval('public.users_user_id_seq', 29, true);
+
+
+--
+-- Name: loaned_game No duplicate block out days; Type: CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.loaned_game
+    ADD CONSTRAINT "No duplicate block out days" UNIQUE (game_id, owner_id, loan_start, loan_end);
+
+
+--
+-- Name: friend_request No duplicate friend requests; Type: CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.friend_request
+    ADD CONSTRAINT "No duplicate friend requests" UNIQUE (from_user_id, to_user_id);
+
+
+--
+-- Name: friend No duplicate friends; Type: CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.friend
+    ADD CONSTRAINT "No duplicate friends" UNIQUE (user_id, friend_id);
+
+
+--
+-- Name: loaned_game No duplicate loans; Type: CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.loaned_game
+    ADD CONSTRAINT "No duplicate loans" UNIQUE (game_id, owner_id, friend_id, loan_start, loan_end);
+
+
+--
+-- Name: alert alert_pk; Type: CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.alert
+    ADD CONSTRAINT alert_pk PRIMARY KEY (alert_id);
+
+
+--
+-- Name: friend friend_pk; Type: CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.friend
+    ADD CONSTRAINT friend_pk PRIMARY KEY (friends_id);
+
+
+--
+-- Name: friend_request friend_request_pk; Type: CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.friend_request
+    ADD CONSTRAINT friend_request_pk PRIMARY KEY (request_id);
+
+
+--
+-- Name: game game_bgg_game_id_key; Type: CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.game
+    ADD CONSTRAINT game_bgg_game_id_key UNIQUE (bgg_game_id);
+
+
+--
+-- Name: game game_pk; Type: CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.game
+    ADD CONSTRAINT game_pk PRIMARY KEY (game_id);
+
+
+--
+-- Name: loaned_game loaned_game_pk; Type: CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.loaned_game
+    ADD CONSTRAINT loaned_game_pk PRIMARY KEY (loan_id);
+
+
+--
+-- Name: user_owned_game owned_game_id; Type: CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.user_owned_game
+    ADD CONSTRAINT owned_game_id UNIQUE (game_id, user_id);
+
+
+--
+-- Name: user_owned_game user_owned_game_pk; Type: CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.user_owned_game
+    ADD CONSTRAINT user_owned_game_pk PRIMARY KEY (owned_game_id);
+
+
+--
+-- Name: users user_pk; Type: CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT user_pk PRIMARY KEY (user_id);
+
+
+--
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_email_key UNIQUE (email);
+
+
+--
+-- Name: users users_user_name_key; Type: CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_user_name_key UNIQUE (user_name);
+
+
+--
+-- Name: alert alert_fk0; Type: FK CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.alert
+    ADD CONSTRAINT alert_fk0 FOREIGN KEY (user_id) REFERENCES public.users(user_id);
+
+
+--
+-- Name: alert alert_fk1; Type: FK CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.alert
+    ADD CONSTRAINT alert_fk1 FOREIGN KEY (loaned_game_id) REFERENCES public.loaned_game(loan_id);
+
+
+--
+-- Name: alert alert_fk2; Type: FK CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.alert
+    ADD CONSTRAINT alert_fk2 FOREIGN KEY (friend_request_id) REFERENCES public.friend_request(request_id);
+
+
+--
+-- Name: friend friend_fk0; Type: FK CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.friend
+    ADD CONSTRAINT friend_fk0 FOREIGN KEY (user_id) REFERENCES public.users(user_id);
+
+
+--
+-- Name: friend friend_fk1; Type: FK CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.friend
+    ADD CONSTRAINT friend_fk1 FOREIGN KEY (friend_id) REFERENCES public.users(user_id);
+
+
+--
+-- Name: friend_request friend_request_fk0; Type: FK CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.friend_request
+    ADD CONSTRAINT friend_request_fk0 FOREIGN KEY (from_user_id) REFERENCES public.users(user_id);
+
+
+--
+-- Name: friend_request friend_request_fk1; Type: FK CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.friend_request
+    ADD CONSTRAINT friend_request_fk1 FOREIGN KEY (to_user_id) REFERENCES public.users(user_id);
+
+
+--
+-- Name: loaned_game loaned_game_fk0; Type: FK CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.loaned_game
+    ADD CONSTRAINT loaned_game_fk0 FOREIGN KEY (game_id) REFERENCES public.game(game_id);
+
+
+--
+-- Name: loaned_game loaned_game_fk2; Type: FK CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.loaned_game
+    ADD CONSTRAINT loaned_game_fk2 FOREIGN KEY (owner_id) REFERENCES public.users(user_id);
+
+
+--
+-- Name: loaned_game loaned_game_fk3; Type: FK CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.loaned_game
+    ADD CONSTRAINT loaned_game_fk3 FOREIGN KEY (friend_id) REFERENCES public.users(user_id);
+
+
+--
+-- Name: user_owned_game user_owned_game_fk0; Type: FK CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.user_owned_game
+    ADD CONSTRAINT user_owned_game_fk0 FOREIGN KEY (game_id) REFERENCES public.game(game_id);
+
+
+--
+-- Name: user_owned_game user_owned_game_fk1; Type: FK CONSTRAINT; Schema: public; Owner: Family
+--
+
+ALTER TABLE ONLY public.user_owned_game
+    ADD CONSTRAINT user_owned_game_fk1 FOREIGN KEY (user_id) REFERENCES public.users(user_id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
