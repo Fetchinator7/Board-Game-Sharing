@@ -46,7 +46,9 @@ or
 Open [Database Preset](database.sql) and use a client such as [Postico](https://eggerapps.at/postico/) to run those commands.
 
 Create a .env file in the root directory with the name of the database and a server session secret, such as:
+
 `DATABASE_NAME=example-database-name`
+
 `SERVER_SESSION_SECRET=25POU<234@4;cp-bVt^#)$JDILsd9shp3npaSdFx6`
 
 If you're running it locally open two different terminal windows and run:
