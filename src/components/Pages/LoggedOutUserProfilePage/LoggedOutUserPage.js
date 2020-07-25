@@ -107,13 +107,13 @@ class UserPage extends Component {
         {/* Status snacks. */}
         <Snack
           onCloseDispatchText='CLEAR_ERROR_GETTING_A_DIFFERENT_USERS_GAMES'
-          autoHideDuration={null}
+          autoHideDurationSeconds={null}
           message={this.props.otherUserGetErrorMessage}
           severity='error'
         />
         <Snack
           onCloseDispatchText='CLEAR_GAME_LOAN_CREATION_SUCCESS_FOR_A_DIFFERENT_USER'
-          autoHideDuration={10000}
+          autoHideDurationSeconds={10}
           message={this.props.otherUsersGamesSuccessMessage}
           severity='success'
         />

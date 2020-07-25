@@ -54,7 +54,7 @@ class SearchPage extends Component {
         <Table tableData={this.props.searchUsers.usersSearchResults.filter(searchResultUser => searchResultUser.user_id !== this.props.userID)} />
         <Snack
           onCloseDispatchText='RESET_USER_SEARCH__USER_NOT_FOUND'
-          autoHideDuration={10000}
+          autoHideDurationSeconds={3}
           message={this.props.searchUsers.noResultsErrorText}
           severity={'error'}
         />

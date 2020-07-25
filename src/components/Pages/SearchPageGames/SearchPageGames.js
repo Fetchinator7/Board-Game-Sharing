@@ -83,13 +83,13 @@ class SearchPage extends Component {
         {/* Status snacks. */}
         <Snack
           onCloseDispatchText='RESET_GAME_SEARCH__GAME_NOT_FOUND'
-          autoHideDuration={10000}
+          autoHideDurationSeconds={10}
           message={this.props.searchBGG.noResultsErrorText}
           severity={'error'}
         />
         <Snack
           onCloseDispatchText='CLEAR_EDIT_GAMES_ERROR'
-          autoHideDuration={10000}
+          autoHideDurationSeconds={10}
           message={this.props.errors.editGamesMessage}
           severity={'error'}
         />

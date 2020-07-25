@@ -24,13 +24,13 @@ class UserPage extends Component {
         {/* Error snacks. */}
         <Snack
           onCloseDispatchText='CLEAR_PROFILE_EDIT_ERROR'
-          autoHideDuration={null}
+          autoHideDurationSeconds={null}
           message={this.props.errors.editProfileFailureMessage}
           severity='error'
         />
         <Snack
           onCloseDispatchText='CLEAR_EDIT_GAMES_ERROR'
-          autoHideDuration={10000}
+          autoHideDurationSeconds={10}
           message={this.props.errors.editGamesMessage}
           severity='error'
         />

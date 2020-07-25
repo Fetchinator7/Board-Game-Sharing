@@ -37,7 +37,7 @@ class RegisterPage extends Component {
       <>
         <Snack
           onCloseDispatchText='CLEAR_REGISTRATION_ERROR'
-          autoHideDuration={20000}
+          autoHideDurationSeconds={20}
           message={this.props.errors.registrationMessage}
           severity='error'
         />

@@ -41,7 +41,7 @@ class LoginPage extends Component {
       <>
         <Snack
           onCloseDispatchText='CLEAR_LOGIN_ERROR'
-          autoHideDuration={null}
+          autoHideDurationSeconds={null}
           message={this.props.errors.loginMessage}
           severity='error'
         />

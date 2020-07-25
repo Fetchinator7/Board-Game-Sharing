@@ -34,7 +34,7 @@ class UserSettings extends Component {
         </FormControl>
         <Snack
           onCloseDispatchText='CLEAR_EDIT_GAMES_ERROR'
-          autoHideDuration={null}
+          autoHideDurationSeconds={null}
           message={this.props.errors.editGamesMessage}
           severity='error'
         />

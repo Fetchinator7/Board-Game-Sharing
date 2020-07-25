@@ -125,13 +125,13 @@ class Notifications extends React.Component {
                 {/* My preset snack to display a success message. */}
                 <Snack
                   onCloseDispatchText='CLEAR_FRIEND_REQUEST_SENT_SUCCESSFULLY'
-                  autoHideDuration={5000}
+                  autoHideDurationSeconds={5}
                   message={this.props.searchUsers.sentFriendRequestSuccessMessage}
                   severity={'success'}
                 />
                 <Snack
                   onCloseDispatchText='CLEAR_ERROR_UPDATING_FRIEND_REQUEST_STATUS'
-                  autoHideDuration={5000}
+                  autoHideDurationSeconds={5}
                   message={this.props.errors.editFriendRequestStatusServerErrorMessage}
                   severity={'error'}
                 />
