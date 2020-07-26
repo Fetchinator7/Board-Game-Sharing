@@ -1,8 +1,8 @@
 # Board Game Sharing
 
-Are you a board game enthusiast who wants to loan your collection out to others but has a hassle keeping track of all the logistics? Well then this is the site for you!
+Are you a board game enthusiast who wants to loan your collection out to others but has a hassle keeping track of all the logistics? Well, then this is the site for you!
 
-From your profile page you can display all the games you want to loan out to other so they can view those games and request specific days to borrow them.
+From your profile page you can display all the games you want to loan out to others so they can view those games and request specific days to borrow them.
 
 You can make an account to add games to your collection, but only games found at [Board Game Geek](https://boardgamegeek.com/) can be added.
 If you're signed in when searching for a game you'll get access to a checkbox to add the specified game to your collection.
@@ -24,9 +24,9 @@ By default the calendar days won't have any icons, but there are three icons tha
 
 |Icon|Meaning|
 |:--:|-------|
-|✅|The owner has agreed for a game to be loaned out those days.|
-|❓|Someone has requested to borrow this game in the given time-frame, but the owner hasn't responded yet.|
-|🚫|The user has blocked out the day so no one can borrow in that time frame. Or, if you previous requested a game and the owner declined the loan you won't be able to select those days again.|
+|✅|The owner has agreed to loan out the game during those days.|
+|❓|Someone has requested to borrow this game in the given time frame, but the owner hasn't responded yet.|
+|🚫|The user has blocked out the day so no one can borrow in that time frame. Or, if you previously requested a game and the owner declined the loan you won't be able to select those days again.|
 
 Once someone sends you a friend request or a game loan request it will appear in the notifications drop-down and gives you the option to accept or decline.
 
@@ -35,17 +35,19 @@ Once someone sends you a friend request or a game loan request it will appear in
 
 ## Setting it up
 
-In the computer terminal navigate to the root directory you want to store this in and enter:
+In your computer terminal navigate to the folder you want to store this in and enter:
 
 `git clone https://github.com/Fetchinator7/Board-Game-Sharing.git`
+
+cd into the new folder and:
 
 `npm install`
 or
 `yarn install`
 
-Open [Database Preset](database.sql) and use a client such as [Postico](https://eggerapps.at/postico/) to run those commands.
+Open [Database Preset](database/database.sql) and use a client such as [Postico](https://eggerapps.at/postico/) to run those commands.
 
-Create a .env file in the root directory with the name of the database and a server session secret, such as:
+Create a `.env` file in the root directory with the name of the database and a server session secret, such as:
 
 `DATABASE_NAME=example-database-name`
 
@@ -53,6 +55,6 @@ Create a .env file in the root directory with the name of the database and a ser
 
 If you're running it locally open two different terminal windows and run:
 
-`npm run server` `npm run client`
+`npm run server` and `npm run client`
 
 From there everything should be all set to go so make an account and start adding some games!
