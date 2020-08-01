@@ -59,7 +59,7 @@ class Notifications extends React.Component {
         <List>
           {this.props.alerts.map((loanNotificationObj, index) => (
             loanNotificationObj.loaned_game_id &&
-            <ListItem button key={`notification-loan-request-${index}`}>
+            <ListItem key={`notification-loan-request-${index}`}>
             <ListItemIcon>{<CheckCircleIcon />}</ListItemIcon>
               <ListItemText primary={loanNotificationObj.alert_text} />
             <Button
@@ -84,7 +84,7 @@ class Notifications extends React.Component {
         <List>
           {this.props.alerts.map((friendNotificationObj, index) => (
             friendNotificationObj.friend_request_id &&
-            <ListItem button key={`notification-friend-request-${index}`}>
+            <ListItem key={`notification-friend-request-${index}`}>
               <ListItemIcon>{<PersonAddIcon />}</ListItemIcon>
               <ListItemText primary={friendNotificationObj.alert_text} />
               <Button
