@@ -11,20 +11,12 @@ import rootReducer from './redux/reducers/reducersIndex';
 
 // Create sagaMiddleware
 const sagaMiddleware = createSagaMiddleware();
-// Pass rootSaga into our sagaMiddleware
-
-const middlewareList = process.env.NODE_ENV === 'development'
-  // Disable the logger.
-  // ? [sagaMiddleware, logger]
-  // : [sagaMiddleware];
-  ? [sagaMiddleware]
-  : [sagaMiddleware];
 
 const store = createStore(
   rootReducer,
   compose(
-    applyMiddleware(...middlewareList),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    applyMiddleware(sagaMiddleware),
+    // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   )
 );
 window.store = store;
